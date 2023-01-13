@@ -5,7 +5,7 @@ camera = PiCamera()
 camera.rotation = 180
 
 camera.start_preview()
-sleep(5)
+sleep(100)
 camera.annotate_text = "Chus!"
 camera.image_effect = 'negative'
 camera.capture('./negativ.jpg')
@@ -15,4 +15,4 @@ Naruto = True
 if Naruto:
     print("Datebajo!")      
 # test
-# checking for experimental branch
+# checking for experimental branch2
