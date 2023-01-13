@@ -11,5 +11,7 @@ camera.image_effect = 'negative'
 camera.capture('./negativ.jpg')
 camera.stop_preview()
 print("Je to tam!")
-      
+Naruto = True
+if Naruto:
+    print("Datebajo!")      
 # test
