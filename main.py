@@ -13,11 +13,3 @@ camera.stop_preview()
 print("Je to tam!")    
 # test
 # checking for experimental branch
-from orbit import ISS
-from skyfield.api import load
-t = load.timescale().now()
-position = ISS.at(t)
-time = t
-location = position.subpoint()
-print(location)
-print(time)
