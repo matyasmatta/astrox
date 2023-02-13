@@ -34,8 +34,8 @@ def calculate_matches(descriptors_1, descriptors_2):
     matches = sorted(matches, key=lambda x: x.distance)
     return matches
 
-image_2 = '45466237414_fc6316727a_o.jpg'
-image_1 = '31251109767_45b71e2025_o.jpg'
+image_2 = 'dataset\original_all\photo_07473_51845707716_o.jpg'
+image_1 = 'dataset\original_all\photo_07472_51844776372_o.jpg'
 
 def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
     match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:100], None)

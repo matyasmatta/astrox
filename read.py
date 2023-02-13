@@ -8,8 +8,11 @@ print(im.size)  # Get the width and hight of the image for iterating over
     
 x = 302
 y = 112
+
+xsize = 
 while True:
     x -= 1
     data = (pix[x,y])
     value = round(average(data))
     print(value)
+    if x = 
