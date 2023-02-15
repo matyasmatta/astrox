@@ -19,6 +19,9 @@ x_increase_meta = np.sin(angle_radians)
 y_increase_meta = np.cos(angle_radians)
 print(x_increase_meta, y_increase_meta)
 
+x_increase_meta = np.round(x_increase_meta,5)
+print(x_increase_meta)
+
 if x_increase_meta > y_increase_meta:
     x_increase_final = 1
     y_increase_final = (y_increase_meta/x_increase_meta)
@@ -30,6 +33,8 @@ if x_increase_meta < y_increase_meta:
     x_increase_final = (x_increase_meta/y_increase_meta)
 print(x_increase_final, y_increase_final)
 
+x_increase_final = x_increase_meta
+y_increase_final = y_increase_meta
 # include quarter information
 if 0<angle<90 or angle == 90:
     q = 1
