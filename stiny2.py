@@ -100,6 +100,11 @@ if q == 1:
             # add to y_sum and move pixel x for 1
             y -= 1
             x_sum += x_increase_final_abs
+        #write into txt
+        with open('stiny.txt', 'a') as f:
+            value = str(value)
+            f.write(value)
+            f.write("\n")
         if count > 20:
             break
 if q == 2:
@@ -141,6 +146,11 @@ if q == 2:
             # add to y_sum and move pixel x for 1
             y += 1
             x_sum += x_increase_final_abs
+            #write into txt
+        with open('stiny.txt', 'a') as f:
+            value = str(value)
+            f.write(value)
+            f.write("\n")
         if count > 20:
             break
 if q == 3:
@@ -182,6 +192,11 @@ if q == 3:
             # add to y_sum and move pixel x for 1
             y += 1
             x_sum += x_increase_final_abs
+        #write into txt
+        value = str(value)
+        with open('stiny.txt', 'a') as f:
+            f.write(value)
+            f.write("\n")
         if count > 20:
             break
 if q == 4:
@@ -223,6 +238,10 @@ if q == 4:
             # add to y_sum and move pixel x for 1
             y -= 1
             x_sum += x_increase_final_abs
+        #write into txt
+        with open('stiny.txt', 'a') as f:
+            f.write(value)
+            f.write("\n")
         if count > 20:
             break
 
