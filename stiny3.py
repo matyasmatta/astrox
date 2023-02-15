@@ -12,8 +12,8 @@ pix = im.load()
 print(im.size)  
 
 # set coordinates from AI model
-x = 294
-y = 199
+x = 295
+y = 197
 angle = 310 # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
 
 # calculate meta angle
@@ -65,7 +65,7 @@ y_sum = 0
 x_sum = 0
 count = 0
 ## set how many pixel you want to count via limit
-limit = 50
+limit = 100
 ## do not alter list_of_values
 list_of_values = []
 
@@ -279,18 +279,46 @@ print(x_increase_final, y_increase_final)
 x_increase_final_abs = abs(x_increase_final)
 y_increase_final_abs = abs(x_increase_final)
 
-# find items in list correspoding to the lowest and highest point
-print(list_of_values)
-shadow_low = min(list_of_values)
-cloud_high = max(list_of_values)
+# define a calculation method for cloud-shadow difference (the following one just takes the min and max values)
+def calculate_using_min_max(list_of_values):
+    # find items in list correspoding to the lowest and highest point
+    shadow_low = min(list_of_values)
+    cloud_high = max(list_of_values)
 
-# find of said items in the list (their order)
-shadow_location = list_of_values.index(shadow_low)
-cloud_location = list_of_values.index(cloud_high)
+    # find of said items in the list (their order)
+    shadow_location = list_of_values.index(shadow_low)
+    cloud_location = list_of_values.index(cloud_high)
 
-# find difference between the two pixel lenghts
-shadow_lenght = shadow_location - cloud_location
-print(shadow_lenght)
+    # find difference between the two pixel lenghts
+    shadow_lenght = shadow_location - cloud_location
+    print(shadow_lenght)
+    return shadow_lenght
+
+def calculate_using_maximum_change(list_of_values):
+    n = 0
+    list_of_changes = []
+    while True:
+        try:
+            current_data = list_of_values[n]
+            previous_data = list_of_values[n-1]
+            change_in_data = current_data-previous_data
+            if n == 0:
+                pass
+            else:
+                list_of_changes.append(change_in_data)
+            n+=1
+        except:
+            break
+    shadow_low = max(list_of_changes)
+    cloud_high = min(list_of_changes)
+
+    shadow_location = list_of_changes.index(shadow_low)
+    cloud_location = list_of_changes.index(cloud_high)
+
+    # find difference between the two pixel lenghts
+    shadow_lenght = shadow_location - cloud_location
+    print(shadow_lenght)
+    return shadow_lenght
 
 # define a simple function to calculate distance based on a given FOV and distance in pixels
 def distance(fieldOfView, distanceinpixels):
@@ -298,8 +326,29 @@ def distance(fieldOfView, distanceinpixels):
     distanceinmeters = int(distanceinpixels)*142
     return distanceinmeters
 
+shadow_lenght_min_max = calculate_using_min_max(list_of_values)
+shadow_lenght_max_difference = calculate_using_maximum_change(list_of_values)
+shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max)/2
+
+difference_of_methods = abs(shadow_lenght_max_difference-shadow_lenght_min_max)
+difference_of_methods = np.round(difference_of_methods,2)
+print("Difference between the two methods of cloud-shadow calculation is", difference_of_methods)
+
 # calculate distance using said function
-lenght = distance(60, shadow_lenght)
+lenght = distance(60, shadow_lenght_final)
+
+# because original lenghts is not Archimedes-compatible we will have to convert
+print("angle", angle_final)
+angle_final_radians = angle_final*(np.pi/180)
+print("lenght", lenght)
+if angle_final <= 45:
+    lenght = lenght/np.cos(angle_final_radians)
+if angle_final > 45:
+    lenght = lenght/np.sin(angle_final_radians)
+print("lenght2", lenght)
+
+
+
 print("Shadow is exactly", lenght, "meters from the cloud!")
       
 # use the NASA API to be able to calculate sun's position
@@ -311,19 +360,21 @@ sun = ephem["Sun"]
 earth = ephem["Earth"]
 
 # define where photo was taken(usually via EXIF data)
-coordinates_latitude = "49.73880 N"
-coordinates_longtitude = "13.39350 E"
+coordinates_latitude = "34.28614 S"
+coordinates_longtitude = "147.9515 E"
 # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
-location = api.Topos(coordinates_latitude, coordinates_long, elevation_m=500)
-sun_pos = (earth + location).at(ts.now()).observe(sun).apparent()
+location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
+sun_pos = (earth + location).at(ts.tt(2022,1,15,5,16,5)).observe(sun).apparent()
 altitude, azimuth, distance = sun_pos.altaz()
 
 print(f"Azimuth: {azimuth.degrees:.4f}")
 print(f"Altitude: {altitude.degrees:.4f}")
 
 # calculate final values
-altitude= int(altitude.degrees)
-cloudheight = np.tan(altitude)*lenght
+altitude= float(altitude.degrees)
+altitude_radians = altitude*(np.pi/180)
+cloudheight = np.tan(altitude_radians)*lenght
+cloudheight = np.round(cloudheight,2)
 
 print("Shadow is exactly", cloudheight, "meters from ground!")
-
+print(list_of_values)
