@@ -4,15 +4,15 @@ from numpy import average
 
 
 # open specific cloud
-im = Image.open(r'C:\Users\kiv\Documents\GitHub\astrox\white.png') # Can be many different formats.
+im = Image.open(r'C:\Users\kiv\Documents\GitHub\astrox\AO_2022.png') # Can be many different formats.
 pix = im.load()
 # get the width and hight of the image for iterating over
 print(im.size)  
 
 # set coordinates from AI model
-x = 252
-y = 0
-angle = 180 # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
+x = 198
+y = 118
+angle = 90 # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
 
 angle_radians =np.radians(angle)
 x_increase_meta = np.sin(angle_radians)
@@ -74,7 +74,7 @@ try:
             value = round(average(data))
             print(value)
             y += 1
-        if count > 490:
+        if count > 10:
             break
 except:
     print("Program ran successfully")
