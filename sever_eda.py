@@ -5,21 +5,24 @@ import math
 import numpy as np
 import statistics
 
-def find_north(image_1, image_2, latitude_image_1, latitude_image_2):
-    latitude_image_1 = float(latitude_image_1)
-    latitude_image_2 = float(latitude_image_2)
-
+def find_north(image_1, image_2):
     def get_time(image):
         with open(image, 'rb') as image_file:
             img = Image(image_file)
-            time_str = img.get("datetime_original")
-            time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+            try:
+                time_str = img.get("datetime_original")
+                time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+            except TypeError:
+                time = 0
         return time
     def get_time_difference(image_1, image_2):
         time_1 = get_time(image_1)
         time_2 = get_time(image_2)
-        time_difference = time_2 - time_1
-        print("time_difference", time_difference)
+        if time_2 != 0:
+            time_difference = time_2 - time_1
+            print("time_difference", time_difference)
+        else:
+            return 0
         return time_difference.seconds
 
     def convert_to_cv(image_1, image_2):
@@ -99,6 +102,33 @@ def find_north(image_1, image_2, latitude_image_1, latitude_image_2):
         tangens_angle_for_general_direction_degrees = tangens_angle_for_general_direction_radians * (360/(2*np.pi))
 
         return coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees
+    
+    def get_latitude(image):
+        with open(image, 'rb') as image_file:
+            img = Image(image_file)
+            if img.has_exif:
+                try:
+                    latitude = img.get("gps_latitude")
+                    latitude_ref = img.get("gps_latitude_ref")
+                    if latitude == None:
+                        latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
+                except AttributeError:
+                    latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
+            else:
+                latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
+        return latitude, latitude_ref
+    def get_decimal_latitude(latitude, latitude_ref):
+        decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
+        if latitude_ref == "S" or latitude_ref == "W":
+            decimal_degrees = -decimal_degrees
+        return decimal_degrees
+
+    def get_latitudes(image_1, image_2):    
+        latitude_image_1_x, latitude_image_1_ref = get_latitude(image_1)
+        latitude_image_1 = get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
+        latitude_image_2_x, latitude_image_2_ref = get_latitude(image_2)
+        latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
+        return latitude_image_1, latitude_image_2
 
     #latitude_image_1 = -43.88975 #latitude před procesem
     #latitude_image_2 = -44.18364 #latitude po procesu
@@ -115,7 +145,7 @@ def find_north(image_1, image_2, latitude_image_1, latitude_image_2):
     #latitude_image_1 = -21.26222 #latitude namibie 1
     #latitude_image_1 = -20.82889 #latitude namibie 2
     #latitude_image_2 = -20.39417 #latitude namibie 3
-
+    latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     time_difference = get_time_difference(image_1, image_2) 
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
     keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10000) 
@@ -161,7 +191,10 @@ def find_north(image_1, image_2, latitude_image_1, latitude_image_2):
 
     poloha_severu=clockwise_alpha_k-clockwise_edoov_coefficient
     print("Poloha severu: ",poloha_severu)
+    print(latitude_image_1, latitude_image_2)
     return poloha_severu, clockwise_edoov_coefficient
 
+
+
 if __name__ == '__main__':
-    find_north(".\\namibie1.jpg", ".\\namibie2.jpg", "-25.07194", "-25.49306")
+    find_north(".\\foto1.jpg", ".\\foto2.jpg")
