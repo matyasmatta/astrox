@@ -35,7 +35,7 @@ def calculate_matches(descriptors_1, descriptors_2):
     matches = sorted(matches, key=lambda x: x.distance)
     return matches
 def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
-    match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:100000000], None)
+    match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:10000], None)
     resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
     cv2.imshow('matches', resize)
     cv2.waitKey(0)
@@ -103,28 +103,28 @@ def find_matching_coordinates(keypoints_1, keypoints_2, matches):
 #    return speed
 
 
-image_1 = r'C:\Users\kiv\Downloads\eda\eda\mad1.jpg'
-image_2 = r'C:\Users\kiv\Downloads\eda\eda\mad2.jpg'
+image_1 = r"C:\Users\trajc\OneDrive\Dokumenty\GitHub\astrox2\astrox\eda\direction5\nam21.jpg"
+image_2 = r'C:\Users\trajc\OneDrive\Dokumenty\GitHub\astrox2\astrox\eda\direction5\nam23.jpg'
 
 #latitude_image_1 = -43.88975 #latitude před procesem
 #latitude_image_2 = -44.18364 #latitude po procesu
 #latitude_image_1 = 1 #latitude před procesem
 #latitude_image_2 = -1 #latitude po procesu
-latitude_image_1 = -13.12361 #latitude před procesem madagaskar
-latitude_image_2 = -12.67333 #latitude po procesu madagaskar
+#latitude_image_1 = -13.12361 #latitude před procesem madagaskar
+#latitude_image_2 = -12.67333 #latitude po procesu madagaskar
 #latitude_image_1 = -25.49306 #latitude před procesem namibie
 #latitude_image_2 = -25.07194 #latitude po procesu namibie
 #latitude_image_1 = 51.61778 #latitude switzerland
 #latitude_image_2 = 51.55894 #latitude switzerland
 
 
-#latitude_image_1 = -21.26222 #latitude namibie 1
+latitude_image_1 = -21.26222 #latitude namibie 1
 #latitude_image_1 = -20.82889 #latitude namibie 2
-#latitude_image_2 = -20.39417 #latitude namibie 3
+latitude_image_2 = -20.39417 #latitude namibie 3
 
 #time_difference = get_time_difference(image_1, image_2) 
 image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 100) 
+keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
 matches = calculate_matches(descriptors_1, descriptors_2)
 display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
 coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)

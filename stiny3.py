@@ -5,16 +5,16 @@ from skyfield import api
 from skyfield import almanac
 
 # open specific cloud
-im = Image.open(r'dataset\sample_crop\zchop.meta.x000.y000.n011.jpg') # Can be many different formats.
+im = Image.open(r'.\tetproedika.jpg') # Can be many different formats.
 pix = im.load()
 
 # get the width and height of the image for iterating over
 print(im.size)  
 
 # set coordinates from AI model
-x = 295
-y = 197
-angle = 310 # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
+x = 1657
+y = 777
+angle = 325 # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
 
 # calculate meta angle
 angle_radians =np.radians(angle)
@@ -291,7 +291,7 @@ def calculate_using_min_max(list_of_values):
 
     # find difference between the two pixel lenghts
     shadow_lenght = shadow_location - cloud_location
-    print(shadow_lenght)
+    print("minmax", shadow_lenght)
     return shadow_lenght
 
 def calculate_using_maximum_change(list_of_values):
@@ -317,7 +317,7 @@ def calculate_using_maximum_change(list_of_values):
 
     # find difference between the two pixel lenghts
     shadow_lenght = shadow_location - cloud_location
-    print(shadow_lenght)
+    print("max difference", shadow_lenght)
     return shadow_lenght
 
 # define a simple function to calculate distance based on a given FOV and distance in pixels
@@ -347,8 +347,6 @@ if angle_final > 45:
     lenght = lenght/np.sin(angle_final_radians)
 print("lenght2", lenght)
 
-
-
 print("Shadow is exactly", lenght, "meters from the cloud!")
       
 # use the NASA API to be able to calculate sun's position
@@ -360,11 +358,11 @@ sun = ephem["Sun"]
 earth = ephem["Earth"]
 
 # define where photo was taken(usually via EXIF data)
-coordinates_latitude = "34.28614 S"
-coordinates_longtitude = "147.9515 E"
+coordinates_latitude = "15.357973 S"
+coordinates_longtitude = "142.64083 E"
 # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
 location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
-sun_pos = (earth + location).at(ts.tt(2022,1,15,5,16,5)).observe(sun).apparent()
+sun_pos = (earth + location).at(ts.tt(2022,1,15,6,55,0)).observe(sun).apparent()
 altitude, azimuth, distance = sun_pos.altaz()
 
 print(f"Azimuth: {azimuth.degrees:.4f}")
