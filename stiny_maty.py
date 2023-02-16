@@ -47,7 +47,7 @@ class sun_data:
         azimuth= float(azimuth.degrees)
         return(azimuth)
 
-def calculate_shadow(file_path, x, y, angle):
+def calculate_shadow(file_path, x, y, angle, latitude, longtitude):
     # open specific cloud
     im = Image.open(file_path) # Can be many different formats.
     pix = im.load()
@@ -122,7 +122,7 @@ def calculate_shadow(file_path, x, y, angle):
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
     limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
     limit = limit_shadow_cloud_distance_pixels
-    # print("limit", limit)
+    print("limit", limit)
 
     # clear the whole txt file
     with open('stiny.txt', 'w') as f:
@@ -461,7 +461,7 @@ def calculate_shadow(file_path, x, y, angle):
     cloudheight = np.tan(altitude_radians)*lenght
     cloudheight = np.round(cloudheight,2)
 
-    print("Shadow is exactly", cloudheight, "meters from ground!")
+    # print("Shadow is exactly", cloudheight, "meters from ground!")
     # print(list_of_values)
     return cloudheight
 
