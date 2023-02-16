@@ -66,8 +66,7 @@ def ai_model(image_path):
     print(scale)
 
     # print('----INFERENCE TIME----')
-    # print('Note: The first inference is slow because it includes',
-        'loading the model into Edge TPU memory.')
+    # print('Note: The first inference is slow because it includes', 'loading the model into Edge TPU memory.')
     for _ in range(2):
         start = time.perf_counter()
         interpreter.invoke()

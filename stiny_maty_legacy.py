@@ -47,7 +47,7 @@ class sun_data:
         azimuth= float(azimuth.degrees)
         return(azimuth)
 
-def calculate_shadow(file_path, x, y, angle):
+def calculate_shadow(file_path, x, y, angle, latitude, longtitude):
     # open specific cloud
     im = Image.open(file_path) # Can be many different formats.
     pix = im.load()
@@ -151,7 +151,7 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                pix[x,y] = (0,0,0)
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
@@ -164,7 +164,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 x += 1
                 y -= 1
             if x_increase_final_abs < y_increase_final_abs:
@@ -181,7 +180,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y -= 1
                 x_sum += x_increase_final_abs
@@ -216,7 +214,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
@@ -229,7 +226,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 x += 1
                 y += 1
             if x_increase_final_abs < y_increase_final_abs:
@@ -246,7 +242,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
@@ -281,7 +276,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
@@ -294,7 +288,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 x -= 1
                 y += 1
             if x_increase_final_abs < y_increase_final_abs:
@@ -311,7 +304,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
@@ -342,7 +334,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
@@ -355,7 +346,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 x -= 1
                 y -= 1
             if x_increase_final_abs < y_increase_final_abs:
@@ -372,7 +362,6 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
                 list_of_values.append(value)
                 # add to y_sum and move pixel x for 1
                 y -= 1
@@ -478,5 +467,4 @@ def calculate_shadow(file_path, x, y, angle):
     return cloudheight
 
 if __name__ == '__main__':
-    cloudheight = calculate_shadow('zchop.meta.x000.y000.n011.jpg', 294,199,310)
-    print(cloudheight)
+    calculate_shadow(r'zchop.meta.x000.y000.n011.jpg', 294,199,310)
