@@ -20,7 +20,7 @@ def find_north(image_1, image_2):
         time_2 = get_time(image_2)
         if time_2 != 0:
             time_difference = time_2 - time_1
-            print("time_difference", time_difference)
+#            print("time_difference", time_difference)
         else:
             return 0
         return time_difference.seconds
@@ -177,7 +177,7 @@ def find_north(image_1, image_2):
 
     alpha_k=np.arcsin((np.cos(51.8*(np.pi/180)))/(np.cos(latitude_avg*(np.pi/180))))
     alpha_k = alpha_k*(180/np.pi)
-    print("Alpha:", alpha_k)
+#    print("Alpha:", alpha_k)
     corrected_alpha_k=0
     if latitude_image_1>latitude_image_2:
         corrected_alpha_k=180-alpha_k
@@ -185,16 +185,16 @@ def find_north(image_1, image_2):
         corrected_alpha_k=alpha_k
     clockwise_alpha_k=360-corrected_alpha_k
 
-    print("Clockwise alpha_k: ",clockwise_alpha_k)
-    print("Edoov koeficient: ", edoov_coefficient)
-    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
+#    print("Clockwise alpha_k: ",clockwise_alpha_k)
+#    print("Edoov koeficient: ", edoov_coefficient)
+#    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
 
     poloha_severu=clockwise_alpha_k-clockwise_edoov_coefficient
-    print("Poloha severu: ",poloha_severu)
-    print(latitude_image_1, latitude_image_2)
+#    print("Poloha severu: ",poloha_severu)
+#    print(latitude_image_1, latitude_image_2)
     return poloha_severu, clockwise_edoov_coefficient
 
 
 
 if __name__ == '__main__':
-    find_north(".\\foto1.jpg", ".\\foto2.jpg")
+    find_north(".\\sw1.jpg", ".\\sw2.jpg")
