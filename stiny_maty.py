@@ -3,6 +3,7 @@ import numpy as np
 from numpy import average 
 from skyfield import api
 from skyfield import almanac
+import os
 
 # define classes
 class sun_data:
@@ -53,7 +54,9 @@ def calculate_shadow(file_path, x, y, angle):
     pix = im.load()
 
     # get the width and height of the image for iterating over
-    # print(im.size)  
+    # print(im.size) 
+    total_x, total_y = im.size
+    print(total_x, total_y)
 
     # set coordinates from AI model
     x = x
@@ -118,7 +121,7 @@ def calculate_shadow(file_path, x, y, angle):
     sun_altitude_for_limit = sun_data.altitude("34.28614 S", "147.9849 E", 2022, 1, 15, 5, 16, 5)
     # print("altitude", sun_altitude_for_limit)
     sun_altitude_for_limit_radians = sun_altitude_for_limit*(np.pi/180)
-    limit_cloud_height = 15000 #meters
+    limit_cloud_height = 7500 #meters
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
     limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
     limit = limit_shadow_cloud_distance_pixels
@@ -129,6 +132,12 @@ def calculate_shadow(file_path, x, y, angle):
         f.write("\n")
     with open('stiny_red.txt', 'w') as f:
         f.write("\n")
+
+    if os.path.exists('meta.jpg') == False:
+        im2 = im.copy()
+        im.save('meta.jpg')
+
+    im2 = Image.open('meta.jpg')
     # put quarter information back for pixel reading
     ## first two lines in each if condition are mostly legacy for backwards-compatibility, code should function without them though not tested yet
     if q == 1:
@@ -151,10 +160,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs == y_increase_final_abs:
                 data = (pix[x,y])
                 # print(data)
@@ -164,9 +175,11 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 x += 1
                 y -= 1
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs < y_increase_final_abs:
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
@@ -181,10 +194,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y -= 1
                 x_sum += x_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             #write into txt
             with open('stiny.txt', 'a') as f:
                 value = str(value)
@@ -216,10 +231,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs == y_increase_final_abs:
                 data = (pix[x,y])
                 # print(data)
@@ -229,9 +246,11 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 x += 1
                 y += 1
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs < y_increase_final_abs:
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
@@ -246,11 +265,13 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
                 #write into txt
+                if x > total_x or y > total_y:
+                    break
             with open('stiny.txt', 'a') as f:
                 value = str(value)
                 f.write(value)
@@ -281,10 +302,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs == y_increase_final_abs:
                 data = (pix[x,y])
                 # print(data)
@@ -294,9 +317,11 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 x -= 1
                 y += 1
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs < y_increase_final_abs:
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
@@ -311,10 +336,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             #write into txt
             value = str(value)
             with open('stiny.txt', 'a') as f:
@@ -342,10 +369,12 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs == y_increase_final_abs:
                 data = (pix[x,y])
                 # print(data)
@@ -355,9 +384,11 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 x -= 1
                 y -= 1
+                if x > total_x or y > total_y:
+                    break
             if x_increase_final_abs < y_increase_final_abs:
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
@@ -372,11 +403,13 @@ def calculate_shadow(file_path, x, y, angle):
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
-                im.putpixel((x,y),(0,0,0,0))
+                im2.putpixel((x,y),(0,0,0,0))
                 list_of_values.append(value)
                 # add to y_sum and move pixel x for 1
                 y -= 1
                 x_sum += x_increase_final_abs
+                if x > total_x or y > total_y:
+                    break
             #write into txt
             with open('stiny.txt', 'a') as f:
                 value = str(value)
@@ -398,43 +431,71 @@ def calculate_shadow(file_path, x, y, angle):
 
     # define a calculation method for cloud-shadow difference (the following one just takes the min and max values)
     def calculate_using_min_max(list_of_values):
-        # find items in list correspoding to the lowest and highest point
-        shadow_low = min(list_of_values)
-        cloud_high = max(list_of_values)
+        def main():
+            # find items in list correspoding to the lowest and highest point
+            shadow_low = min(list_of_values)
+            cloud_high = max(list_of_values)
 
-        # find of said items in the list (their order)
-        shadow_location = list_of_values.index(shadow_low)
-        cloud_location = list_of_values.index(cloud_high)
+            # find of said items in the list (their order)
+            shadow_location = list_of_values.index(shadow_low)
+            cloud_location = list_of_values.index(cloud_high)
+
+            # find the difference
+            shadow_lenght = shadow_location - cloud_location
+            return shadow_lenght, cloud_high
+        shadow_lenght, cloud_high = main()
+        while True:
+            if shadow_lenght <= 0:
+                list_of_values.remove(cloud_high)
+                shadow_lenght, cloud_high = main()
+                # print("When calculating via min max, the shadow resulted being negative, recalculation in progress.")
+            else:
+                break
 
         # find difference between the two pixel lenghts
-        shadow_lenght = shadow_location - cloud_location
         # print("minmax", shadow_lenght)
         return shadow_lenght
 
     def calculate_using_maximum_change(list_of_values):
-        n = 0
-        list_of_changes = []
-        while True:
-            try:
-                current_data = list_of_values[n]
-                previous_data = list_of_values[n-1]
-                change_in_data = current_data-previous_data
-                if n == 0:
-                    pass
-                else:
-                    list_of_changes.append(change_in_data)
-                n+=1
-            except:
-                break
-        shadow_low = max(list_of_changes)
-        cloud_high = min(list_of_changes)
+        def main():
+            n = 0
+            list_of_changes = []
+            while True:
+                try:
+                    current_data = list_of_values[n]
+                    previous_data = list_of_values[n-1]
+                    change_in_data = current_data-previous_data
+                    if n == 0:
+                        pass
+                    else:
+                        list_of_changes.append(change_in_data)
+                    n+=1
+                except:
+                    break
+            shadow_low = max(list_of_changes)
+            cloud_high = min(list_of_changes)
 
-        shadow_location = list_of_changes.index(shadow_low)
-        cloud_location = list_of_changes.index(cloud_high)
+            shadow_location = list_of_changes.index(shadow_low)
+            cloud_location = list_of_changes.index(cloud_high)
+
+            # find difference between the two pixel lenghts
+            shadow_lenght = shadow_location - cloud_location
+            # print("max difference", shadow_lenght)
+            # im2.show()
+            return shadow_lenght, cloud_high, cloud_location
+        shadow_lenght, cloud_high, cloud_location = main()
+        while True:
+            n = 0
+            if shadow_lenght <= 0:
+                item_to_be_deleted = list_of_values[cloud_location]
+                list_of_values.remove(item_to_be_deleted)
+                shadow_lenght, cloud_high, cloud_location = main()
+                # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
+            else:
+                break
 
         # find difference between the two pixel lenghts
-        shadow_lenght = shadow_location - cloud_location
-        # print("max difference", shadow_lenght)
+        # print("minmax", shadow_lenght)
         return shadow_lenght
 
     # define a simple function to calculate distance based on a given FOV and distance in pixels
@@ -442,6 +503,8 @@ def calculate_shadow(file_path, x, y, angle):
         fieldOfViewRadians = fieldOfView*(np.pi/180)
         distanceinmeters = int(distanceinpixels)*142
         return distanceinmeters
+    
+    im2.save('meta.jpg')
 
     shadow_lenght_min_max = calculate_using_min_max(list_of_values)
     shadow_lenght_max_difference = calculate_using_maximum_change(list_of_values)
