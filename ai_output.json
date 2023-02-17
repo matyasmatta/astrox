@@ -1,72 +1,72 @@
 {
     "0": {
-        "xmin": 324,
-        "ymin": 47,
-        "xmax": 388,
-        "ymax": 111,
-        "accuracy": 0.98046875
+        "xmin": 251,
+        "ymin": 250,
+        "xmax": 313,
+        "ymax": 313,
+        "accuracy": 0.99609375
     },
     "1": {
-        "xmin": 46,
-        "ymin": 369,
-        "xmax": 86,
-        "ymax": 421,
-        "accuracy": 0.94921875
+        "xmin": 420,
+        "ymin": 97,
+        "xmax": 463,
+        "ymax": 151,
+        "accuracy": 0.96875
     },
     "2": {
-        "xmin": 15,
-        "ymin": 425,
-        "xmax": 73,
-        "ymax": 480,
-        "accuracy": 0.94140625
+        "xmin": -1,
+        "ymin": -1,
+        "xmax": 475,
+        "ymax": 486,
+        "accuracy": 0.94921875
     },
     "3": {
-        "xmin": 295,
-        "ymin": 301,
-        "xmax": 360,
-        "ymax": 363,
-        "accuracy": 0.8984375
+        "xmin": 433,
+        "ymin": 215,
+        "xmax": 465,
+        "ymax": 261,
+        "accuracy": 0.80078125
     },
     "4": {
-        "xmin": 397,
-        "ymin": 295,
-        "xmax": 433,
-        "ymax": 339,
-        "accuracy": 0.84375
+        "xmin": 324,
+        "ymin": 56,
+        "xmax": 361,
+        "ymax": 96,
+        "accuracy": 0.80078125
     },
     "5": {
-        "xmin": 329,
-        "ymin": 242,
-        "xmax": 376,
-        "ymax": 298,
-        "accuracy": 0.74609375
+        "xmin": -2,
+        "ymin": -8,
+        "xmax": 461,
+        "ymax": 285,
+        "accuracy": 0.4609375
     },
     "6": {
-        "xmin": 422,
-        "ymin": 244,
-        "xmax": 458,
-        "ymax": 279,
-        "accuracy": 0.61328125
+        "xmin": 309,
+        "ymin": 334,
+        "xmax": 327,
+        "ymax": 353,
+        "accuracy": 0.4609375
     },
     "7": {
-        "xmin": 235,
-        "ymin": 302,
-        "xmax": 279,
-        "ymax": 347,
-        "accuracy": 0.61328125
+        "xmin": 337,
+        "ymin": 251,
+        "xmax": 356,
+        "ymax": 274,
+        "accuracy": 0.38671875
     },
     "8": {
-        "xmin": 316,
-        "ymin": 436,
-        "xmax": 344,
-        "ymax": 468,
-        "accuracy": 0.61328125
+        "xmin": 327,
+        "ymin": 346,
+        "xmax": 348,
+        "ymax": 366,
+        "accuracy": 0.38671875
     },
     "9": {
-        "xmin": 383,
-        "ymin": 51,
-        "xmax": 440,
-        "ymax": 115,
-        "accuracy": 0.578125
+        "xmin": 402,
+        "ymin": 231,
+        "xmax": 432,
+        "ymax": 269,
+        "accuracy": 0.3515625
     }
 }

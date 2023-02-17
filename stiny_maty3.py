@@ -141,7 +141,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     sun_altitude_for_limit = sun_data.altitude("34.28614 S", "147.9849 E", 2022, 1, 15, 5, 16, 5)
     # print("altitude", sun_altitude_for_limit)
     sun_altitude_for_limit_radians = sun_altitude_for_limit*(np.pi/180)
-    limit_cloud_height = 7500 #meters
+    limit_cloud_height = 7500 #not meters
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
     limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
     limit = limit_shadow_cloud_distance_pixels
