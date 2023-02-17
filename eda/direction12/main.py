@@ -11,12 +11,12 @@ counter=0
 for i in range(65):
     i_1=str(counter)
     if counter < 10:
-        before = "photo_0000"
+        before = "eda\direction12\photo_0000"
     else:
         if counter <100:
-            before = "photo_000"
+            before = "eda\direction12\photo_000"
         else:
-            before = "photo_00"
+            before = "eda\direction12\photo_00"
     image_1=str(before + i_1 +".jpg")
     print(image_1)
     i_2=str(counter+1)
@@ -26,3 +26,5 @@ for i in range(65):
     data = sever_eda.find_north(image_1, image_2)
     print(data)
     counter+=2
+
+    
