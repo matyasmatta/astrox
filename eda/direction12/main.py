@@ -11,10 +11,10 @@ counter=0
 for i in range(65):
     i_1=str(counter)
     if counter < 10:
-        before = "eda\direction12\photo_0000"
+        before = "eda\direction12\photo_1830"
     else:
         if counter <100:
-            before = "eda\direction12\photo_000"
+            before = "eda\direction12\photo_183"
         else:
             before = "eda\direction12\photo_00"
     image_1=str(before + i_1 +".jpg")

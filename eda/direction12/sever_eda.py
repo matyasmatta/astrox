@@ -62,7 +62,7 @@ def find_north(image_1, image_2):
         match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:1000], None)
         resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
         cv2.imshow('matches', resize)
-        cv2.waitKey(200)
+        cv2.waitKey(1000)
         cv2.destroyWindow('matches')
 
     def hack_ISS():
@@ -179,7 +179,7 @@ def find_north(image_1, image_2):
         resized = cv2.resize(image, (800,600), interpolation = cv2.INTER_AREA)
         cv2.putText(resized, "N", print_cordinations, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5, cv2.LINE_AA)
         cv2.imshow('north', resized)
-        cv2.waitKey(200)
+        cv2.waitKey(1000)
         cv2.destroyAllWindows()
 
     #latitude_image_1 = -43.88975 #latitude před procesem
@@ -251,7 +251,6 @@ def find_north(image_1, image_2):
 #    print(latitude_image_1, latitude_image_2)
 
     print("median", list.get_median())
-    print("list", list.get_list())
     show_north(poloha_severu)
     return poloha_severu
 
