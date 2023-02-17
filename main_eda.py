@@ -161,22 +161,15 @@ class north:
         
         #getting latitude of both images from EXIF data
         def get_latitude(image):
-            print("ve funkci")
             with open(image, 'rb') as image_file:
-                print("v with")
                 img = exify(image_file)
-                print("precetl jsem")
-                print("mam exif")
                 try:
                     latitude = img.get("gps_latitude")
                     latitude_ref = img.get("gps_latitude_ref")
-                    print("0")
                     if latitude == None:
                         latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-                        print("1")
                 except AttributeError:
                     latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-                    print("2")
             return latitude, latitude_ref
         
         #converting latitude to decimal
@@ -232,9 +225,7 @@ class north:
         #latitude_image_2 = -20.39417 #latitude namibie 3
 
         #using defined functions
-        print("zacatek")
         latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
-        print("po")
         #time_difference = get_time_difference(image_1, image_2) 
         image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
         keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10) 
@@ -1050,11 +1041,12 @@ try:
         data = north.find_north(image_1, image_2)
         print(list.get_median())
         count_for_edovo_srac += 1
+        sleep(0)
         print(datetime.now())
-        sleep(2)
         print(image_1)
     while (datetime.now() < start_time + timedelta(minutes=170)):
         print("cas")
+        break
         pass
 except:
     print("except")
