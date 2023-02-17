@@ -7,24 +7,32 @@ import statistics
 
 #data = stiny_maty.calculate_shadow('.\\zchop.meta.x000.y000.n011.jpg', 294,199,310)
 #print(data)
-counter=0
-for i in range(65):
+counter=234
+for i in range(130):
     i_1=str(counter)
-    if counter < 10:
-        before = "eda\direction12\photo_1830"
+    if int(i_1) < 10:
+        before_1 = "eda\direction12\photo_18"
     else:
-        if counter <100:
-            before = "eda\direction12\photo_183"
-        else:
-            before = "eda\direction12\photo_00"
-    image_1=str(before + i_1 +".jpg")
-    print(image_1)
+        if int(i_1) <100:
+            before_1 = "eda\direction12\photo_18"
+        if int(i_1) >= 100:
+            before_1 = "eda\direction12\photo_18"
+    image_1=str(before_1 + i_1 +".jpg")
     i_2=str(counter+1)
-    image_2=str(before + i_2 +".jpg")
-    print(image_2)
+    #print(image_1)
+    if int(i_2) < 10:
+        before_2 = "eda\direction12\photo_18"
+    else:
+        if int(i_2) <100:
+            before_2 = "eda\direction12\photo_18"
+        if int(i_1) >= 100:
+            before_2 = "eda\direction12\photo_18"
+
+    image_2=str(before_2 + i_2 +".jpg")
+    #print(image_2)
 
     data = sever_eda.find_north(image_1, image_2)
-    print(data)
-    counter+=2
+    #print(data)
+    counter+=1
 
     

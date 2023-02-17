@@ -62,7 +62,7 @@ def find_north(image_1, image_2):
         match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:1000], None)
         resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
         cv2.imshow('matches', resize)
-        cv2.waitKey(1000)
+        cv2.waitKey(10)
         cv2.destroyWindow('matches')
 
     def hack_ISS():
@@ -171,15 +171,15 @@ def find_north(image_1, image_2):
         print_x=int(x_0+dx)
         print_y=int(y_0+dy)
         print_cordinations=(print_x, print_y)
-        print(angle)
-        print(x_0, y_0)
-        print("lool", dx, dy)
-        print(print_cordinations)
+        #print(angle)
+        #print(x_0, y_0)
+        #print("lool", dx, dy)
+        #print(print_cordinations)
         image=cv2.imread(image_1)
         resized = cv2.resize(image, (800,600), interpolation = cv2.INTER_AREA)
         cv2.putText(resized, "N", print_cordinations, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5, cv2.LINE_AA)
         cv2.imshow('north', resized)
-        cv2.waitKey(1000)
+        cv2.waitKey(10)
         cv2.destroyAllWindows()
 
     #latitude_image_1 = -43.88975 #latitude před procesem
@@ -247,14 +247,15 @@ def find_north(image_1, image_2):
 
     #combinating both informations to get real position of north on photo
     poloha_severu=clockwise_alpha_k-median_clockwise_edoov_coefficient
-    print("Poloha severu: ",poloha_severu)
+    #print("Poloha severu: ",poloha_severu)
 #    print(latitude_image_1, latitude_image_2)
 
-    print("median", list.get_median())
+    print(list.get_median())
     show_north(poloha_severu)
+    #print(list.get_list())
     return poloha_severu
 
 
 
 if __name__ == '__main__':
-    find_north(r"eda\direction12\mad1.jpg", r"eda\direction12\mad2.jpg")
+    find_north(r"eda\direction12\sw1.jpg", r"eda\direction12\sw2.jpg")
