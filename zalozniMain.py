@@ -13,6 +13,7 @@ sense.color.integration_cycles = 64
 start_time = datetime.now()
 now_time = datetime.now()
 camera = PiCamera()
+camera.resolution = (4056, 3040)
 sleep(2)
 
 with open('data.csv', 'w', buffering=1, newline='') as f:
@@ -67,10 +68,8 @@ def get_sense_data():
         data_writer = writer(f)
         data_writer.writerow(sense_data)
 count = 0
-while (datetime.now() < start_time + timedelta(minutes=1)):
+while (datetime.now() < start_time + timedelta(minutes=5)):
     get_sense_data()
-    print(datetime.now())
-    print(start_time + timedelta(minutes=1))
-    sleep(5)
+    sleep(20)
     count += 1
 print("konec")
