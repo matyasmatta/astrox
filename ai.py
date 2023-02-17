@@ -37,6 +37,8 @@ from pycoral.adapters import common
 from pycoral.adapters import detect
 from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
+import json
+import os
 
 
 def draw_objects(draw, objs, labels):
@@ -100,7 +102,13 @@ def ai_model(image_path):
         image.save('grace_hopper_processed.bmp')
         counter_for_ai_output += 1
         
-    image.show()
+    # image.show()
+    if os.path.exists('meta.jpg') == True:
+        os.remove('meta.jpg')
+    image.save('meta.jpg')
+
+    with open('ai_output.json', 'w', encoding='utf-8') as f:
+        json.dump(ai_output, f, ensure_ascii=False, indent=4)
     return ai_output
 
 
