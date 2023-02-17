@@ -57,6 +57,16 @@ class sun_data:
         azimuth= float(azimuth.degrees)
         return(azimuth)
 
+def starting_point_corrector(x_centre, y_centre, x_increase_final, y_increase_final):
+    constant_for_starting_point_correction = 10
+    x_final = x_centre - constant_for_starting_point_correction*x_increase_final
+    y_final = y_centre - constant_for_starting_point_correction*y_increase_final
+    x_final = round(x_final, 0)
+    x_final = int(x_final)
+    y_final = round(y_final, 0)
+    y_final = int(y_final)
+    return x_final, y_final
+
 def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id="not specified"):
     # open specific cloud
     im = Image.open(file_path) # Can be many different formats.
@@ -71,6 +81,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     x = x
     y = y
     angle = angle # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
+
 
     # calculate meta angle
     angle_radians =np.radians(angle)
@@ -142,17 +153,16 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     with open('stiny_red.txt', 'w') as f:
         f.write("\n")
 
-    global im2
     if os.path.exists('meta.jpg') == False:
         im2 = im.copy()
         im.save('meta.jpg')
 
-    im2 = Image.open('meta.jpg')
     # put quarter information back for pixel reading
     ## first two lines in each if condition are mostly legacy for backwards-compatibility, code should function without them though not tested yet
     if q == 1:
         x_increase_final = x_increase_final
         y_increase_final = -y_increase_final
+        x,y = starting_point_corrector(x,y, x_increase_final, y_increase_final)
         while True:
             if x_increase_final_abs > y_increase_final_abs:
                 # check if y_sum is bigger than 1
@@ -169,7 +179,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
@@ -177,7 +189,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 write_pixel_into_json(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                 if x > total_x or y > total_y:
                     break
-            if x_increase_final_abs == y_increase_final_abs:
+            if x_increase_final_abs == y_increase_final_abs:               
                 data = (pix[x,y])
                 # print(data)
                 value = round(average(data))
@@ -186,14 +198,16 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 x += 1
                 y -= 1
                 # print(count, limit)
                 write_pixel_into_json(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                 if x > total_x or y > total_y:
                     break
-            if x_increase_final_abs < y_increase_final_abs:
+            if x_increase_final_abs < y_increase_final_abs:               
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
                     x_sum -= 1
@@ -207,7 +221,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 y -= 1
                 x_sum += x_increase_final_abs
@@ -228,10 +244,11 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 break
     if q == 2:
         x_increase_final = x_increase_final
-        y_increase_final = y_increase_final   
+        y_increase_final = y_increase_final  
+        x,y = starting_point_corrector(x,y, x_increase_final, y_increase_final) 
         while True:
             count += 1
-            if x_increase_final_abs > y_increase_final_abs:
+            if x_increase_final_abs > y_increase_final_abs:        
                 # check if y_sum is bigger than 1
                 y_sum = abs(y_sum)
                 if y_sum >= 1:
@@ -246,7 +263,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 x += 1
                 y_sum += y_increase_final_abs
@@ -254,7 +273,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 write_pixel_into_json(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                 if x > total_x or y > total_y:
                     break
-            if x_increase_final_abs == y_increase_final_abs:
+            if x_increase_final_abs == y_increase_final_abs:          
                 data = (pix[x,y])
                 # print(data)
                 value = round(average(data))
@@ -263,14 +282,16 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 x += 1
                 y += 1
                 # print(count, limit)
                 write_pixel_into_json(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                 if x > total_x or y > total_y:
                     break
-            if x_increase_final_abs < y_increase_final_abs:
+            if x_increase_final_abs < y_increase_final_abs:   
                 x_sum = abs(x_sum)
                 if x_sum >= 1:
                     x_sum -= 1
@@ -284,7 +305,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
@@ -306,6 +329,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     if q == 3:
         x_increase_final = -x_increase_final
         y_increase_final = y_increase_final 
+        x,y = starting_point_corrector(x,y, x_increase_final, y_increase_final)
         while True:
             count += 1
             if x_increase_final_abs > y_increase_final_abs:
@@ -323,7 +347,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
@@ -340,7 +366,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 x -= 1
                 y += 1
                 # print(count, limit)
@@ -361,7 +389,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 y += 1
                 x_sum += x_increase_final_abs
@@ -379,6 +409,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     if q == 4:
         x_increase_final = -x_increase_final
         y_increase_final = -y_increase_final 
+        x,y = starting_point_corrector(x,y, x_increase_final, y_increase_final)
         while True:
             count += 1
             if x_increase_final_abs > y_increase_final_abs:
@@ -396,7 +427,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 x -= 1
                 y_sum += y_increase_final_abs
@@ -414,7 +447,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 x -= 1
                 y -= 1
                 # print(count, limit)
@@ -435,7 +470,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("red", value_red)
                 list_of_red.append(value_red)
                 list_of_values.append(value)
+                im2 = Image.open('meta.jpg')
                 im2.putpixel((x,y),(0,0,0,0))
+                im2.save('meta.jpg')
                 # add to y_sum and move pixel x for 1
                 y -= 1
                 x_sum += x_increase_final_abs
@@ -454,11 +491,10 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 f.write("\n")
             if count > limit:
                 break
-    
-    
+
     # # print for debugging
     # print(x_increase_final, y_increase_final)
-
+    im2.save('meta.jpg')
     # set absolute final values
     x_increase_final_abs = abs(x_increase_final)
     y_increase_final_abs = abs(x_increase_final)
@@ -512,6 +548,28 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                             pass
                     except:
                         pass
+        with open('pixels.csv', "r") as f:
+            csv_file = csv.reader(f, delimiter=",")
+            for row in csv_file:
+                if not ''.join(row).strip():
+                    pass
+                else:
+                    try:
+                        if int(row[1]) == cloud_id and int(row[0]) == image_id and int(row[2]) == cloud_location:
+                            x = row[3]
+                            y = row[4]
+                            x = int(x)
+                            y = int(y)
+                            im3 = Image.open('meta.jpg')
+                            im3.putpixel((x,y),(255,0,0,0))
+                            print("found it!", x, y, cloud_location)
+                            im3.show()
+                            im3.save('meta.jpg')
+                            break
+                        else:
+                            pass
+                    except:
+                        pass
         # find difference between the two pixel lenghts
         # print("minmax", shadow_lenght)
         return shadow_lenght
@@ -542,40 +600,17 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             shadow_lenght = shadow_location - cloud_location
             # print("max difference", shadow_lenght)
             # im2.show()
-            return shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location
-        shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+            return shadow_lenght, cloud_high, cloud_location
+        shadow_lenght, cloud_high, cloud_location = main()
         while True:
             n = 0
             if shadow_lenght <= 0:
                 item_to_be_deleted = list_of_values[cloud_location]
                 list_of_values.remove(item_to_be_deleted)
-                shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+                shadow_lenght, cloud_high, cloud_location = main()
                 # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
             else:
                 break
-        with open('pixels.csv', "r") as f:
-            csv_file = csv.reader(f, delimiter=",")
-            for row in csv_file:
-                # print(row)
-                if not ''.join(row).strip():
-                    pass
-                else:
-                    try:
-                        if int(row[1]) == cloud_id and int(row[0]) == image_id and int(row[2]) == shadow_location:
-                            im3 = Image.open('meta.jpg')
-                            x = row[3]
-                            y = row[4]
-                            x = int(x)
-                            y = int(y)
-                            im2.putpixel((x,y),(255,0,0,0))
-                            print("found it!", x, y, shadow_location)
-                            im3.show()
-                            im3.save('meta.jpg')
-                            break
-                        else:
-                            pass
-                    except:
-                        pass
 
         # find difference between the two pixel lenghts
         # print("minmax", shadow_lenght)
@@ -592,7 +627,6 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     shadow_lenght_max_difference_red = calculate_using_maximum_change(list_of_red)
     shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red)/3
 
-    im2.save('meta.jpg')
     difference_of_methods = abs(shadow_lenght_max_difference-shadow_lenght_min_max)
     difference_of_methods = np.round(difference_of_methods,2)
     # print("Difference between the two methods of cloud-shadow calculation is", difference_of_methods)
@@ -624,4 +658,4 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
 
 if __name__ == '__main__':
     cloudheight = calculate_shadow('zchop.meta.x000.y000.n011.jpg', 294,199,310)
-    # print(cloudheight)
+    print(cloudheight)

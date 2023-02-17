@@ -97,10 +97,11 @@ def ai_model(image_path):
         ai_output[counter_for_ai_output]['ymax'] = bbox.ymax
         ai_output[counter_for_ai_output]['accuracy'] = score
 
-        image = image.convert('RGB')
-        draw_objects(ImageDraw.Draw(image), objs, labels)
-        image.save('grace_hopper_processed.bmp')
         counter_for_ai_output += 1
+    image = image.convert('RGB')
+    draw_objects(ImageDraw.Draw(image), objs, labels)
+    image.save('grace_hopper_processed.bmp')
+    
         
     # image.show()
     if os.path.exists('meta.jpg') == True:

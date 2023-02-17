@@ -454,8 +454,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 f.write("\n")
             if count > limit:
                 break
-    
-    
+
     # # print for debugging
     # print(x_increase_final, y_increase_final)
 
@@ -502,11 +501,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                             y = row[4]
                             x = int(x)
                             y = int(y)
-                            im3 = Image.open('meta.jpg')
-                            im3.putpixel((x,y),(255,255,255,0))
+                            im2.putpixel((x,y),(255,255,255,0))
                             print("found it!", x, y, shadow_location)
-                            im3.show()
-                            im3.save('meta.jpg')
+                            im2.show()
                             break
                         else:
                             pass
@@ -542,40 +539,17 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             shadow_lenght = shadow_location - cloud_location
             # print("max difference", shadow_lenght)
             # im2.show()
-            return shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location
-        shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+            return shadow_lenght, cloud_high, cloud_location
+        shadow_lenght, cloud_high, cloud_location = main()
         while True:
             n = 0
             if shadow_lenght <= 0:
                 item_to_be_deleted = list_of_values[cloud_location]
                 list_of_values.remove(item_to_be_deleted)
-                shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+                shadow_lenght, cloud_high, cloud_location = main()
                 # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
             else:
                 break
-        with open('pixels.csv', "r") as f:
-            csv_file = csv.reader(f, delimiter=",")
-            for row in csv_file:
-                # print(row)
-                if not ''.join(row).strip():
-                    pass
-                else:
-                    try:
-                        if int(row[1]) == cloud_id and int(row[0]) == image_id and int(row[2]) == shadow_location:
-                            im3 = Image.open('meta.jpg')
-                            x = row[3]
-                            y = row[4]
-                            x = int(x)
-                            y = int(y)
-                            im2.putpixel((x,y),(255,0,0,0))
-                            print("found it!", x, y, shadow_location)
-                            im3.show()
-                            im3.save('meta.jpg')
-                            break
-                        else:
-                            pass
-                    except:
-                        pass
 
         # find difference between the two pixel lenghts
         # print("minmax", shadow_lenght)
