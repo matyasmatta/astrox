@@ -3,7 +3,7 @@ from datetime import datetime
 import cv2
 import math
 import numpy as np
-
+# test 
 #def get_time(image):
 #    with open(image, 'rb') as image_file:
 #        img = Image(image_file)
