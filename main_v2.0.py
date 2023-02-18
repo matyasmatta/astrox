@@ -257,7 +257,6 @@ class north:
         #show_north(poloha_severu)
         #print(list.get_list())
         return poloha_severu
-
 class ai:
     def draw_objects(draw, objs, labels):
         count = 0
@@ -1000,32 +999,54 @@ class photo:
         imageName = str("/img_" + str(count_for_edovo_srac) + ".jpg")
         camera.capture("./Pictures" + imageName)
 try:
-    start_time =  datetime.now()
-    camera = PiCamera()
-    sleep(2)
-    count_for_edovo_srac = 240
-    photo.get_photo(camera)
-    count_for_edovo_srac += 1
-    while (datetime.now() < start_time + timedelta(seconds=69)):
+    # first define all functions neccessary for operation and calibrate the camera
+    # pre-initialization
+    try:
+        start_time =  datetime.now()
+        camera = PiCamera()
+        sleep(2)
+        count_for_edovo_srac = 240
         photo.get_photo(camera)
-        i_1=str(count_for_edovo_srac-1)
-        before = "./Pictures2/photo_18"
-        image_1=str(before + i_1 +".jpg")
-        i_2=str(count_for_edovo_srac)
-        #print(image_1)
-        image_2=str(before + i_2 +".jpg")
-        #print(image_2)
-
-        data = north.find_north(image_1, image_2)
-        print(list.get_median())
         count_for_edovo_srac += 1
-        sleep(0)
-        print(datetime.now())
-        print(image_1)
-    while (datetime.now() < start_time + timedelta(minutes=170)):
-        print("cas")
-        break
-        pass
+    except:
+        print("There was an error during pre-initialization")
+
+    # initialise and calibrate the north data via north class
+    # initialization
+    try:
+        while (datetime.now() < start_time + timedelta(seconds=69)):
+            photo.get_photo(camera)
+            i_1=str(count_for_edovo_srac-1)
+            before = "./Pictures2/photo_18"
+            image_1=str(before + i_1 +".jpg")
+            i_2=str(count_for_edovo_srac)
+            #print(image_1)
+            image_2=str(before + i_2 +".jpg")
+            #print(image_2)
+
+            data = north.find_north(image_1, image_2)
+            print(list.get_median())
+            count_for_edovo_srac += 1
+            sleep(0)
+            print(datetime.now())
+            print(image_1)
+            north_initial = list.get_median()
+        print("North was defined at", north_initial, "counted counter-clockwise.")
+    except:
+        print("There was an error during the initialzitation")
+
+    # run the actual main code
+    # main runtime
+    try:
+        while (datetime.now() < start_time + timedelta(minutes=170)):
+            print("cas")
+            break
+            pass
+    except:
+        print("There was an error during the main runtime")
+
+    # after time has passed do automatic runtime checks
+    # finalization
 except:
-    print("except")
+    print("There was an error running the code")
     pass
