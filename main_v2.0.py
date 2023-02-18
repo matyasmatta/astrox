@@ -1322,7 +1322,7 @@ try:
             print(datetime.now())
             print(image_1)
             north_initial = list.get_median()
-        print("North was defined at", north_initial, "counted counter-clockwise.")
+        print("North was defined at", north_initial, "counted clockwise.")
     except:
         print("There was an error during the initialzitation")
 
