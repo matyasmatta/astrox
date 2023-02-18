@@ -17,13 +17,9 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 import json
 import os
-from PIL import Image
-import numpy as np
 from numpy import average 
 from skyfield import api
 from skyfield import almanac
-import os
-import json
 import csv
 from sense_hat import SenseHat
 from datetime import datetime, timedelta
