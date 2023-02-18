@@ -1330,34 +1330,53 @@ try:
     # main runtime
     try:
         # first take a photo outside the loop for first reference
-        image_1 = photo.get_photo(camera),
+        image_1 = photo.get_photo(camera)
+
         # make sure there is a little bit of differnce for the north class
         sleep(1)
+
         # set the north calculated during initialization as baseline of a new list
         north_database = [north_initial]
+        image_id = 0
+
+        # the following is the main loop which will run for the majority of time on the ISS
         while (datetime.now() < start_time + timedelta(minutes=170)):
+            # first we take a photo within the loop
             image_2 = photo.get_photo(camera)
+
+            # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
             latitude = shadow.coordinates.get_latitude(image_2)
             longitude = shadow.coordinates.get_longitude(image_2)
+
+            # we extract the time information from datetime library 
             year = datetime.datetime.now().year
             month = datetime.datetime.now().month
             day = datetime.datetime.now().day
             hour = datetime.datetime.now().hour
             minute = datetime.datetime.now().minute
             second = datetime.datetime.now().second
-            north_database.append(north.find_north(image_1=image_1, image_2=image_2))
-            north_main = list.get_median(north_database)
+
+            # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
+            north_main = north.find_north(image_1=image_1, image_2=image_2)
+
+            # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
             data_of_ai_model = ai.ai_model(image_2)
+
+            # we will use this counter to label the dictionary correctly
             counter_for_shadows = 0
+
+            # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
             angle = shadow.calculate_angle_for_shadow(latitude, longitude, year, month, day, hour, minute, second)
+
+            # this loop runs through all the clouds detected in an image and writes the data into the final csv file
             while True:
                 try:
                     x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
                     if x_cloud_lenght < 69 and y_cloud_lenght < 69:
                         try:
-                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(image_2, x_centre_of_cloud, y_centre_of_cloud, angle, cloud_id=counter_for_shadows)
+                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(image_2, x_centre_of_cloud, y_centre_of_cloud, angle, cloud_id=counter_for_shadows, image_id=image_id)
                         except:
-                            print("There was an error running the stiny module.")
+                            print("There was an error running the shadow module.")
                         print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
                     else:
                         print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
@@ -1368,6 +1387,7 @@ try:
                     break
 
             image_1 = image_2
+            image_id += 1
             del image_2
     except:
         print("There was an error during the main runtime")
