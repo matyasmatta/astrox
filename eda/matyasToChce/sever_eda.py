@@ -64,7 +64,8 @@ def find_north(image_1, image_2):
         cv2.imshow('matches', resize)
         cv2.waitKey(10)
         cv2.destroyWindow('matches')
-
+        
+    #nic čeho se obávat
     def hack_ISS():
         h=[]
         all_informations = 1000101
@@ -104,28 +105,14 @@ def find_north(image_1, image_2):
         y_22all_div=0
         y_22all_div=statistics.median(y_22all)
         
-        #we find the vector of median coordinates and place them into one of four quadrants 
-        global direction_x
-        global direction_y
-        delta_x = x_11all_div-x_22all_div
-        if delta_x > 0:
-            direction_x = "left"
-        elif delta_x < 0:
-            direction_x = "right"
-        else: 
-            direction_x = "null"
-        delta_y = y_11all_div-y_22all_div
-        if delta_y > 0:
-            direction_y = "up"
-        elif delta_y < 0:
-            direction_y = "down"
-        else:
-            direction_y = "null"
+        #není nutné to dělit do 4 kvadrantů protože mega op funkce arctan2 to udělá za nás
 
         #we calculate the angle of movemment of "things" on photo
-        delta_x = abs(delta_x)
-        delta_y = abs(delta_y)
-        tangens_angle_for_general_direction_radians = np.arctan((delta_y)/(delta_x))
+        delta_x = x_11all_div - x_22all_div
+        #y jde v opačném směru (dolů) než je obvyklé pro práci s tangens, proto bude lepší odečítat y1 od y2
+        delta_y = y_22all_div - y_11all_div
+        
+        tangens_angle_for_general_direction_radians = np.arctan2(delta_y,delta_x)
         tangens_angle_for_general_direction_degrees = tangens_angle_for_general_direction_radians * (360/(2*np.pi))
 
         return coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees
@@ -207,26 +194,12 @@ def find_north(image_1, image_2):
     #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
     coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 
-    tangens_angle_for_general_direction_degrees = abs(tangens_angle_for_general_direction_degrees)
-
     #calculating the relative rotation of camera on ISS
-    edoov_coefficient = ""
-    if direction_x == "left":
-        if direction_y == "up":
-            edoov_coefficient = (tangens_angle_for_general_direction_degrees, -1, -1, "↖")
-            clockwise_edoov_coefficient = 270-tangens_angle_for_general_direction_degrees
-        if direction_y == "down":
-            edoov_coefficient = (tangens_angle_for_general_direction_degrees, -1, 1,"↙")
-            clockwise_edoov_coefficient = 270+tangens_angle_for_general_direction_degrees
-    if direction_x == "right":
-        if direction_y == "up":
-            edoov_coefficient = (tangens_angle_for_general_direction_degrees, 1, -1, "↗")
-            clockwise_edoov_coefficient = 90+tangens_angle_for_general_direction_degrees
-        if direction_y == "down":
-            edoov_coefficient = (tangens_angle_for_general_direction_degrees, 1, 1, "↘")
-            clockwise_edoov_coefficient = 90-tangens_angle_for_general_direction_degrees
-    list.add_clockwise_edoov_coefficient(clockwise_edoov_coefficient)
-    median_clockwise_edoov_coefficient=list.get_median()
+    edoov_coefficient = tangens_angle_for_general_direction_degrees #orientovaný úhel od spodku fotky ke směru pohybu - tedy to samé, co vyhodí arctan2
+    
+    list.add_clockwise_edoov_coefficient(edoov_coefficient) 
+    #nechal jsem list.add_clockwise i když to není clockwise protože tu funkci tak Eda má pojmenovanou v list.py a mně se to nechce měnit
+    median_edoov_coefficient=list.get_median()
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -239,14 +212,13 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
-    clockwise_alpha_k=360-corrected_alpha_k
 
 #    print("Clockwise alpha_k: ",clockwise_alpha_k)
 #    print("Edoov koeficient: ", edoov_coefficient)
 #    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
 
     #combinating both informations to get real position of north on photo
-    poloha_severu=clockwise_alpha_k-median_clockwise_edoov_coefficient
+    poloha_severu=corrected_alpha_k+median_edoov_coefficient
     #print("Poloha severu: ",poloha_severu)
 #    print(latitude_image_1, latitude_image_2)
 
