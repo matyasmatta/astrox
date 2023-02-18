@@ -1330,9 +1330,6 @@ try:
 
         # make sure there is a little bit of differnce for the north class
         sleep(1)
-
-        # set the north calculated during initialization as baseline of a new list
-        north_database = [north_initial]
         image_id = 0
 
         # the following is the main loop which will run for the majority of time on the ISS
