@@ -44,7 +44,245 @@ class list:
     def get_list():
         return store_clockwise_edoov_coefficient
 class north:
-    # updated by @Alfons8128 via sever_eda_2tecka0.py
+    def find_north(image_1, image_2):
+
+        #geting EXIF time of capture
+        def get_time(image):
+            with open(image, 'rb') as image_file:
+                img = Image(image_file)
+                try:
+                    time_str = img.get("datetime_original")
+                    time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+                except TypeError:
+                    time = 0
+            return time
+        
+        #getting time difference between the two input images
+        def get_time_difference(image_1, image_2):
+            time_1 = get_time(image_1)
+            time_2 = get_time(image_2)
+            if time_2 != 0:
+                time_difference = time_2 - time_1
+    #            print("time_difference", time_difference)
+            else:
+                return 0
+            return time_difference.seconds
+
+        #converting images to cv friendly readable format 
+        def convert_to_cv(image_1, image_2):
+            image_1_cv = cv2.imread(image_1, 0)
+            image_2_cv = cv2.imread(image_2, 0)
+            return image_1_cv, image_2_cv
+
+        #finding same "things" on both images
+        def calculate_features(image_1, image_2, feature_number):
+            orb = cv2.ORB_create(nfeatures = feature_number)
+            keypoints_1, descriptors_1 = orb.detectAndCompute(image_1_cv, None)
+            keypoints_2, descriptors_2 = orb.detectAndCompute(image_2_cv, None)
+            return keypoints_1, keypoints_2, descriptors_1, descriptors_2
+
+        #connecting same "things" on photo
+        def calculate_matches(descriptors_1, descriptors_2):
+            brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+            matches = brute_force.match(descriptors_1, descriptors_2)
+            matches = sorted(matches, key=lambda x: x.distance)
+            return matches
+        
+        #displaying the matches (only works on PC)
+        #def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
+            match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:1000], None)
+            resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
+            cv2.imshow('matches', resize)
+            cv2.waitKey(10)
+            cv2.destroyWindow('matches')
+
+        def hack_ISS():
+            h=[]
+            all_informations = 1000101
+            h.append(all_informations)
+
+        #finding coordination of same "things" on both fotos
+        def find_matching_coordinates(keypoints_1, keypoints_2, matches):
+            coordinates_1 = []
+            coordinates_2 = []
+            global x_1all_div
+            global x_2all_div
+            global y_1all_div
+            global y_2all_div
+            x_11all= []
+            x_22all= []
+            y_11all= []
+            y_22all= []
+            for match in matches:
+                image_1_idx = match.queryIdx
+                image_2_idx = match.trainIdx
+                (x1,y1) = keypoints_1[image_1_idx].pt
+                (x2,y2) = keypoints_2[image_2_idx].pt
+                coordinates_1.append((x1,y1))
+                coordinates_2.append((x2,y2))
+                #we store all matched coordinates to list for further calculation
+                x_11all.append(x1)
+                x_22all.append(x2)
+                y_11all.append(y1)
+                y_22all.append(y2)
+            #this calculates us the median of all coordinations on output [x1, y1] and [x2,y2]
+            x_11all_div=0
+            x_11all_div=statistics.median(x_11all)
+            x_22all_div=0
+            x_22all_div=statistics.median(x_22all)
+            y_11all_div=0
+            y_11all_div=statistics.median(y_11all)
+            y_22all_div=0
+            y_22all_div=statistics.median(y_22all)
+            
+            #we find the vector of median coordinates and place them into one of four quadrants 
+            global direction_x
+            global direction_y
+            delta_x = x_11all_div-x_22all_div
+            if delta_x > 0:
+                direction_x = "left"
+            elif delta_x < 0:
+                direction_x = "right"
+            else: 
+                direction_x = "null"
+            delta_y = y_11all_div-y_22all_div
+            if delta_y > 0:
+                direction_y = "up"
+            elif delta_y < 0:
+                direction_y = "down"
+            else:
+                direction_y = "null"
+
+            #we calculate the angle of movemment of "things" on photo
+            delta_x = abs(delta_x)
+            delta_y = abs(delta_y)
+            tangens_angle_for_general_direction_radians = np.arctan((delta_y)/(delta_x))
+            tangens_angle_for_general_direction_degrees = tangens_angle_for_general_direction_radians * (360/(2*np.pi))
+
+            return coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees
+        
+        #getting latitude of both images from EXIF data
+        def get_latitude(image):
+            with open(image, 'rb') as image_file:
+                img = exify(image_file)
+                try:
+                    latitude = img.get("gps_latitude")
+                    latitude_ref = img.get("gps_latitude_ref")
+                    if latitude == None:
+                        latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
+                except AttributeError:
+                    latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
+            return latitude, latitude_ref
+        
+
+        #converting latitude to decimal
+        def get_decimal_latitude(latitude, latitude_ref):
+            decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
+            if latitude_ref == "S" or latitude_ref == "W":
+                decimal_degrees = -decimal_degrees
+            return decimal_degrees
+
+        #getting latitude for using
+        def get_latitudes(image_1, image_2):    
+            latitude_image_1_x, latitude_image_1_ref = get_latitude(image_1)
+            latitude_image_1 = get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
+            latitude_image_2_x, latitude_image_2_ref = get_latitude(image_2)
+            latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
+            return latitude_image_1, latitude_image_2
+
+        #def show_north(angle):
+            angle=angle/180*np.pi
+            r=560/2
+            x_0=183+r
+            y_0=37+r
+            dy=-np.cos(angle)*r
+            dx=np.sin(angle)*r
+            print_x=int(x_0+dx)
+            print_y=int(y_0+dy)
+            print_cordinations=(print_x, print_y)
+            #print(angle)
+            #print(x_0, y_0)
+            #print("lool", dx, dy)
+            #print(print_cordinations)
+            image=cv2.imread(image_1)
+            resized = cv2.resize(image, (800,600), interpolation = cv2.INTER_AREA)
+            cv2.putText(resized, "N", print_cordinations, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5, cv2.LINE_AA)
+            cv2.imshow('north', resized)
+            cv2.waitKey(10)
+            cv2.destroyAllWindows()
+
+        #latitude_image_1 = -43.88975 #latitude před procesem
+        #latitude_image_2 = -44.18364 #latitude po procesu
+        #latitude_image_1 = 1 #latitude před procesem
+        #latitude_image_2 = -1 #latitude po procesu
+        #latitude_image_1 = -13.12361 #latitude před procesem madagaskar
+        #latitude_image_2 = -12.67333 #latitude po procesu madagaskar
+        #latitude_image_1 = -25.49306 #latitude před procesem nqamibie
+        #latitude_image_2 = -25.07194 #latitude po procesu namibie
+        #latitude_image_1 = 51.61778 #latitude switzerland
+        #latitude_image_2 = 51.55894 #latitude switzerland
+
+
+        #latitude_image_1 = -21.26222 #latitude namibie 1
+        #latitude_image_1 = -20.82889 #latitude namibie 2
+        #latitude_image_2 = -20.39417 #latitude namibie 3
+
+        #using defined functions
+        latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
+        #time_difference = get_time_difference(image_1, image_2) 
+        image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
+        keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10) 
+        matches = calculate_matches(descriptors_1, descriptors_2)
+        #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
+        coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees = find_matching_coordinates(keypoints_1, keypoints_2, matches)
+
+        tangens_angle_for_general_direction_degrees = abs(tangens_angle_for_general_direction_degrees)
+
+        #calculating the relative rotation of camera on ISS
+        edoov_coefficient = ""
+        if direction_x == "left":
+            if direction_y == "up":
+                edoov_coefficient = (tangens_angle_for_general_direction_degrees, -1, -1, "↖")
+                clockwise_edoov_coefficient = 270-tangens_angle_for_general_direction_degrees
+            if direction_y == "down":
+                edoov_coefficient = (tangens_angle_for_general_direction_degrees, -1, 1,"↙")
+                clockwise_edoov_coefficient = 270+tangens_angle_for_general_direction_degrees
+        if direction_x == "right":
+            if direction_y == "up":
+                edoov_coefficient = (tangens_angle_for_general_direction_degrees, 1, -1, "↗")
+                clockwise_edoov_coefficient = 90+tangens_angle_for_general_direction_degrees
+            if direction_y == "down":
+                edoov_coefficient = (tangens_angle_for_general_direction_degrees, 1, 1, "↘")
+                clockwise_edoov_coefficient = 90-tangens_angle_for_general_direction_degrees
+        list.add_clockwise_edoov_coefficient(clockwise_edoov_coefficient)
+        median_clockwise_edoov_coefficient=list.get_median()
+        #averaging latitudes for more accurate calculation 
+        latitude_avg = (latitude_image_1+latitude_image_2)/2
+
+        #calculating the relative position of north for ISS (looks forward)
+        alpha_k=np.arcsin((np.cos(51.8*(np.pi/180)))/(np.cos(latitude_avg*(np.pi/180))))
+        alpha_k = alpha_k*(180/np.pi)
+    #    print("Alpha:", alpha_k)
+        corrected_alpha_k=0
+        if latitude_image_1>latitude_image_2:
+            corrected_alpha_k=180-alpha_k
+        else:
+            corrected_alpha_k=alpha_k
+        clockwise_alpha_k=360-corrected_alpha_k
+
+    #    print("Clockwise alpha_k: ",clockwise_alpha_k)
+    #    print("Edoov koeficient: ", edoov_coefficient)
+    #    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
+
+        #combinating both informations to get real position of north on photo
+        poloha_severu=clockwise_alpha_k-median_clockwise_edoov_coefficient
+        #print("Poloha severu: ",poloha_severu)
+    #    print(latitude_image_1, latitude_image_2)
+
+        #print(list.get_median())
+        #show_north(poloha_severu)
+        #print(list.get_list())
+        return poloha_severu    # updated by @Alfons8128 via sever_eda_2tecka0.py
     def find_north(image_1, image_2):
         #geting EXIF time of capture
         def get_time(image):
@@ -327,6 +565,41 @@ class ai:
             json.dump(ai_output, f, ensure_ascii=False, indent=4)
         return ai_output
 class shadow:
+    class coordinates:
+        def get_latitude(image):
+            with open(image, 'rb') as image_file:
+                img = exify(image_file)
+                try:
+                    latitude = img.get("gps_latitude")
+                except:
+                    latitude = (0.0, 0.0, 0.0)
+            return latitude
+        def get_longitude(image):
+            with open(image, 'rb') as image_file:
+                img = exify(image_file)
+                try:
+                    longitude = img.get("gps_longitude")
+                except:
+                    longitude = (0.0, 0.0, 0.0)
+            return longitude            
+
+    def calculate_cloud_data(counter_for_shadows):
+        x_max = data[counter_for_shadows]['xmax']
+        y_max = data[counter_for_shadows]['ymax']
+        x_min = data[counter_for_shadows]['xmin']
+        y_min = data[counter_for_shadows]['ymin']
+        print(x_min, y_min, x_max, y_max)
+        x_centre_of_cloud = (x_min+x_max)/2
+        y_centre_of_cloud = (y_min+y_max)/2
+        x_centre_of_cloud = round(x_centre_of_cloud, 0)
+        y_centre_of_cloud = round(y_centre_of_cloud, 0)
+        x_centre_of_cloud = int(x_centre_of_cloud)
+        y_centre_of_cloud = int(y_centre_of_cloud)
+        x_cloud_lenght = abs(x_max - x_min)
+        y_cloud_lenght = abs(y_max - y_min)
+
+        return x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght
+
     # ignore the 'json' in the name, we replaced the file format with csv for simplicity, jsons are useful for export data - not metadata
     def write_pixel_into_icon(count, x, y, cloud_id="not specified", image_id="not specified"):
         with open('pixels.csv', 'a') as f:
@@ -386,11 +659,29 @@ class shadow:
         y_final = round(y_final, 0)
         y_final = int(y_final)
         return x_final, y_final
+    
+    def calculate_angle_for_shadow(north, latitude, longitude, year, month, day, hour=0, minute=0, second=0):
+        azimuth = shadow.sun_data.azimuth(latitude, longitude, year, month, day, hour, minute, second)
+        print(north, azimuth)
+        total_angle = north + azimuth
+        while True:
+            if total_angle >= 360:
+                total_angle -= 360
+            else:
+                break
+        return total_angle
 
-    def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id="not specified"):
+
+    def calculate_shadow(x, y, angle, cloud_id="not specified", image_id="not specified", file_path="not specified", image_direct="not specified"):
         # open specific cloud
-        im = Image.open(file_path) # Can be many different formats.
-        pix = im.load()
+        if file_path != "not specified":
+            im = Image.open(file_path) # Can be many different formats.
+            if image_direct != "not specified":
+                im = image_direct
+            pix = im.load()
+        else:
+            raise Exception("There was an error during initial loading for shadow calculation")
+
 
         # get the width and height of the image for iterating over
         # print(im.size) 
@@ -1005,9 +1296,9 @@ try:
         start_time =  datetime.now()
         camera = PiCamera()
         sleep(2)
-        count_for_edovo_srac = 240
+        initialization_count = 240
         photo.get_photo(camera)
-        count_for_edovo_srac += 1
+        initialization_count += 1
     except:
         print("There was an error during pre-initialization")
 
@@ -1016,17 +1307,17 @@ try:
     try:
         while (datetime.now() < start_time + timedelta(seconds=69)):
             photo.get_photo(camera)
-            i_1=str(count_for_edovo_srac-1)
+            i_1=str(initialization_count-1)
             before = "./Pictures2/photo_18"
             image_1=str(before + i_1 +".jpg")
-            i_2=str(count_for_edovo_srac)
+            i_2=str(initialization_count)
             #print(image_1)
             image_2=str(before + i_2 +".jpg")
             #print(image_2)
 
             data = north.find_north(image_1, image_2)
             print(list.get_median())
-            count_for_edovo_srac += 1
+            initialization_count += 1
             sleep(0)
             print(datetime.now())
             print(image_1)
@@ -1038,10 +1329,46 @@ try:
     # run the actual main code
     # main runtime
     try:
+        # first take a photo outside the loop for first reference
+        image_1 = photo.get_photo(camera),
+        # make sure there is a little bit of differnce for the north class
+        sleep(1)
+        # set the north calculated during initialization as baseline of a new list
+        north_database = [north_initial]
         while (datetime.now() < start_time + timedelta(minutes=170)):
-            print("cas")
-            break
-            pass
+            image_2 = photo.get_photo(camera)
+            latitude = shadow.coordinates.get_latitude(image_2)
+            longitude = shadow.coordinates.get_longitude(image_2)
+            year = datetime.datetime.now().year
+            month = datetime.datetime.now().month
+            day = datetime.datetime.now().day
+            hour = datetime.datetime.now().hour
+            minute = datetime.datetime.now().minute
+            second = datetime.datetime.now().second
+            north_database.append(north.find_north(image_1=image_1, image_2=image_2))
+            north_main = list.get_median(north_database)
+            data_of_ai_model = ai.ai_model(image_2)
+            counter_for_shadows = 0
+            angle = shadow.calculate_angle_for_shadow(latitude, longitude, year, month, day, hour, minute, second)
+            while True:
+                try:
+                    x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
+                    if x_cloud_lenght < 69 and y_cloud_lenght < 69:
+                        try:
+                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(image_2, x_centre_of_cloud, y_centre_of_cloud, angle, cloud_id=counter_for_shadows)
+                        except:
+                            print("There was an error running the stiny module.")
+                        print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
+                    else:
+                        print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
+                    counter_for_shadows += 1                             
+                except:
+                    meta = Image.open('meta.jpg')
+                    meta.show()
+                    break
+
+            image_1 = image_2
+            del image_2
     except:
         print("There was an error during the main runtime")
 
