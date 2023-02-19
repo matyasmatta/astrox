@@ -110,7 +110,7 @@ def find_north(image_1, image_2):
         #y jde v opačném směru (dolů) než je obvyklé pro práci s tangens, proto bude lepší odečítat y1 od y2
         delta_y = y_22all_div - y_11all_div
         
-        edoov_coefficient = np.degrees(np.arctan2(delta_y,delta_x))
+        edoov_coefficient = np.arctan2(delta_y,delta_x) * 57.29577951
         clockwise_edoov_coefficient = 360 - edoov_coefficient
         return coordinates_1, coordinates_2, clockwise_edoov_coefficient
     

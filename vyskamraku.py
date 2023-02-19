@@ -154,8 +154,8 @@ class m:
 
             # calculate meta angle
         angle_radians = angle / 57.29577951
-        x_increase_meta = np.sin(angle_radians)
-        y_increase_meta = np.cos(angle_radians)
+        x_increase_meta = np.cos(angle_radians)
+        y_increase_meta = np.sin(angle_radians)
         y_increase_meta = -y_increase_meta
         x_increase_meta = np.round(x_increase_meta,5)
         y_increase_meta = np.round(y_increase_meta,5)
