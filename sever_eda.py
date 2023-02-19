@@ -111,7 +111,8 @@ def find_north(image_1, image_2):
         delta_y = y_22all_div - y_11all_div
         
         edoov_coefficient = np.degrees(np.arctan2(delta_y,delta_x))
-        return coordinates_1, coordinates_2, edoov_coefficient
+        clockwise_edoov_coefficient = 360 - edoov_coefficient
+        return coordinates_1, coordinates_2, clockwise_edoov_coefficient
     
     #getting latitude of both images from EXIF data
     def get_latitude(image):
@@ -188,12 +189,12 @@ def find_north(image_1, image_2):
     keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
     #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
-    coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
+    coordinates_1, coordinates_2, clockwise_edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
 
     store_edoov_coefficient = []
-    store_edoov_coefficient.append(edoov_coefficient) 
-    median_edoov_coefficient=statistics.median(store_edoov_coefficient)
+    store_edoov_coefficient.append(clockwise_edoov_coefficient) 
+    median_clockwise_edoov_coefficient=statistics.median(store_edoov_coefficient)
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -206,16 +207,16 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
+    clockwise_alpha_k = 360 - corrected_alpha_k
 
 #    print("Clockwise alpha_k: ",clockwise_alpha_k)
 #    print("Edoov koeficient: ", edoov_coefficient)
 #    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
 
     #combinating both informations to get real position of north on photo
-    poloha_severu = median_edoov_coefficient + corrected_alpha_k
+    poloha_severu = median_clockwise_edoov_coefficient + clockwise_alpha_k
     #print("Poloha severu: ",poloha_severu)
 #    print(latitude_image_1, latitude_image_2)
-
     #print(list.get_median())
     #show_north(poloha_severu)
     #print(list.get_list())
