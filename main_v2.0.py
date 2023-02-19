@@ -1,6 +1,5 @@
 # for further file history see main_old/main_v1.4.py
 
-from datetime import datetime
 import cv2
 import math
 import numpy as np
@@ -23,7 +22,7 @@ from skyfield import almanac
 import csv
 from sense_hat import SenseHat
 from datetime import datetime, timedelta
-from time import sleep
+
 from csv import writer
 from pathlib import Path
 from picamera import PiCamera
