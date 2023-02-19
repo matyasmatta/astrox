@@ -8,17 +8,6 @@ import statistics
 from time import sleep
 import statistics
 
-store_edoov_coefficient= []
-
-def get_median():
-    return statistics.median(store_edoov_coefficient)
-
-def add_edoov_coefficient(item):
-    store_edoov_coefficient.append(item)
-
-def get_list():
-    return store_edoov_coefficient
-
 # This is code for better calculation of position of north on photo
 # We did analyze on example data which were on raspberry and found that compass can be easy affected by other magnetic fields. The difference between the correct position of north and the data from compass were sometimes different by 30 degrees
 # So we invented equation that describe position of north towards positition of ISS (the ISS is looking in the direction of its flight).
@@ -201,15 +190,16 @@ def find_north(image_1, image_2):
     #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
     coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
-    
-    add_edoov_coefficient(edoov_coefficient) 
-    median_edoov_coefficient=get_median()
+
+    store_edoov_coefficient = []
+    store_edoov_coefficient.append(edoov_coefficient) 
+    median_edoov_coefficient=statistics.median(store_edoov_coefficient)
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
     #calculating the relative position of north for ISS (looks forward)
-    alpha_k=np.arcsin(np.cos(np.radians(51.8))/np.cos(np.radians(latitude_avg)))
-    alpha_k = np.degrees(alpha_k)
+    alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951))
+    alpha_k = alpha_k * 57.29577951
 #    print("Alpha:", alpha_k)
     corrected_alpha_k=0
     if latitude_image_1>latitude_image_2:
