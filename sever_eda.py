@@ -6,7 +6,18 @@ import math
 import numpy as np
 import statistics
 from time import sleep
-import list
+import statistics
+
+store_edoov_coefficient= []
+
+def get_median():
+    return statistics.median(store_edoov_coefficient)
+
+def add_edoov_coefficient(item):
+    store_edoov_coefficient.append(item)
+
+def get_list():
+    return store_edoov_coefficient
 
 # This is code for better calculation of position of north on photo
 # We did analyze on example data which were on raspberry and found that compass can be easy affected by other magnetic fields. The difference between the correct position of north and the data from compass were sometimes different by 30 degrees
@@ -97,13 +108,10 @@ def find_north(image_1, image_2):
             y_11all.append(y1)
             y_22all.append(y2)
         #this calculates us the median of all coordinations on output [x1, y1] and [x2,y2]
-        x_11all_div=0
+
         x_11all_div=statistics.median(x_11all)
-        x_22all_div=0
         x_22all_div=statistics.median(x_22all)
-        y_11all_div=0
         y_11all_div=statistics.median(y_11all)
-        y_22all_div=0
         y_22all_div=statistics.median(y_22all)
         
         #není nutné to dělit do 4 kvadrantů protože mega op funkce arctan2 to udělá za nás
@@ -113,10 +121,8 @@ def find_north(image_1, image_2):
         #y jde v opačném směru (dolů) než je obvyklé pro práci s tangens, proto bude lepší odečítat y1 od y2
         delta_y = y_22all_div - y_11all_div
         
-        tangens_angle_for_general_direction_radians = np.arctan2(delta_y,delta_x)
-        tangens_angle_for_general_direction_degrees = tangens_angle_for_general_direction_radians * (360/(2*np.pi))
-
-        return coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees
+        edoov_coefficient = np.degrees(np.arctan2(delta_y,delta_x))
+        return coordinates_1, coordinates_2, edoov_coefficient
     
     #getting latitude of both images from EXIF data
     def get_latitude(image):
@@ -193,20 +199,17 @@ def find_north(image_1, image_2):
     keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
     #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
-    coordinates_1, coordinates_2, tangens_angle_for_general_direction_degrees = find_matching_coordinates(keypoints_1, keypoints_2, matches)
-
+    coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
-    edoov_coefficient = tangens_angle_for_general_direction_degrees #orientovaný úhel od spodku fotky ke směru pohybu - tedy to samé, co vyhodí arctan2
     
-    list.add_clockwise_edoov_coefficient(edoov_coefficient) 
-    #nechal jsem list.add_clockwise i když to není clockwise protože tu funkci tak Eda má pojmenovanou v list.py a mně se to nechce měnit
-    median_edoov_coefficient=list.get_median()
+    add_edoov_coefficient(edoov_coefficient) 
+    median_edoov_coefficient=get_median()
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
     #calculating the relative position of north for ISS (looks forward)
-    alpha_k=np.arcsin((np.cos(51.8*(np.pi/180)))/(np.cos(latitude_avg*(np.pi/180))))
-    alpha_k = alpha_k*(180/np.pi)
+    alpha_k=np.arcsin(np.cos(np.radians(51.8))/np.cos(np.radians(latitude_avg)))
+    alpha_k = np.degrees(alpha_k)
 #    print("Alpha:", alpha_k)
     corrected_alpha_k=0
     if latitude_image_1>latitude_image_2:
@@ -227,6 +230,6 @@ def find_north(image_1, image_2):
     #show_north(poloha_severu)
     #print(list.get_list())
     #return poloha_severu
-    return median_edoov_coefficient
-northxx = find_north("52652396850_976568dfb4_o.jpg","52652437058_efecd1212a_o.jpg")
-print(northxx)
+    return poloha_severu
+north = find_north("52652396850_976568dfb4_o.jpg","52652437058_efecd1212a_o.jpg")
+print(north)
