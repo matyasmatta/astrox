@@ -122,9 +122,9 @@ class m:
         return x_final, y_final
         
     def calculate_angle_for_shadow(north, latitude, longitude, year, month, day, hour=0, minute=0, second=0):
-        altitude, azimuth = sun_data.tudemuth(latitude, longitude, year, month, day, hour, minute, second)
+        altitude, azimuth = shadow.sun_data.tudemuth(latitude, longitude, year, month, day, hour, minute, second)
         print(north, azimuth)
-        total_angle = north + azimuth
+        total_angle = north + azimuth - 180 #slunce svítí z úhlu north + azimuth, stín je na druhé straně
         while total_angle >= 360:
             total_angle -= 360
         return total_angle
@@ -209,7 +209,7 @@ class m:
             # automatic limit calculation (turn off if you want to use manual)
         sun_altitude_for_limit = shadow.sun_data.altitude("34.28614 S", "147.9849 E", 2022, 1, 15, 5, 16, 5)
             # print("altitude", sun_altitude_for_limit)
-        sun_altitude_for_limit_radians = sun_altitude_for_limit*(np.pi/180)
+        sun_altitude_for_limit_radians = sun_altitude_for_limit / 57.29577951
         limit_cloud_height = 7500 #not meters
         limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
         limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
