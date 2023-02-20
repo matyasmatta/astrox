@@ -30,10 +30,13 @@ def find_north(image_1, image_2):
 
     #connecting same "things" on photo
     def calculate_matches(descriptors_1, descriptors_2):
-        brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-        matches = brute_force.match(descriptors_1, descriptors_2)
-        matches = sorted(matches, key=lambda x: x.distance)
-        return matches
+        try:
+            brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+            matches = brute_force.match(descriptors_1, descriptors_2)
+            matches = sorted(matches, key=lambda x: x.distance)
+            return matches
+        except:
+            return 0
         
     #nic čeho se obávat
     def hack_ISS():
@@ -67,10 +70,16 @@ def find_north(image_1, image_2):
             y_22all.append(y2)
         #this calculates us the median of all coordinations on output [x1, y1] and [x2,y2]
 
-        x_11all_div=statistics.median(x_11all)
-        x_22all_div=statistics.median(x_22all)
-        y_11all_div=statistics.median(y_11all)
-        y_22all_div=statistics.median(y_22all)
+        try:
+            x_11all_div=statistics.median(x_11all)
+            x_22all_div=statistics.median(x_22all)
+            y_11all_div=statistics.median(y_11all)
+            y_22all_div=statistics.median(y_22all)
+        except:
+            x_11all_div=0
+            x_22all_div=0
+            y_11all_div=0
+            y_22all_div=0
 
         #we calculate the angle of movemment of "things" on photo
         delta_x = x_11all_div - x_22all_div
@@ -130,15 +139,13 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
-
     #combinating both informations to get real position of north on photo
     poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
     if poloha_severu < 0:
         poloha_severu = poloha_severu + 360
     if poloha_severu > 360:
         poloha_severu = poloha_severu - 360
-    print(poloha_severu)
     return poloha_severu
 
 if __name__ == "__main__":
-    find_north("./nam21.jpg","./nam22.jpg")
+    find_north("./black.jpg","./mad3.jpg")
