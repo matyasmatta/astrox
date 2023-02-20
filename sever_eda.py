@@ -1,5 +1,4 @@
 from exif import Image
-from PIL import Image as Imag
 from datetime import datetime
 import cv2
 import math
@@ -15,28 +14,6 @@ import statistics
 
 #for acessing program via other .py file
 def find_north(image_1, image_2):
-
-    #geting EXIF time of capture
-    def get_time(image):
-        with open(image, 'rb') as image_file:
-            img = Image(image_file)
-            try:
-                time_str = img.get("datetime_original")
-                time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
-            except TypeError:
-                time = 0
-        return time
-    
-    #getting time difference between the two input images
-    def get_time_difference(image_1, image_2):
-        time_1 = get_time(image_1)
-        time_2 = get_time(image_2)
-        if time_2 != 0:
-            time_difference = time_2 - time_1
-#            print("time_difference", time_difference)
-        else:
-            return 0
-        return time_difference.seconds
 
     #converting images to cv friendly readable format 
     def convert_to_cv(image_1, image_2):
@@ -59,11 +36,11 @@ def find_north(image_1, image_2):
         return matches
     
     #displaying the matches (only works on PC)
-    #def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
-        match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:1000], None)
+    def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
+        match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:100000], None)
         resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
         cv2.imshow('matches', resize)
-        cv2.waitKey(10)
+        cv2.waitKey(0)
         cv2.destroyWindow('matches')
         
     #nic čeho se obávat
@@ -111,8 +88,7 @@ def find_north(image_1, image_2):
         delta_y = y_22all_div - y_11all_div
         
         edoov_coefficient = np.arctan2(delta_y,delta_x) * 57.29577951
-        clockwise_edoov_coefficient = 360 - edoov_coefficient
-        return coordinates_1, coordinates_2, clockwise_edoov_coefficient
+        return coordinates_1, coordinates_2, edoov_coefficient
     
     #getting latitude of both images from EXIF data
     def get_latitude(image):
@@ -145,7 +121,7 @@ def find_north(image_1, image_2):
         latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
         return latitude_image_1, latitude_image_2
 
-    #def show_north(angle):
+    def show_north(angle):
         angle=angle/180*np.pi
         r=560/2
         x_0=183+r
@@ -155,10 +131,10 @@ def find_north(image_1, image_2):
         print_x=int(x_0+dx)
         print_y=int(y_0+dy)
         print_cordinations=(print_x, print_y)
-        #print(angle)
-        #print(x_0, y_0)
-        #print("lool", dx, dy)
-        #print(print_cordinations)
+            #print(angle)
+            #print(x_0, y_0)
+            #print("lool", dx, dy)
+            #print(print_cordinations)
         image=cv2.imread(image_1)
         resized = cv2.resize(image, (800,600), interpolation = cv2.INTER_AREA)
         cv2.putText(resized, "N", print_cordinations, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5, cv2.LINE_AA)
@@ -166,35 +142,20 @@ def find_north(image_1, image_2):
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    #latitude_image_1 = -43.88975 #latitude před procesem
-    #latitude_image_2 = -44.18364 #latitude po procesu
-    #latitude_image_1 = 1 #latitude před procesem
-    #latitude_image_2 = -1 #latitude po procesu
-    #latitude_image_1 = -13.12361 #latitude před procesem madagaskar
-    #latitude_image_2 = -12.67333 #latitude po procesu madagaskar
-    #latitude_image_1 = -25.49306 #latitude před procesem nqamibie
-    #latitude_image_2 = -25.07194 #latitude po procesu namibie
-    #latitude_image_1 = 51.61778 #latitude switzerland
-    #latitude_image_2 = 51.55894 #latitude switzerland
 
-
-    #latitude_image_1 = -21.26222 #latitude namibie 1
-    #latitude_image_1 = -20.82889 #latitude namibie 2
-    #latitude_image_2 = -20.39417 #latitude namibie 3
 
     #using defined functions
     latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     time_difference = get_time_difference(image_1, image_2) 
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
-    #display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
-    coordinates_1, coordinates_2, clockwise_edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
+    display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
+    coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
-
     store_edoov_coefficient = []
-    store_edoov_coefficient.append(clockwise_edoov_coefficient) 
-    median_clockwise_edoov_coefficient=statistics.median(store_edoov_coefficient)
+    store_edoov_coefficient.append(edoov_coefficient) 
+    median_edoov_coefficient=statistics.median(store_edoov_coefficient)
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -207,20 +168,24 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
-    clockwise_alpha_k = 360 - corrected_alpha_k
 
-#    print("Clockwise alpha_k: ",clockwise_alpha_k)
-#    print("Edoov koeficient: ", edoov_coefficient)
+    print("Clockwise alpha_k: ",corrected_alpha_k)
+    print("Edoov koeficient: ", edoov_coefficient)
 #    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
 
     #combinating both informations to get real position of north on photo
-    poloha_severu = median_clockwise_edoov_coefficient + clockwise_alpha_k
+    poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
     #print("Poloha severu: ",poloha_severu)
 #    print(latitude_image_1, latitude_image_2)
     #print(list.get_median())
-    #show_north(poloha_severu)
+    show_north(poloha_severu)
     #print(list.get_list())
     #return poloha_severu
     return poloha_severu
-north = find_north("52652396850_976568dfb4_o.jpg","52652437058_efecd1212a_o.jpg")
+
+north = find_north("nam21.jpg","nam22.jpg")
+if north < 0:
+    north = north + 360
+if north > 360:
+    north = north - 360
 print(north)
