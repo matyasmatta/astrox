@@ -406,10 +406,10 @@ class north:
 
         #getting latitude for using
         def get_latitudes(image_1, image_2):    
-            latitude_image_1_x, latitude_image_1_ref = get_latitude(image_1)
-            latitude_image_1 = get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
-            latitude_image_2_x, latitude_image_2_ref = get_latitude(image_2)
-            latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
+            latitude_image_1_x, latitude_image_1_ref = find_north.get_latitude(image_1)
+            latitude_image_1 = find_north.get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
+            latitude_image_2_x, latitude_image_2_ref = find_north.get_latitude(image_2)
+            latitude_image_2 = find_north.get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
             return latitude_image_1, latitude_image_2
 
         #def show_north(angle):
@@ -1282,7 +1282,7 @@ class photo:
 
         # Capture the image
         imageName = ""
-        imageName = str("/img_" + str(count_for_edovo_srac) + ".jpg")
+        imageName = str("/img_" + str(initialization_count) + ".jpg")
         camera.capture("./Pictures" + imageName)
 try:
     # first define all functions neccessary for operation and calibrate the camera
@@ -1332,7 +1332,7 @@ try:
         image_id = 0
 
         # the following is the main loop which will run for the majority of time on the ISS
-        while (datetime.now() < start_time + timedelta(minutes=170)):
+        while (datetime.now() < start_time + timedelta(minutes=3)):
             # first we take a photo within the loop
             image_2 = photo.get_photo(camera)
 
