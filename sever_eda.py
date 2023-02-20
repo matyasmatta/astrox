@@ -1,5 +1,4 @@
 from exif import Image
-from PIL import Image as Imag
 from datetime import datetime
 import cv2
 import math
