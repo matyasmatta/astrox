@@ -1,3 +1,4 @@
+#import stiny_maty
 from exif import Image
 from datetime import datetime
 import cv2
@@ -46,8 +47,6 @@ def find_north(image_1, image_2):
 
     #finding coordination of same "things" on both fotos
     def find_matching_coordinates(keypoints_1, keypoints_2, matches):
-        coordinates_1 = []
-        coordinates_2 = []
         global x_1all_div
         global x_2all_div
         global y_1all_div
@@ -61,8 +60,6 @@ def find_north(image_1, image_2):
             image_2_idx = match.trainIdx
             (x1,y1) = keypoints_1[image_1_idx].pt
             (x2,y2) = keypoints_2[image_2_idx].pt
-            coordinates_1.append((x1,y1))
-            coordinates_2.append((x2,y2))
             #we store all matched coordinates to list for further calculation
             x_11all.append(x1)
             x_22all.append(x2)
@@ -82,11 +79,11 @@ def find_north(image_1, image_2):
             y_22all_div=0
 
         #we calculate the angle of movemment of "things" on photo
-        delta_x = x_11all_div - x_22all_div
-        delta_y = y_22all_div - y_11all_div
+        delta_x = x_22all_div - x_11all_div
+        delta_y = y_11all_div - y_22all_div
         
-        edoov_coefficient = np.arctan2(delta_y,delta_x) * 57.29577951
-        return coordinates_1, coordinates_2, edoov_coefficient
+        edoov_coefficient = np.arctan2(delta_x,delta_y) * 57.29577951 - 180
+        return edoov_coefficient
     
     #getting latitude of both images from EXIF data
     def get_latitude(image):
@@ -122,15 +119,15 @@ def find_north(image_1, image_2):
     #using defined functions
     latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10000) 
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
-    coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
+    edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
-    list.add_edoov_coefficient(edoov_coefficient) 
+    list.add_clockwise_edoov_coefficient(edoov_coefficient) 
     median_edoov_coefficient=list.get_median()
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
-
+    print("coef:",median_edoov_coefficient)
     #calculating the relative position of north for ISS (looks forward)
     alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951)) * 57.29577951
     corrected_alpha_k=0
@@ -138,10 +135,9 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
+    print("corralpha:", corrected_alpha_k)
     #combinating both informations to get real position of north on photo
-    poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
+    poloha_severu = median_edoov_coefficient - corrected_alpha_k
     if poloha_severu < 0:
         poloha_severu = poloha_severu + 360
-    if poloha_severu > 360:
-        poloha_severu = poloha_severu - 360
     return poloha_severu
