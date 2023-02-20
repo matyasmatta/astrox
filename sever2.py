@@ -2,10 +2,8 @@
 from exif import Image
 from datetime import datetime
 import cv2
-import math
 import numpy as np
 import statistics
-from time import sleep
 import list
 
 # This is code for better calculation of position of north on photo
@@ -119,7 +117,7 @@ def find_north(image_1, image_2):
     #using defined functions
     latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 100) 
     matches = calculate_matches(descriptors_1, descriptors_2)
     edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
