@@ -29,6 +29,10 @@ from pathlib import Path
 from picamera import PiCamera
 from orbit import ISS
 from exif import Image as exify
+# import the modules
+import os
+from os import listdir
+
 
 class list:
     global store_clockwise_edoov_coefficient
@@ -281,7 +285,6 @@ class north:
         #show_north(poloha_severu)
         #print(list.get_list())
         return poloha_severu    # updated by @Alfons8128 via sever_eda_2tecka0.py
-
 class ai:
     def draw_objects(draw, objs, labels):
         count = 0
@@ -1090,6 +1093,45 @@ class photo:
         imageName = ""
         imageName = str("/img_" + str(initialization_count) + ".jpg")
         camera.capture("./Pictures" + imageName)
+class split:
+    def file_split(image_id, image_path):
+        # check if the image ends with png or jpg or jpeg
+        if (image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg")):
+            # Opens an image in RGB mode
+            im = Image.open(image_path)
+            left = 1075
+            top = 520
+            right = 3015
+            bottom = 2460
+            # Cropped image of above dimension
+            # (It will not change original image)
+            im1 = im.crop((left, top, right, bottom))
+            # Shows the image in image viewer
+            im1.save('meta.jpg')
+            # Slice
+            infile = 'meta.jpg'
+            chopsize = 485
+
+            img = Image.open(infile)
+            width, height = img.size
+
+            # Metadata
+            image = Image.open(image_path)
+            exif = image.info['exif']
+
+            # Save Chops of original image
+            within_loop_counter = 0
+            for x0 in range(0, width, chopsize):
+                for y0 in range(0, height, chopsize):
+                    box = (x0, y0,
+                            x0+chopsize if x0+chopsize <  width else  width - 1,
+                            y0+chopsize if y0+chopsize < height else height - 1)
+                    print('%s %s' % (infile, box))
+                    file_name = "./chop/astrochop_" + within_loop_counter + ".jpg"
+                    img.crop(box).save(file_name,exif=exif)
+                    within_loop_counter += 1
+            del exif
+
 try:
     # first define all functions neccessary for operation and calibrate the camera
     # pre-initialization
@@ -1137,8 +1179,7 @@ try:
         initialization_count += 1
         # make sure there is a little bit of differnce for the north class
         sleep(1)
-        image_id = 0
-
+        full_image_id = 0
         # the following is the main loop which will run for the majority of time on the ISS
         while (datetime.datetime.now() < start_time + timedelta(minutes=30)):
             # first we take a photo within the loop
@@ -1161,41 +1202,48 @@ try:
             # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
             north_main = north.find_north(image_1=image_1_path, image_2=image_2_path)
             print("sever",north_main)
-            # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
-            global data
-            data = ai.ai_model(image_2_path)
 
-            # we will use this counter to label the dictionary correctly
-            counter_for_shadows = 0
+            # split image into many
+            split.file_split(image_id = full_image_id, image_path=image_2_path) # creates a ./chop/... folder and puts the chops into it with  "astrochop_n" syntax
+            sector_id = 0
+            for images in os.listdir("./chop/"):
+                chop_image_path = "./chop/astrochop_" + sector_id + ".jpg" 
 
-            # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
-            angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
+                # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
+                global data
+                data = ai.ai_model(chop_image_path)
 
-            # this loop runs through all the clouds detected in an image and writes the data into the final csv file
-            while counter_for_shadows <= 9:
-                try:
-                    x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
-                    if x_cloud_lenght < 69 and y_cloud_lenght < 69:
-                        try:
-                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=image_id, cloud_id=counter_for_shadows)
-                            with open('shadows.csv', 'a') as f:
-                                writer = csv.writer(f)
-                                data_csv = [image_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
-                                writer.writerow(data_csv)
-                        except:
-                            print("There was an error running the shadow module.")
-                        print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
-                    else:
-                        print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
-                    counter_for_shadows += 1                             
-                except:
-                    meta = Image.open('meta.jpg')
-                    meta.show()
-                    break
+                # we will use this counter to label the dictionary correctly
+                counter_for_shadows = 0
 
+                # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
+                angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
+
+                # this loop runs through all the clouds detected in an image and writes the data into the final csv file
+                while counter_for_shadows <= 9:
+                    try:
+                        x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
+                        if x_cloud_lenght < 69 and y_cloud_lenght < 69:
+                            try:
+                                data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                with open('shadows.csv', 'a') as f:
+                                    writer = csv.writer(f)
+                                    data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
+                                    writer.writerow(data_csv)
+                            except:
+                                print("There was an error running the shadow module.")
+                            print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
+                        else:
+                            print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
+                        counter_for_shadows += 1                             
+                    except:
+                        meta = Image.open('meta.jpg')
+                        meta.show()
+                        break
+                sector_id += 1
             image_1 = image_2
             image_1_path = image_2_path
-            image_id += 1
+            full_image_id += 1
             initialization_count += 1
             del image_2
     except:
