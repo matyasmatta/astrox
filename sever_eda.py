@@ -59,7 +59,7 @@ def find_north(image_1, image_2):
     
     #displaying the matches (only works on PC)
     def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
-        match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:1000], None)
+        match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:100000], None)
         resize = cv2.resize(match_img, (1600,600), interpolation = cv2.INTER_AREA)
         cv2.imshow('matches', resize)
         cv2.waitKey(0)
@@ -170,7 +170,7 @@ def find_north(image_1, image_2):
     latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     time_difference = get_time_difference(image_1, image_2) 
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 10000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
     display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches)
     coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
@@ -205,5 +205,9 @@ def find_north(image_1, image_2):
     #return poloha_severu
     return poloha_severu
 
-north = find_north("sw1.jpg","sw2.jpg")
+north = find_north("nam21.jpg","nam22.jpg")
+if north < 0:
+    north = north + 360
+if north > 360:
+    north = north - 360
 print(north)
