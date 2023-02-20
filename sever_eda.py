@@ -143,7 +143,7 @@ def find_north(image_1, image_2):
         latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
         return latitude_image_1, latitude_image_2
 
-    #def show_north(angle):
+    def show_north(angle):
         angle=angle/180*np.pi
         r=560/2
         x_0=183+r
@@ -153,10 +153,10 @@ def find_north(image_1, image_2):
         print_x=int(x_0+dx)
         print_y=int(y_0+dy)
         print_cordinations=(print_x, print_y)
-        #print(angle)
-        #print(x_0, y_0)
-        #print("lool", dx, dy)
-        #print(print_cordinations)
+            #print(angle)
+            #print(x_0, y_0)
+            #print("lool", dx, dy)
+            #print(print_cordinations)
         image=cv2.imread(image_1)
         resized = cv2.resize(image, (800,600), interpolation = cv2.INTER_AREA)
         cv2.putText(resized, "N", print_cordinations, cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 5, cv2.LINE_AA)
@@ -196,13 +196,14 @@ def find_north(image_1, image_2):
 #    print("Clockwise edoov koeficient: ", clockwise_edoov_coefficient)
 
     #combinating both informations to get real position of north on photo
-    poloha_severu = median_edoov_coefficient + corrected_alpha_k
+    poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
     #print("Poloha severu: ",poloha_severu)
 #    print(latitude_image_1, latitude_image_2)
     #print(list.get_median())
-    #show_north(poloha_severu)
+    show_north(poloha_severu)
     #print(list.get_list())
     #return poloha_severu
     return poloha_severu
+
 north = find_north("sw1.jpg","sw2.jpg")
 print(north)
