@@ -4,18 +4,18 @@ import cv2
 import math
 
 
-def get_time(image):
-    with open(image, 'rb') as image_file:
-        img = Image(image_file)
-        time_str = img.get("datetime_original")
-        time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
-    return time
-def get_time_difference(image_1, image_2):
-    time_1 = get_time(image_1)
-    time_2 = get_time(image_2)
-    time_difference = time_2 - time_1
-    print(time_difference)
-    return time_difference.seconds
+#def get_time(image):
+#    with open(image, 'rb') as image_file:
+#        img = Image(image_file)
+#        time_str = img.get("datetime_original")
+#        time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+#    return time
+#def get_time_difference(image_1, image_2):
+#    time_1 = get_time(image_1)
+#    time_2 = get_time(image_2)
+#    time_difference = time_2 - time_1
+#    print(time_difference)
+#    return time_difference.seconds
 
 def convert_to_cv(image_1, image_2):
     image_1_cv = cv2.imread(image_1, 0)
@@ -34,8 +34,13 @@ def calculate_matches(descriptors_1, descriptors_2):
     matches = sorted(matches, key=lambda x: x.distance)
     return matches
 
+<<<<<<< Updated upstream
 image_2 = 'dataset\original_all\photo_07473_51845707716_o.jpg'
 image_1 = 'dataset\original_all\photo_07472_51844776372_o.jpg'
+=======
+image_1 = '51846437985_0718257094_o.jpg'
+image_2 = '51845694351_477e118eba_o.jpg'
+>>>>>>> Stashed changes
 
 def display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches):
     match_img = cv2.drawMatches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches[:100], None)
@@ -69,13 +74,20 @@ import statistics
 
 def calculate_median_tgangle(coordinates_1, coordinates_2):
     all_tgangles = []
+    yall = 0
+    xall = 0
     merged_coordinates = list(zip(coordinates_1, coordinates_2))
     for coordinate in merged_coordinates:
         x_difference = coordinate[0][0] - coordinate[1][0]
         y_difference = coordinate[0][1] - coordinate[1][1]
         if x_difference != 0:
-            tgangle = y_difference / (x_difference)
+            yall = yall + y_difference
+            xall = xall + x_difference
+            tgangle = y_difference / x_difference
             all_tgangles.append(tgangle)
+    print("tg všech", yall/xall)
+    print(xall)
+    print(yall)
     return statistics.median(all_tgangles)
 
 def calculate_mean_tgangle(coordinates_1, coordinates_2):
@@ -95,7 +107,7 @@ def calculate_mean_tgangle(coordinates_1, coordinates_2):
 #    speed = distance / time_difference
 #    return speed
 
-time_difference = get_time_difference(image_1, image_2) 
+#time_difference = get_time_difference(image_1, image_2) 
 image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
 keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
 matches = calculate_matches(descriptors_1, descriptors_2)
