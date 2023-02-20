@@ -5,7 +5,7 @@ import math
 import numpy as np
 import statistics
 from time import sleep
-import statistics
+import list
 
 # This is code for better calculation of position of north on photo
 # We did analyze on example data which were on raspberry and found that compass can be easy affected by other magnetic fields. The difference between the correct position of north and the data from compass were sometimes different by 30 degrees
@@ -126,9 +126,8 @@ def find_north(image_1, image_2):
     matches = calculate_matches(descriptors_1, descriptors_2)
     coordinates_1, coordinates_2, edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
-    store_edoov_coefficient = []
-    store_edoov_coefficient.append(edoov_coefficient) 
-    median_edoov_coefficient=statistics.median(store_edoov_coefficient)
+    list.add_edoov_coefficient(edoov_coefficient) 
+    median_edoov_coefficient=list.get_median()
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
 
