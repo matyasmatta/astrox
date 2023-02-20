@@ -15,28 +15,6 @@ import statistics
 #for acessing program via other .py file
 def find_north(image_1, image_2):
 
-    #geting EXIF time of capture
-    def get_time(image):
-        with open(image, 'rb') as image_file:
-            img = Image(image_file)
-            try:
-                time_str = img.get("datetime_original")
-                time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
-            except TypeError:
-                time = 0
-        return time
-    
-    #getting time difference between the two input images
-    def get_time_difference(image_1, image_2):
-        time_1 = get_time(image_1)
-        time_2 = get_time(image_2)
-        if time_2 != 0:
-            time_difference = time_2 - time_1
-            print("time_difference", time_difference)
-        else:
-            return 0
-        return time_difference.seconds
-
     #converting images to cv friendly readable format 
     def convert_to_cv(image_1, image_2):
         image_1_cv = cv2.imread(image_1, 0)
