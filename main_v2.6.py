@@ -111,10 +111,12 @@ class north:
                 y_22all_div=0
 
             #we calculate the angle of movemment of "things" on photo
-            delta_x = x_11all_div - x_22all_div
-            delta_y = y_22all_div - y_11all_div
+            delta_x = x_22all_div - x_11all_div
+            delta_y = y_11all_div - y_22all_div
             
-            edoov_coefficient = np.arctan2(delta_y,delta_x) * 57.29577951
+            edoov_coefficient = np.arctan2(delta_x,delta_y) * 57.29577951 + 180
+            if edoov_coefficient >= 360:
+                edoov_coefficient=edoov_coefficient-360
             return edoov_coefficient
         
         #getting latitude of both images from EXIF data
@@ -155,13 +157,8 @@ class north:
         matches = calculate_matches(descriptors_1, descriptors_2)
         edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
         #calculating the relative rotation of camera on ISS
-        if edoov_coefficient < 0:
-            stored_edoov_coefficient = edoov_coefficient + 360
-        if edoov_coefficient > 360:
-            stored_edoov_coefficient = edoov_coefficient - 360
-        if edoov_coefficient >=0 and edoov_coefficient <= 360:
-            stored_edoov_coefficient = edoov_coefficient       
-        list.add_edoov_coefficient(stored_edoov_coefficient)
+              
+        list.add_edoov_coefficient(edoov_coefficient)
         print("list:",list.get_list())
         median_edoov_coefficient=list.get_median()
         print("median u listu", median_edoov_coefficient)
@@ -175,12 +172,11 @@ class north:
             corrected_alpha_k=180-alpha_k
         else:
             corrected_alpha_k=alpha_k
+        
         #combinating both informations to get real position of north on photo
-        poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
+        poloha_severu = median_edoov_coefficient - corrected_alpha_k
         if poloha_severu < 0:
             poloha_severu = poloha_severu + 360
-        if poloha_severu > 360:
-            poloha_severu = poloha_severu - 360
         return poloha_severu
     def find_north_fast(image_1, image_2):
         def get_latitude(image):
@@ -216,8 +212,6 @@ class north:
         #using defined functions
         latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
         #using defined functions
-        median_edoov_coefficient=list.get_median()
-        print("median nelist", median_edoov_coefficient)
         #averaging latitudes for more accurate calculation 
         latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -228,12 +222,12 @@ class north:
             corrected_alpha_k=180-alpha_k
         else:
             corrected_alpha_k=alpha_k
+        
         #combinating both informations to get real position of north on photo
-        poloha_severu = 90 - median_edoov_coefficient - corrected_alpha_k
+        poloha_severu = all_edoov_coefficient - corrected_alpha_k
+        print("all edoov koeficient:", all_edoov_coefficient)
         if poloha_severu < 0:
             poloha_severu = poloha_severu + 360
-        if poloha_severu > 360:
-            poloha_severu = poloha_severu - 360
         return poloha_severu
          
 
@@ -390,6 +384,7 @@ class shadow:
 
             altitude= float(altitude.degrees)
             return(altitude)
+            
         def azimuth(coordinates_latitude, coordinates_longtitude, year, month, day, hour, minute, second):
             # use the NASA API to be able to calculate sun's position
             ts = api.load.timescale()
@@ -427,6 +422,7 @@ class shadow:
         total_angle = north + azimuth - 180
         while total_angle >= 360:
             total_angle -= 360
+        print(".......................TOTAL ANGLE", total_angle)
         return total_angle
 
 
@@ -1071,7 +1067,7 @@ try:
             timescale = load.timescale()
             t = timescale.now()
             if ISS.at(t).is_sunlit(ephemeris):
-                while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
+                while (datetime.datetime.now() < start_time + timedelta(seconds=25)):
                     photo.get_photo(camera)
                     i_1=str(initialization_count-1)
                     before = "./sample_crop/image ("
@@ -1088,9 +1084,12 @@ try:
                     print(image_1)
                     north_initial = list.get_median()
                     print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
+                    global all_edoov_coefficient
+                    all_edoov_coefficient = north_initial
                 break
             else:
                 print("Initialization was postponed due to it being the night")
+                sleep (10)
     except:
         print("There was an error during the initialzitation")
 
