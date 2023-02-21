@@ -10,6 +10,7 @@ import argparse
 import time
 from PIL import Image
 from PIL import ImageDraw
+from PIL import ImageStat
 from pycoral.adapters import common
 from pycoral.adapters import detect
 from pycoral.utils.dataset import read_label_file
@@ -986,7 +987,11 @@ class split:
                     img.crop(box).save(file_name,exif=exif)
                     within_loop_counter += 1
             del exif
-
+class brightness:
+    def calculate_brightness(im_file):
+        im = Image.open(im_file).convert('L')
+        stat = ImageStat.Stat(im)
+        return stat.rms[0]
 try:
     # first define all functions neccessary for operation and calibrate the camera
     # pre-initialization
@@ -1063,38 +1068,40 @@ try:
             sector_id = 0
             for images in os.listdir("./chop/"):
                 chop_image_path = "./chop/astrochop_" + str(sector_id) + ".jpg" 
+                if 20 < brightness.calculate_brightness(chop_image_path) < 150:
+                    # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
+                    global data
+                    data = ai.ai_model(chop_image_path)
 
-                # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
-                global data
-                data = ai.ai_model(chop_image_path)
+                    # we will use this counter to label the dictionary correctly
+                    counter_for_shadows = 0
 
-                # we will use this counter to label the dictionary correctly
-                counter_for_shadows = 0
+                    # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
+                    angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
 
-                # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
-                angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
-
-                # this loop runs through all the clouds detected in an image and writes the data into the final csv file
-                while counter_for_shadows <= 9:
-                    try:
-                        x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
-                        if x_cloud_lenght < 69 and y_cloud_lenght < 69:
-                            try:
-                                data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
-                                with open('shadows.csv', 'a') as f:
-                                    writer = csv.writer(f)
-                                    data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
-                                    writer.writerow(data_csv)
-                            except:
-                                print("There was an error running the shadow module.")
-                            print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
-                        else:
-                            print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
-                        counter_for_shadows += 1                             
-                    except:
-                        meta = Image.open('meta.jpg')
-                        # meta.show()
-                        break
+                    # this loop runs through all the clouds detected in an image and writes the data into the final csv file
+                    while counter_for_shadows <= 9:
+                        try:
+                            x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
+                            if x_cloud_lenght < 69 and y_cloud_lenght < 69:
+                                try:
+                                    data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                    with open('shadows.csv', 'a') as f:
+                                        writer = csv.writer(f)
+                                        data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
+                                        writer.writerow(data_csv)
+                                except:
+                                    print("There was an error running the shadow module.")
+                                print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
+                            else:
+                                print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
+                            counter_for_shadows += 1                             
+                        except:
+                            meta = Image.open('meta.jpg')
+                            # meta.show()
+                            break
+                else:
+                    print("Skipped image due to brightness being", brightness.calculate_brightness(chop_image_path))
                 sector_id += 1
             image_1 = image_2
             image_1_path = image_2_path
