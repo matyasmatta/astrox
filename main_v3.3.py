@@ -1084,7 +1084,7 @@ class photo_thread(threading.Thread):
         count_for_images_night = 0
         sleep(2)
 
-        while (datetime.now() < start_time + timedelta(seconds=1000)):
+        while (datetime.now() < start_time + timedelta(minutes=100)):
             timescale = load.timescale()
             t = timescale.now()
             if ISS.at(t).is_sunlit(ephemeris):
@@ -1123,7 +1123,7 @@ class processing_thread(threading.Thread):
                 try:
                     start_time =  datetime.now()
                     global initialization_count
-                    initialization_count = 119
+                    initialization_count = 0
                 except:
                     print("There was an error during pre-initialization")
                 # initialise and calibrate the north data via north class
@@ -1132,11 +1132,11 @@ class processing_thread(threading.Thread):
                     while True:
                         timescale = load.timescale()
                         t = timescale.now()
-                        while (datetime.now() < start_time + timedelta(seconds=30)):
-                            i_1=str(initialization_count-1)
+                        while (datetime.now() < start_time + timedelta(seconds=100)):
+                            i_1=str(initialization_count)
                             before = "./datasetlow/image ("
                             image_1=str(before + i_1 +").jpg")
-                            i_2=str(initialization_count)
+                            i_2=str(initialization_count+1)
                             #print(image_1)
                             image_2=str(before + i_2 +").jpg")
                             #print(image_2)
@@ -1147,7 +1147,7 @@ class processing_thread(threading.Thread):
                             sleep(0)
                             print(image_1)
                             list_medianu = list.get_median()
-                            print("North (edoov koeficient) was defined at", list_medianu, "counted clockwise.")
+                            print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
                             global all_edoov_coefficient
                             all_edoov_coefficient = list_medianu
                         break
@@ -1166,9 +1166,9 @@ class processing_thread(threading.Thread):
                     sleep(1)
                     full_image_id = 0
                     # the following is the main loop which will run for the majority of time on the ISS
-                    while (datetime.now() < start_time + timedelta(minutes=15)):
+                    while (datetime.now() < start_time + timedelta(minutes=100)):
                         # first we take a photo within the loop
-                        image_2 = photo.get_photo(camera)
+                        #image_2 = photo.get_photo(camera)
                         imageName = str("./datasetlow/image (" + str(initialization_count) + ").jpg")
                         image_2_path = imageName
                         print(imageName)
@@ -1189,7 +1189,7 @@ class processing_thread(threading.Thread):
                             sector_id = 0
                             for images in os.listdir("./chop/"):
                                 chop_image_path = "./chop/astrochop_" + str(sector_id) + ".jpg" 
-                                if 50 < properties.calculate_brightness(chop_image_path) < 190 and properties.calculate_contrast(chop_image_path) > 42:
+                                if 50 < properties.calculate_brightness(chop_image_path) < 190:
                                     # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
                                     global data
                                     data = ai.ai_model(chop_image_path)
@@ -1230,11 +1230,9 @@ class processing_thread(threading.Thread):
                                 sector_id += 1
                             else:
                                 print("Skipped image due to the sun being under 5 degrees, i.e.", shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second))
-                        image_1 = image_2
                         image_1_path = image_2_path
                         full_image_id += 1
                         initialization_count += 1
-                        del image_2
                 except:
                     print("There was an error during the main runtime")
 
@@ -1261,9 +1259,11 @@ if __name__ == '__main__':
     # we need to turn on the camera for both threads
     camera = PiCamera()
     camera.resolution = (4056, 3040)
+    sleep(3) # to ensure quality of pictures
 
     # then we start the threads
     auxiliary_thread.start()
+    sleep(1)
     main_thread.start()
 
     # and then we wait until they are finished 
