@@ -1028,7 +1028,6 @@ class photo_thread(threading.Thread):
         sense.color.integration_cycles = 64
         start_time = datetime.now()
         now_time = datetime.now()
-        camera = PiCamera()
         count_for_images = 0
         camera.resolution = (4056, 3040)
         sleep(2)
@@ -1065,7 +1064,6 @@ class processing_thread(threading.Thread):
                     while True:
                         timescale = load.timescale()
                         t = timescale.now()
-                        camera = PiCamera()
                         if ISS.at(t).is_sunlit(ephemeris):
                             while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
                                 photo.get_photo(camera)
@@ -1190,6 +1188,9 @@ if __name__ == '__main__':
     # first we define the threads
     auxiliary_thread = photo_thread(1, "Thread1", 10)
     main_thread = processing_thread(2, "Thread2", 5)
+
+    # we need to turn on the camera for both threads
+    camera = PiCamera()
 
     # then we start the threads
     auxiliary_thread.start()
