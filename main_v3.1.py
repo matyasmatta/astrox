@@ -1120,7 +1120,11 @@ class processing_thread(threading.Thread):
                             # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
                             north_main = north.find_north(image_1=image_1_path, image_2=image_2_path)
                             print("sever",north_main)
-
+                            # rotate the picture so that the north is up
+                            image = Image.open(image_2_path)
+                            rotated_image = image.rotate(north_main)
+                            rotated_image.show()
+                            rotated_image = rotated_image.save("otocena_fotka.jpg")
                             # split image into many
                             split.file_split(image_id = full_image_id, image_path=image_2_path) # creates a ./chop/... folder and puts the chops into it with  "astrochop_n" syntax
                             sector_id = 0
