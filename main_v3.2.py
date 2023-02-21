@@ -1169,7 +1169,7 @@ class processing_thread(threading.Thread):
 
                         if shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second) > 5:
                             # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
-                            north_main = north.find_north(image_1=image_1_path, image_2=image_2_path)
+                            north_main = north.find_north_fast(image_1=image_1_path, image_2=image_2_path)
                             print("sever",north_main)
 
                             # split image into many
