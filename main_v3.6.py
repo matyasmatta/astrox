@@ -231,12 +231,20 @@ class north:
             poloha_severu = poloha_severu + 360
         return poloha_severu
 class ai:
-# this class will contain all the necessary things to run an AI model(s) (as of v3.3 I do not know if we will have used 2 models - one for clouds and one for window)
-    # this is the main model to which we pass an image and it will generate us simply a dictionary of data
-    def ai_model(image_path):
+    def draw_objects(draw, objs, labels):
+        count = 0
+        for obj in objs:
+            bbox = obj.bbox
+            draw.rectangle([(bbox.xmin, bbox.ymin), (bbox.xmax, bbox.ymax)],
+                        outline='red')
+            print(count)
+            draw.text((bbox.xmin + 10, bbox.ymin + 10),
+                    '%s\n%.2f' % (count, obj.score),
+                    fill='red')
+            count += 1
 
-        # we set the paths to the model
-        # this is the labelmap setting
+
+    def ai_model(image_path):
         open("./model/labelmap.txt")
         labels = './model/labelmap.txt'
         interpreter = make_interpreter('./model/edgetpu.tflite')
@@ -294,9 +302,6 @@ class ai:
             json.dump(ai_output, f, ensure_ascii=False, indent=4)
         return ai_output
 class shadow:
-    def print_log(data):
-        with open('log.txt', 'a') as f:
-            f.write(data)
     class coordinates:
         def get_latitude(image):
             with open(image, 'rb') as image_file:
@@ -371,7 +376,7 @@ class shadow:
             # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
             location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
-            altitude, azimuth = sun_pos.altaz()
+            altitude, azimuth, distance = sun_pos.altaz()
 
             # print(f"Azimuth: {azimuth.degrees:.4f}")
             # print(f"Altitude: {altitude.degrees:.4f}")
@@ -393,7 +398,7 @@ class shadow:
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
             altitude, azimuth, distance = sun_pos.altaz()
 
-            # print(f"Azimuth: {azimuth.degrees:.4f}")
+            print(f"Azimuth: {azimuth.degrees:.4f}")
             # print(f"Altitude: {altitude.degrees:.4f}")
 
             azimuth= float(azimuth.degrees)
@@ -1033,10 +1038,15 @@ class split:
                     within_loop_counter += 1
             del exif
 class properties:
-    def calculate_brightness(im_file):
-        im = Image.open(im_file).convert('L')
+    def calculate_brightness(img_path):
+        im = Image.open(img_path).convert('L')
         stat = ImageStat.Stat(im)
         return stat.rms[0]
+    def calculate_contrast(img_path):
+        img=cv2.imread(img_path)
+        img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        contrast = img_grey.std()
+        return contrast
 class exifmeta:
     def find_time_from_image(image_path):
         img = Image.open(image_path)
@@ -1074,7 +1084,7 @@ class photo_thread(threading.Thread):
         count_for_images_night = 0
         sleep(2)
 
-        while (datetime.now() < start_time + timedelta(seconds=1000)):
+        while (datetime.now() < start_time + timedelta(minutes=100)):
             timescale = load.timescale()
             t = timescale.now()
             if ISS.at(t).is_sunlit(ephemeris):
@@ -1083,8 +1093,17 @@ class photo_thread(threading.Thread):
             else:
                 imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
                 count_for_images_night += 1
+            location = ISS.coordinates()
+            # Convert the latitude and longitude to EXIF-appropriate representations
+            south, exif_latitude = photo.convert(location.latitude)
+            west, exif_longitude = photo.convert(location.longitude)
+            # Set the EXIF tags specifying the current location
+            camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+            camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+            camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+            camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
             camera.capture(imageName)     
-            sleep(photo_sleep_interval)
+            sleep(5)
             del imageName       
 
         print("Exiting: " + self.name + "\n")
@@ -1104,7 +1123,7 @@ class processing_thread(threading.Thread):
                 try:
                     start_time =  datetime.now()
                     global initialization_count
-                    initialization_count = 1
+                    initialization_count = 0
                 except:
                     print("There was an error during pre-initialization")
                 # initialise and calibrate the north data via north class
@@ -1113,12 +1132,11 @@ class processing_thread(threading.Thread):
                     while True:
                         timescale = load.timescale()
                         t = timescale.now()
-                        while (datetime.now() < start_time + timedelta(seconds=256)):
-                            photo.get_photo(camera)
-                            i_1=str(initialization_count-1)
-                            before = "./main/night_img_"
+                        while (datetime.now() < start_time + timedelta(seconds=100)):
+                            i_1=str(initialization_count)
+                            before = "./datasetlow/image ("
                             image_1=str(before + i_1 +").jpg")
-                            i_2=str(initialization_count)
+                            i_2=str(initialization_count+1)
                             #print(image_1)
                             image_2=str(before + i_2 +").jpg")
                             #print(image_2)
@@ -1129,7 +1147,7 @@ class processing_thread(threading.Thread):
                             sleep(0)
                             print(image_1)
                             list_medianu = list.get_median()
-                            print("North (edoov koeficient) was defined at", list_medianu, "counted clockwise.")
+                            print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
                             global all_edoov_coefficient
                             all_edoov_coefficient = list_medianu
                         break
@@ -1268,7 +1286,6 @@ class processing_thread(threading.Thread):
         # add data to log file
         to_print = str("Exiting: " + self.name + "\n")
         shadow.print_log(to_print)
-
 if __name__ == '__main__':
     # there are many advantages to multithreaded operation compare to monothread
     # suppose we ignore photos taken in the complete darkness, i.e. half the time,
@@ -1280,15 +1297,16 @@ if __name__ == '__main__':
     auxiliary_thread = photo_thread(1, "Thread1", 10)
     main_thread = processing_thread(2, "Thread2", 5)
 
-    # we need to turn on the camera for both threads (fixes many errors)
+    # we need to turn on the camera for both threads
     camera = PiCamera()
     camera.resolution = (4056, 3040)
-
+    sleep(3) # to ensure quality of pictures
+    
     # set the default interval for taking photos, it will be changed only in order to calculate the north, i.e. the first 4 minutes will have 5 seconds/photo, else 20 s/photo
     photo_sleep_interval = 20
-
     # then we start the threads
     auxiliary_thread.start()
+    sleep(1)
     main_thread.start()
 
     # and then we wait until they are finished 
