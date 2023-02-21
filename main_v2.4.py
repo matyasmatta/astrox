@@ -24,7 +24,8 @@ import csv
 from sense_hat import SenseHat
 import datetime
 from datetime import timedelta
-
+from orbit import ISS, ephemeris
+from skyfield.api import load
 from csv import writer
 from pathlib import Path
 from picamera import PiCamera
@@ -1008,23 +1009,30 @@ try:
     # initialise and calibrate the north data via north class
     # initialization
     try:
-        while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
-            photo.get_photo(camera)
-            i_1=str(initialization_count-1)
-            before = "./sample_crop/image ("
-            image_1=str(before + i_1 +").jpg")
-            i_2=str(initialization_count)
-            #print(image_1)
-            image_2=str(before + i_2 +").jpg")
-            #print(image_2)
+        while True:
+            timescale = load.timescale()
+            t = timescale.now()
+            if ISS.at(t).is_sunlit(ephemeris):
+                while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
+                    photo.get_photo(camera)
+                    i_1=str(initialization_count-1)
+                    before = "./sample_crop/image ("
+                    image_1=str(before + i_1 +").jpg")
+                    i_2=str(initialization_count)
+                    #print(image_1)
+                    image_2=str(before + i_2 +").jpg")
+                    #print(image_2)
 
-            data_north = north.find_north(image_1, image_2)
-            print(list.get_median())
-            initialization_count += 1
-            sleep(0)
-            print(image_1)
-            north_initial = list.get_median()
-        print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
+                    data_north = north.find_north(image_1, image_2)
+                    print(list.get_median())
+                    initialization_count += 1
+                    sleep(0)
+                    print(image_1)
+                    north_initial = list.get_median()
+                    print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
+                break
+            else:
+                print("Initialization was postponed due to it being the night")
     except:
         print("There was an error during the initialzitation")
 
@@ -1069,7 +1077,7 @@ try:
                 sector_id = 0
                 for images in os.listdir("./chop/"):
                     chop_image_path = "./chop/astrochop_" + str(sector_id) + ".jpg" 
-                    if 20 < brightness.calculate_brightness(chop_image_path) < 150:
+                    if 10 < brightness.calculate_brightness(chop_image_path) < 190:
                         # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
                         global data
                         data = ai.ai_model(chop_image_path)
