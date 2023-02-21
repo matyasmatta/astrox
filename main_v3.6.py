@@ -160,9 +160,7 @@ class north:
         #calculating the relative rotation of camera on ISS
               
         list.add_edoov_coefficient(edoov_coefficient)
-        print("list:",list.get_list())
         median_edoov_coefficient=list.get_median()
-        print("median u listu", median_edoov_coefficient)
         #averaging latitudes for more accurate calculation 
         latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -237,7 +235,6 @@ class ai:
             bbox = obj.bbox
             draw.rectangle([(bbox.xmin, bbox.ymin), (bbox.xmax, bbox.ymax)],
                         outline='red')
-            print(count)
             draw.text((bbox.xmin + 10, bbox.ymin + 10),
                     '%s\n%.2f' % (count, obj.score),
                     fill='red')
@@ -253,7 +250,6 @@ class ai:
         image = Image.open(image_path)
         _, scale = common.set_resized_input(
             interpreter, image.size, lambda size: image.resize(size, Image.ANTIALIAS))
-        print(scale)
 
         # print('----INFERENCE TIME----')
         # print('Note: The first inference is slow because it includes', 'loading the model into Edge TPU memory.')
@@ -262,7 +258,6 @@ class ai:
             interpreter.invoke()
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0, scale)
-            print('%.2f ms' % (inference_time * 1000))
 
         # print('-------RESULTS--------')
         if not objs:
@@ -302,6 +297,10 @@ class ai:
             json.dump(ai_output, f, ensure_ascii=False, indent=4)
         return ai_output
 class shadow:
+    def print_log(data):
+        with open('log.txt', 'a') as f:
+            f.write(data)
+            f.write("\n")
     class coordinates:
         def get_latitude(image):
             with open(image, 'rb') as image_file:
@@ -313,10 +312,8 @@ class shadow:
                         latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
                 except AttributeError:
                     latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-            print(latitude, latitude_ref)
             decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
             latitude_formatted = str(str(decimal_degrees)+" "+str(latitude_ref))
-            print(latitude_formatted)
             return latitude_formatted
 
         def get_longitude(image):
@@ -329,20 +326,16 @@ class shadow:
                         longitude, longitude_ref = (0.0, 0.0, 0.0), "A"
                 except AttributeError:
                     longitude, longitude_ref = (0.0, 0.0, 0.0), "A"
-            print(longitude, longitude_ref)
             decimal_degrees = longitude[0] + longitude[1] / 60 + longitude[2] / 3600
             longitude_formatted = str(str(decimal_degrees)+" "+longitude_ref)
-            print(longitude_formatted)
             return longitude_formatted   
 
 
     def calculate_cloud_data(counter_for_shadows):
-        print(counter_for_shadows)
         x_max = data[counter_for_shadows]['xmax']
         y_max = data[counter_for_shadows]['ymax']
         x_min = data[counter_for_shadows]['xmin']
         y_min = data[counter_for_shadows]['ymin']
-        print(x_min, y_min, x_max, y_max)
         x_centre_of_cloud = (x_min+x_max)/2
         y_centre_of_cloud = (y_min+y_max)/2
         x_centre_of_cloud = round(x_centre_of_cloud, 0)
@@ -397,10 +390,6 @@ class shadow:
             location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
             altitude, azimuth, distance = sun_pos.altaz()
-
-            print(f"Azimuth: {azimuth.degrees:.4f}")
-            # print(f"Altitude: {altitude.degrees:.4f}")
-
             azimuth= float(azimuth.degrees)
             return(azimuth)
 
@@ -416,7 +405,6 @@ class shadow:
     
     def calculate_angle_for_shadow(north, latitude, longitude, year, month, day, hour=0, minute=0, second=0):
         azimuth = shadow.sun_data.azimuth(latitude, longitude, year, month, day, hour, minute, second)
-        print(north, azimuth)
         total_angle = north + azimuth - 180
         while total_angle >= 360:
             total_angle -= 360
@@ -1032,7 +1020,6 @@ class split:
                     box = (x0, y0,
                             x0+chopsize if x0+chopsize <  width else  width - 1,
                             y0+chopsize if y0+chopsize < height else height - 1)
-                    print('%s %s' % (infile, box))
                     file_name = "./chop/astrochop_" + str(within_loop_counter) + ".jpg"
                     img.crop(box).save(file_name,exif=exif)
                     within_loop_counter += 1
@@ -1071,7 +1058,8 @@ class photo_thread(threading.Thread):
         self.count = count
     # this is the main process that will take photos in a loop
     def run(self):
-        print("Starting: " + self.name + "\n")
+        to_print = str("Starting: " + str(self.name) )
+        shadow.print_log(to_print)
         # first we initialize the process
         base_folder = Path(__file__).parent.resolve()
         data_file = base_folder / "data.csv"
@@ -1106,7 +1094,8 @@ class photo_thread(threading.Thread):
             sleep(5)
             del imageName       
 
-        print("Exiting: " + self.name + "\n")
+        to_print = str("Exiting: " + str(self.name) )
+        shadow.print_log(to_print)
 class processing_thread(threading.Thread):
     # we must make sure that initialization of each thread is done well
     def __init__(self, threadId, name, count):
@@ -1125,7 +1114,8 @@ class processing_thread(threading.Thread):
                     global initialization_count
                     initialization_count = 0
                 except:
-                    print("There was an error during pre-initialization")
+                    to_print = str("There was an error during pre-initialization")
+                    shadow.print_log(to_print)
                 # initialise and calibrate the north data via north class
                 # initialization
                 try:
@@ -1137,22 +1127,18 @@ class processing_thread(threading.Thread):
                             before = "./datasetlow/image ("
                             image_1=str(before + i_1 +").jpg")
                             i_2=str(initialization_count+1)
-                            #print(image_1)
                             image_2=str(before + i_2 +").jpg")
-                            #print(image_2)
-
                             data_north = north.find_north(image_1, image_2)
-                            print(list.get_median())
                             initialization_count += 1
                             sleep(0)
-                            print(image_1)
                             list_medianu = list.get_median()
                             print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
                             global all_edoov_coefficient
                             all_edoov_coefficient = list_medianu
                         break
                 except:
-                    print("There was an error during the initialzitation")
+                    to_print = str("There was an error during the initialzitation")
+                    shadow.print_log(to_print)
 
                 # run the actual main code
                 # main runtime
@@ -1197,68 +1183,71 @@ class processing_thread(threading.Thread):
 
                                 # then we check if the image is not all-clouds or all-sea with a brightness function, see the respective class for more information
                                 if 50 < properties.calculate_brightness(chop_image_path) < 190 and properties.calculate_contrast(chop_image_path) > 42:
-                                    
-                                    # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
-                                    global data
-                                    data = ai.ai_model(chop_image_path)
+                                    try:
+                                        # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
+                                        global data
+                                        data = ai.ai_model(chop_image_path)
 
-                                    # we will use this counter to label the dictionary correctly
-                                    counter_for_shadows = 0
+                                        # we will use this counter to label the dictionary correctly
+                                        counter_for_shadows = 0
 
-                                    # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
-                                    angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
+                                        # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
+                                        angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
 
-                                    # this loop runs through all the clouds detected in an image and writes the data into the final csv file
-                                    while counter_for_shadows <= 9:
-                                        try:
-                                            # this code will figure us out the cloud bbox data, respectively its centre
-                                            x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
-                                            
-                                            # we check that the cloud is not too long as too long clouds would be useless and slow the program down
-                                            if x_cloud_lenght < 69 and y_cloud_lenght < 69:
+                                        # this loop runs through all the clouds detected in an image and writes the data into the final csv file
+                                        while counter_for_shadows <= 9:
+                                            try:
+                                                # this code will figure us out the cloud bbox data, respectively its centre
+                                                x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
                                                 
-                                                # we add a simple error handling to make sure we can handle unexpected expections
-                                                try:
-                                                    # this piece of code will return either data or "error" string, that will happen in rare cases
-                                                    # so that the loop does not crash completely and skip the cloud we use the "error" string
-                                                    result_shadow = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                # we check that the cloud is not too long as too long clouds would be useless and slow the program down
+                                                if x_cloud_lenght < 69 and y_cloud_lenght < 69:
                                                     
-                                                    # here we simply pass if an unexpected though handlable error happens
-                                                    if result_shadow == "error":
+                                                    # we add a simple error handling to make sure we can handle unexpected expections
+                                                    try:
+                                                        # this piece of code will return either data or "error" string, that will happen in rare cases
+                                                        # so that the loop does not crash completely and skip the cloud we use the "error" string
+                                                        result_shadow = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                        
+                                                        # here we simply pass if an unexpected though handlable error happens
+                                                        if result_shadow == "error":
+                                                            pass
+
+                                                        # else we write the results into a csv table which we will try to get back on Earth for analysis
+                                                        else:
+                                                            # here we add the datum to a python dictionary
+                                                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                            
+                                                            # here we run a simple csv writer to write into the file
+                                                            with open('shadows.csv', 'a') as f:
+                                                                writer = csv.writer(f)
+                                                                data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
+                                                                writer.writerow(data_csv)
+                                                    except:
+                                                        # we add simple error handling
                                                         pass
 
-                                                    # else we write the results into a csv table which we will try to get back on Earth for analysis
-                                                    else:
-                                                        # here we add the datum to a python dictionary
-                                                        data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
-                                                        
-                                                        # here we run a simple csv writer to write into the file
-                                                        with open('shadows.csv', 'a') as f:
-                                                            writer = csv.writer(f)
-                                                            data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
-                                                            writer.writerow(data_csv)
-                                                except:
-                                                    # we add simple error handling
-                                                    pass
-
-                                                # we print the data into some log file
-                                                to_print = str("Cloud number " + counter_for_shadows + " has a lenght of " + data[counter_for_shadows]['shadow'])
-                                                shadow.print_log(to_print)
-                                            else:
-                                                # add data to log file
-                                                to_print = str("Cloud number "+ counter_for_shadows + " did not meet maximal lenght criteria")
-                                                shadow.print.log(to_print)
-                                            counter_for_shadows += 1                             
-                                        except:
-                                            break
+                                                    # we print the data into some log file
+                                                    to_print = str("Cloud number " + counter_for_shadows + " has a lenght of " + data[counter_for_shadows]['shadow'])
+                                                    shadow.print_log(to_print)
+                                                else:
+                                                    # add data to log file
+                                                    to_print = str("Cloud number "+ counter_for_shadows + " did not meet maximal lenght criteria")
+                                                    shadow.print.log(to_print)
+                                                counter_for_shadows += 1                             
+                                            except:
+                                                break
+                                    except:
+                                        to_print = "There was an error running the ai module" 
+                                        shadow.print_log(to_print)
                                 else:
                                     # add data to log file
-                                    to_print = str("Skipped image due to the brightness being" + properties.calculate_brightness(chop_image_path))
+                                    to_print = str("Skipped image due to the brightness being" + str(properties.calculate_brightness(chop_image_path)))
                                     shadow.print_log(to_print)
                                 sector_id += 1
                             else:
                                 # add data to log file
-                                to_print = str("Skipped image due to the sun being under 5 degrees, i.e. " + shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second))
+                                to_print = str("Skipped image due to the sun being under 5 degrees, i.e. " + str(shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second)))
                                 shadow.print_log(to_print)
                         
                         # for the north function we simply change the image_2_path to be image_1_path and we can count on
@@ -1273,18 +1262,18 @@ class processing_thread(threading.Thread):
                     shadow.print_log(to_print)
             except:
                 # add data to log file
-                to_print = str("There was an error running the code")
+                to_print = str("There was an error running the code" )
                 shadow.print_log(to_print)
         
         # add data to log file
-        to_print = str("Starting: " + self.name + "\n")
+        to_print = str("Starting: " + self.name )
         shadow.print_log(to_print)
 
         # run the main function as seen above
         main_processing()
 
         # add data to log file
-        to_print = str("Exiting: " + self.name + "\n")
+        to_print = str("Exiting: " + self.name )
         shadow.print_log(to_print)
 if __name__ == '__main__':
     # there are many advantages to multithreaded operation compare to monothread
@@ -1314,4 +1303,5 @@ if __name__ == '__main__':
     main_thread.join()
 
     # we print a happy message to let us know that everything went well
-    print("Done main thread")
+    to_print = str("Done main thread")
+    shadow.print_log(to_print)
