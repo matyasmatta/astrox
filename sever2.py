@@ -21,7 +21,7 @@ def find_north(image_1, image_2):
         return image_1_cv, image_2_cv
 
     #finding same "things" on both images
-    def calculate_features(image_1, image_2, feature_number):
+    def calculate_features(image_1_cv, image_2_cv, feature_number):
         orb = cv2.ORB_create(nfeatures = feature_number)
         keypoints_1, descriptors_1 = orb.detectAndCompute(image_1_cv, None)
         keypoints_2, descriptors_2 = orb.detectAndCompute(image_2_cv, None)
@@ -117,7 +117,7 @@ def find_north(image_1, image_2):
     #using defined functions
     latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
     image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 100) 
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
     matches = calculate_matches(descriptors_1, descriptors_2)
     edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
     #calculating the relative rotation of camera on ISS
@@ -125,7 +125,7 @@ def find_north(image_1, image_2):
     median_edoov_coefficient=list.get_median()
     #averaging latitudes for more accurate calculation 
     latitude_avg = (latitude_image_1+latitude_image_2)/2
-    print("coef:",median_edoov_coefficient)
+    #print("coef:",median_edoov_coefficient)
     #calculating the relative position of north for ISS (looks forward)
     alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951)) * 57.29577951
     corrected_alpha_k=0
@@ -133,9 +133,25 @@ def find_north(image_1, image_2):
         corrected_alpha_k=180-alpha_k
     else:
         corrected_alpha_k=alpha_k
-    print("corralpha:", corrected_alpha_k)
+    #print("corralpha:", corrected_alpha_k)
     #combinating both informations to get real position of north on photo
     poloha_severu = median_edoov_coefficient - corrected_alpha_k
     if poloha_severu < 0:
         poloha_severu = poloha_severu + 360
     return poloha_severu
+
+counter=234
+timeted = datetime.now()
+for i in range(130):
+    i_1=str(counter)
+    before = "eda\direction12\photo_18"
+    image_1=str(before + i_1 +".jpg")
+    i_2=str(counter+1)
+    #print(image_1)
+    image_2=str(before + i_2 +".jpg")
+    #print(image_2)
+
+    data = find_north(image_1, image_2)
+    print(data)
+    counter+=1
+print(datetime.now()- timeted)
