@@ -1228,11 +1228,11 @@ class processing_thread(threading.Thread):
                                                         pass
 
                                                     # we print the data into some log file
-                                                    to_print = str("Cloud number " + counter_for_shadows + " has a lenght of " + data[counter_for_shadows]['shadow'])
+                                                    to_print = str("Cloud number " + str(counter_for_shadows) + " has a lenght of " + data[counter_for_shadows]['shadow'])
                                                     shadow.print_log(to_print)
                                                 else:
                                                     # add data to log file
-                                                    to_print = str("Cloud number "+ counter_for_shadows + " did not meet maximal lenght criteria")
+                                                    to_print = str("Cloud number "+ str(counter_for_shadows) + " did not meet maximal lenght criteria")
                                                     shadow.print.log(to_print)
                                                 counter_for_shadows += 1                             
                                             except:
@@ -1266,14 +1266,14 @@ class processing_thread(threading.Thread):
                 shadow.print_log(to_print)
         
         # add data to log file
-        to_print = str("Starting: " + self.name )
+        to_print = str("Starting: " + str(self.name))
         shadow.print_log(to_print)
 
         # run the main function as seen above
         main_processing()
 
         # add data to log file
-        to_print = str("Exiting: " + self.name )
+        to_print = str("Exiting: " + str(self.name))
         shadow.print_log(to_print)
 if __name__ == '__main__':
     # there are many advantages to multithreaded operation compare to monothread
