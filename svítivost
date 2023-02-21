@@ -1,0 +1,4 @@
+def brightness( im_file ):
+   im = Image.open(im_file).convert('L')
+   stat = ImageStat.Stat(im)
+   return stat.rms[0]
