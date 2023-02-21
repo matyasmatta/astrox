@@ -1051,8 +1051,7 @@ class photo_thread(threading.Thread):
         self.count = count
     # this is the main process that will take photos in a loop
     def run(self):
-        to_print = str("Starting: " + str(self.name) )
-        shadow.print_log(to_print)
+        print("Starting: " + self.name + "\n")
         # first we initialize the process
         base_folder = Path(__file__).parent.resolve()
         data_file = base_folder / "data.csv"
@@ -1063,9 +1062,18 @@ class photo_thread(threading.Thread):
         now_time = datetime.now()
         count_for_images_day = 0
         count_for_images_night = 0
-        sleep(2)
+        
+        with open('data.csv', 'w', buffering=1, newline='') as f:
+            data_writer = writer(f)
+            data_writer.writerow(['temp', 'pres', 'hum',
+                                'red', 'green', 'blue', 'clear', #only for Sense HAT version 2
+                                'yaw', 'pitch', 'roll',
+                                'mag_x', 'mag_y', 'mag_z',
+                                'acc_x', 'acc_y', 'acc_z',
+                                'gyro_x', 'gyro_y', 'gyro_z',
+                                'datetime'])
 
-        while (datetime.now() < start_time + timedelta(minutes=100)):
+        while (datetime.now() < start_time + timedelta(seconds=1000)):
             timescale = load.timescale()
             t = timescale.now()
             if ISS.at(t).is_sunlit(ephemeris):
@@ -1085,10 +1093,47 @@ class photo_thread(threading.Thread):
             camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
             camera.capture(imageName)     
             sleep(5)
-            del imageName       
+            del imageName   
+            
+            sense_data = []
+            # Get environmental data
+            sense_data.append(sense.get_temperature())
+            sense_data.append(sense.get_pressure())
+            sense_data.append(sense.get_humidity())
+            # Get colour sensor data (version 2 Sense HAT only)
+            red, green, blue, clear = sense.colour.colour
+            sense_data.append(red)
+            sense_data.append(green)
+            sense_data.append(blue)
+            sense_data.append(clear)
+            # Get orientation data
+            orientation = sense.get_orientation()
+            sense_data.append(orientation["yaw"])
+            sense_data.append(orientation["pitch"])
+            sense_data.append(orientation["roll"])
+            # Get compass data
+            mag = sense.get_compass_raw()
+            sense_data.append(mag["x"])
+            sense_data.append(mag["y"])
+            sense_data.append(mag["z"])
+            # Get accelerometer data
+            acc = sense.get_accelerometer_raw()
+            sense_data.append(acc["x"])
+            sense_data.append(acc["y"])
+            sense_data.append(acc["z"])
+            #Get gyroscope data
+            gyro = sense.get_gyroscope_raw()
+            sense_data.append(gyro["x"])
+            sense_data.append(gyro["y"])
+            sense_data.append(gyro["z"])
+            sense_data.append(datetime.now())
+            
+            print(sense_data)
+            with open("data.csv", "a", newline="") as f:
+                data_writer = writer(f)
+                data_writer.writerow(sense_data)    
 
-        to_print = str("Exiting: " + str(self.name) )
-        shadow.print_log(to_print)
+        print("Exiting: " + self.name + "\n")
 class processing_thread(threading.Thread):
     # we must make sure that initialization of each thread is done well
     def __init__(self, threadId, name, count):
