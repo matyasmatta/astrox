@@ -999,12 +999,8 @@ try:
     # first define all functions neccessary for operation and calibrate the camera
     # pre-initialization
     try:
-        start_time =  datetime.datetime.now()
-        camera = PiCamera()
-        sleep(2)
-        initialization_count = 1
-        photo.get_photo(camera)
-        initialization_count += 1
+
+
     except:
         print("There was an error during pre-initialization")
 
