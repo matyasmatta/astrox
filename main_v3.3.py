@@ -1038,10 +1038,15 @@ class split:
                     within_loop_counter += 1
             del exif
 class properties:
-    def calculate_brightness(im_file):
-        im = Image.open(im_file).convert('L')
+    def calculate_brightness(img_path):
+        im = Image.open(img_path).convert('L')
         stat = ImageStat.Stat(im)
         return stat.rms[0]
+    def calculate_contrast(img_path):
+        img=cv2.imread(img_path)
+        img_grey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        contrast = img_grey.std()
+        return contrast
 class exifmeta:
     def find_time_from_image(image_path):
         img = Image.open(image_path)
