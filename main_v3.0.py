@@ -1,5 +1,7 @@
+# first version to include two threads
 # for further file history see main_old/main_v1.4.py
-
+import threading
+import time
 import cv2
 import math
 import numpy as np
@@ -31,13 +33,11 @@ from pathlib import Path
 from picamera import PiCamera
 from orbit import ISS
 from exif import Image as exify
-# import the modules
 import os
 from os import listdir
 import threading
 
-
-
+# classes for functions
 class list:
     global store_edoov_coefficient
     store_edoov_coefficient = []
@@ -995,137 +995,209 @@ class brightness:
         im = Image.open(im_file).convert('L')
         stat = ImageStat.Stat(im)
         return stat.rms[0]
-try:
-    # first define all functions neccessary for operation and calibrate the camera
-    # pre-initialization
-    try:
-        start_time =  datetime.datetime.now()
+class exifmeta:
+    def find_time_from_image(image_path):
+        img = Image.open(image_path)
+        img_exif_dict = img.getexif()
+        date = str(img_exif_dict[306])
+
+        year = int(date[0:4])
+        month = int(date[5:7])
+        day = int(date[8:10])
+        hour = int(date[11:13])
+        minute = int(date[14:16])
+        second = int(date[17:19])
+
+        return year, month, day, hour, minute, second        
+# classes for threads
+class photo_thread(threading.Thread):
+    # we must make sure that initialization of each thread is done well
+    def __init__(self, threadId, name, count):
+        threading.Thread.__init__(self)
+        self.threadId = threadId
+        self.name = name
+        self.count = count
+    # this is the main process that will take photos in a loop
+    def run(self):
+        print("Starting: " + self.name + "\n")
+        # first we initialize the process
+        base_folder = Path(__file__).parent.resolve()
+        data_file = base_folder / "data.csv"
+        sense = SenseHat()
+        sense.color.gain = 60
+        sense.color.integration_cycles = 64
+        start_time = datetime.now()
+        now_time = datetime.now()
         camera = PiCamera()
+        count_for_images = 0
+        camera.resolution = (4056, 3040)
         sleep(2)
-        initialization_count = 1
-        photo.get_photo(camera)
-        initialization_count += 1
-    except:
-        print("There was an error during pre-initialization")
 
-    # initialise and calibrate the north data via north class
-    # initialization
-    try:
-        while True:
-            timescale = load.timescale()
-            t = timescale.now()
-            if ISS.at(t).is_sunlit(ephemeris):
-                while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
-                    photo.get_photo(camera)
-                    i_1=str(initialization_count-1)
-                    before = "./sample_crop/image ("
-                    image_1=str(before + i_1 +").jpg")
-                    i_2=str(initialization_count)
-                    #print(image_1)
-                    image_2=str(before + i_2 +").jpg")
-                    #print(image_2)
+        while (datetime.now() < start_time + timedelta(seconds=50)):
+            imageName = str("./main/img_" + str(count_for_images) + ".jpg")
+            camera.capture(imageName)
+            count_for_images += 1     
+            sleep(5)
+            del imageName       
 
-                    data_north = north.find_north(image_1, image_2)
-                    print(list.get_median())
+        print("Exiting: " + self.name + "\n")
+class processing_thread(threading.Thread):
+    # we must make sure that initialization of each thread is done well
+    def __init__(self, threadId, name, count):
+        threading.Thread.__init__(self)
+        self.threadId = threadId
+        self.name = name
+        self.count = count
+        
+    def run(self):
+        def main_processing():
+            try:
+                # first define all functions neccessary for operation and calibrate the camera
+                # pre-initialization
+                try:
+                    start_time =  datetime.datetime.now()
+                    initialization_count = 1
+                except:
+                    print("There was an error during pre-initialization")
+                # initialise and calibrate the north data via north class
+                # initialization
+                try:
+                    while True:
+                        timescale = load.timescale()
+                        t = timescale.now()
+                        camera = PiCamera()
+                        if ISS.at(t).is_sunlit(ephemeris):
+                            while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
+                                photo.get_photo(camera)
+                                i_1=str(initialization_count-1)
+                                before = "./sample_crop/image ("
+                                image_1=str(before + i_1 +").jpg")
+                                i_2=str(initialization_count)
+                                #print(image_1)
+                                image_2=str(before + i_2 +").jpg")
+                                #print(image_2)
+
+                                data_north = north.find_north(image_1, image_2)
+                                print(list.get_median())
+                                initialization_count += 1
+                                sleep(0)
+                                print(image_1)
+                                north_initial = list.get_median()
+                                print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
+                            break
+                        else:
+                            print("Initialization was postponed due to it being the night")
+                except:
+                    print("There was an error during the initialzitation")
+
+                # run the actual main code
+                # main runtime
+                try:
+                    # first take a photo outside the loop for first reference
+                    image_1 = photo.get_photo(camera)
+                    initialization_count = 1
+                    imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
+                    image_1_path = imageName
                     initialization_count += 1
-                    sleep(0)
-                    print(image_1)
-                    north_initial = list.get_median()
-                    print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
-                break
-            else:
-                print("Initialization was postponed due to it being the night")
-    except:
-        print("There was an error during the initialzitation")
+                    # make sure there is a little bit of differnce for the north class
+                    sleep(1)
+                    full_image_id = 0
+                    # the following is the main loop which will run for the majority of time on the ISS
+                    while (datetime.datetime.now() < start_time + timedelta(minutes=30)):
+                        # first we take a photo within the loop
+                        image_2 = photo.get_photo(camera)
+                        imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
+                        image_2_path = imageName
+                        print(imageName)
+                        # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
+                        latitude = shadow.coordinates.get_latitude(image_2_path)
+                        longitude = shadow.coordinates.get_longitude(image_2_path)
+                        print(latitude, longitude)
+                        # we extract the time information from the image
+                        year, month, day, hour, minute, second  = exifmeta.find_time_from_image(image_path=image_2_path)
 
-    # run the actual main code
-    # main runtime
-    try:
-        # first take a photo outside the loop for first reference
-        image_1 = photo.get_photo(camera)
-        initialization_count = 1
-        imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
-        image_1_path = imageName
-        initialization_count += 1
-        # make sure there is a little bit of differnce for the north class
-        sleep(1)
-        full_image_id = 0
-        # the following is the main loop which will run for the majority of time on the ISS
-        while (datetime.datetime.now() < start_time + timedelta(minutes=30)):
-            # first we take a photo within the loop
-            image_2 = photo.get_photo(camera)
-            imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
-            image_2_path = imageName
-            print(imageName)
-            # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
-            latitude = shadow.coordinates.get_latitude(image_2_path)
-            longitude = shadow.coordinates.get_longitude(image_2_path)
-            print(latitude, longitude)
-            # we extract the time information from datetime library 
-            year = datetime.datetime.now().year
-            month = datetime.datetime.now().month
-            day = datetime.datetime.now().day
-            hour = datetime.datetime.now().hour
-            minute = datetime.datetime.now().minute
-            second = datetime.datetime.now().second
+                        if shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second) > 5:
+                            # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
+                            north_main = north.find_north(image_1=image_1_path, image_2=image_2_path)
+                            print("sever",north_main)
 
-            if shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second) > 5:
-                # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
-                north_main = north.find_north(image_1=image_1_path, image_2=image_2_path)
-                print("sever",north_main)
+                            # split image into many
+                            split.file_split(image_id = full_image_id, image_path=image_2_path) # creates a ./chop/... folder and puts the chops into it with  "astrochop_n" syntax
+                            sector_id = 0
+                            for images in os.listdir("./chop/"):
+                                chop_image_path = "./chop/astrochop_" + str(sector_id) + ".jpg" 
+                                if 10 < brightness.calculate_brightness(chop_image_path) < 190:
+                                    # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
+                                    global data
+                                    data = ai.ai_model(chop_image_path)
 
-                # split image into many
-                split.file_split(image_id = full_image_id, image_path=image_2_path) # creates a ./chop/... folder and puts the chops into it with  "astrochop_n" syntax
-                sector_id = 0
-                for images in os.listdir("./chop/"):
-                    chop_image_path = "./chop/astrochop_" + str(sector_id) + ".jpg" 
-                    if 10 < brightness.calculate_brightness(chop_image_path) < 190:
-                        # the image is fed to the ai model, which returns a dictionary of cloud boundaries and accuracies, see the ai class for more details
-                        global data
-                        data = ai.ai_model(chop_image_path)
+                                    # we will use this counter to label the dictionary correctly
+                                    counter_for_shadows = 0
 
-                        # we will use this counter to label the dictionary correctly
-                        counter_for_shadows = 0
+                                    # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
+                                    angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
 
-                        # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
-                        angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
-
-                        # this loop runs through all the clouds detected in an image and writes the data into the final csv file
-                        while counter_for_shadows <= 9:
-                            try:
-                                x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
-                                if x_cloud_lenght < 69 and y_cloud_lenght < 69:
-                                    try:
-                                        data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
-                                        with open('shadows.csv', 'a') as f:
-                                            writer = csv.writer(f)
-                                            data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
-                                            writer.writerow(data_csv)
-                                    except:
-                                        print("There was an error running the shadow module.")
-                                    print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
+                                    # this loop runs through all the clouds detected in an image and writes the data into the final csv file
+                                    while counter_for_shadows <= 9:
+                                        try:
+                                            x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght = shadow.calculate_cloud_data(counter_for_shadows)
+                                            if x_cloud_lenght < 69 and y_cloud_lenght < 69:
+                                                try:
+                                                    data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                    with open('shadows.csv', 'a') as f:
+                                                        writer = csv.writer(f)
+                                                        data_csv = [full_image_id, sector_id, counter_for_shadows, data[counter_for_shadows]['shadow']]
+                                                        writer.writerow(data_csv)
+                                                except:
+                                                    print("There was an error running the shadow module.")
+                                                print("Cloud number", counter_for_shadows, "has a lenght of", data[counter_for_shadows]['shadow'])
+                                            else:
+                                                print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
+                                            counter_for_shadows += 1                             
+                                        except:
+                                            meta = Image.open('meta.jpg')
+                                            # meta.show()
+                                            break
                                 else:
-                                    print("Cloud number", counter_for_shadows, "did not meet maximal lenght criteria")
-                                counter_for_shadows += 1                             
-                            except:
-                                meta = Image.open('meta.jpg')
-                                # meta.show()
-                                break
-                    else:
-                        print("Skipped image due to the brightness being", brightness.calculate_brightness(chop_image_path))
-                    sector_id += 1
-                else:
-                    print("Skipped image due to the sun being under 5 degrees, i.e.", shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second))
-            image_1 = image_2
-            image_1_path = image_2_path
-            full_image_id += 1
-            initialization_count += 1
-            del image_2
-    except:
-        print("There was an error during the main runtime")
+                                    print("Skipped image due to the brightness being", brightness.calculate_brightness(chop_image_path))
+                                sector_id += 1
+                            else:
+                                print("Skipped image due to the sun being under 5 degrees, i.e.", shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second))
+                        image_1 = image_2
+                        image_1_path = image_2_path
+                        full_image_id += 1
+                        initialization_count += 1
+                        del image_2
+                except:
+                    print("There was an error during the main runtime")
 
-    # after time has passed do automatic runtime checks
-    # finalization
-except:
-    print("There was an error running the code")
-    pass
+                # after time has passed do automatic runtime checks
+                # finalization
+            except:
+                print("There was an error running the code")
+                pass        
+        print("Starting: " + self.name + "\n")
+        main_processing()
+        print("Exiting: " + self.name + "\n")
+
+if __name__ == '__main__':
+    # there are many advantages to multithreaded operation compare to monothread
+    # suppose we ignore photos taken in the complete darkness, i.e. half the time,
+    # but because the processing is so much slower than the photographing we will have many unprocessed images that could take advatage of being run in the dark.
+    # also because the processing is about 2 minutes/full image (as of v2.4),
+    # we would have to force-quit operation often just to take photos where the north class can actually detect similiar objects (when too far apart openCV would fail)
+    
+    # first we define the threads
+    auxiliary_thread = photo_thread(1, "Thread1", 10)
+    main_thread = processing_thread(2, "Thread2", 5)
+
+    # then we start the threads
+    auxiliary_thread.start()
+    main_thread.start()
+
+    # and then we wait until they are finished 
+    auxiliary_thread.join()
+    main_thread.join()
+
+    # we print a happy message to let us know that everything went well
+    print("Done main thread")
