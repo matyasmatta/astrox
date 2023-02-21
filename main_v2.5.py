@@ -1080,10 +1080,10 @@ try:
                     initialization_count += 1
                     sleep(0)
                     print(image_1)
-                    north_initial = list.get_median()
-                    print("North (edoov koeficient) was defined at", north_initial, "counted clockwise.")
+                    list_medianu = list.get_median()
+                    print("North (edoov koeficient) was defined at", list_medianu, "counted clockwise.")
                     global all_edoov_coefficient
-                    all_edoov_coefficient = north_initial
+                    all_edoov_coefficient = list_medianu
                 break
             else:
                 print("Initialization was postponed due to it being the night")
