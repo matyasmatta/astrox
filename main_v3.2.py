@@ -1075,13 +1075,20 @@ class photo_thread(threading.Thread):
         sense.color.integration_cycles = 64
         start_time = datetime.now()
         now_time = datetime.now()
-        count_for_images = 0
+        count_for_images_day = 0
+        count_for_images_night = 0
         sleep(2)
 
         while (datetime.now() < start_time + timedelta(seconds=1000)):
-            imageName = str("./main/img_" + str(count_for_images) + ".jpg")
-            camera.capture(imageName)
-            count_for_images += 1     
+            timescale = load.timescale()
+            t = timescale.now()
+            if ISS.at(t).is_sunlit(ephemeris):
+                imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
+                count_for_images_day += 1
+            else:
+                imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
+                count_for_images_night += 1
+            camera.capture(imageName)     
             sleep(5)
             del imageName       
 
@@ -1111,29 +1118,26 @@ class processing_thread(threading.Thread):
                     while True:
                         timescale = load.timescale()
                         t = timescale.now()
-                        if ISS.at(t).is_sunlit(ephemeris):
-                            while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
-                                photo.get_photo(camera)
-                                i_1=str(initialization_count-1)
-                                before = "./sample_crop/image ("
-                                image_1=str(before + i_1 +").jpg")
-                                i_2=str(initialization_count)
-                                #print(image_1)
-                                image_2=str(before + i_2 +").jpg")
-                                #print(image_2)
+                        while (datetime.datetime.now() < start_time + timedelta(seconds=256)):
+                            photo.get_photo(camera)
+                            i_1=str(initialization_count-1)
+                            before = "./main/night_img_"
+                            image_1=str(before + i_1 +").jpg")
+                            i_2=str(initialization_count)
+                            #print(image_1)
+                            image_2=str(before + i_2 +").jpg")
+                            #print(image_2)
 
-                                data_north = north.find_north(image_1, image_2)
-                                print(list.get_median())
-                                initialization_count += 1
-                                sleep(0)
-                                print(image_1)
-                                list_medianu = list.get_median()
-                                print("North (edoov koeficient) was defined at", list_medianu, "counted clockwise.")
-                                global all_edoov_coefficient
-                                all_edoov_coefficient = list_medianu
-                            break
-                        else:
-                            print("Initialization was postponed due to it being the night")
+                            data_north = north.find_north(image_1, image_2)
+                            print(list.get_median())
+                            initialization_count += 1
+                            sleep(0)
+                            print(image_1)
+                            list_medianu = list.get_median()
+                            print("North (edoov koeficient) was defined at", list_medianu, "counted clockwise.")
+                            global all_edoov_coefficient
+                            all_edoov_coefficient = list_medianu
+                        break
                 except:
                     print("There was an error during the initialzitation")
 
