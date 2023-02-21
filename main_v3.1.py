@@ -331,7 +331,7 @@ class shadow:
             # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
             location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
-            altitude, azimuth, distance = sun_pos.altaz()
+            altitude, azimuth = sun_pos.altaz()
 
             # print(f"Azimuth: {azimuth.degrees:.4f}")
             # print(f"Altitude: {altitude.degrees:.4f}")
@@ -1112,9 +1112,9 @@ class processing_thread(threading.Thread):
                         # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
                         latitude = shadow.coordinates.get_latitude(image_2_path)
                         longitude = shadow.coordinates.get_longitude(image_2_path)
-                        print(latitude, longitude)
                         # we extract the time information from the image
                         year, month, day, hour, minute, second  = exifmeta.find_time_from_image(image_path=image_2_path)
+                        print(latitude, longitude, year, month, day, hour, minute, second)
 
                         if shadow.sun_data.altitude(coordinates_latitude=latitude, coordinates_longtitude=longitude, year=year, month=month, day=day, hour=hour, minute=minute, second=second) > 5:
                             # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
