@@ -1123,7 +1123,7 @@ class processing_thread(threading.Thread):
                 try:
                     start_time =  datetime.now()
                     global initialization_count
-                    initialization_count = 1
+                    initialization_count = 119
                 except:
                     print("There was an error during pre-initialization")
                 # initialise and calibrate the north data via north class
@@ -1134,7 +1134,7 @@ class processing_thread(threading.Thread):
                         t = timescale.now()
                         while (datetime.now() < start_time + timedelta(seconds=30)):
                             i_1=str(initialization_count-1)
-                            before = "./sample_crop/image ("
+                            before = "./datasetlow/image ("
                             image_1=str(before + i_1 +").jpg")
                             i_2=str(initialization_count)
                             #print(image_1)
@@ -1159,7 +1159,7 @@ class processing_thread(threading.Thread):
                 try:
                     # first take a photo outside the loop for first reference
                     initialization_count = 1
-                    imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
+                    imageName = str("./datasetlow/image (" + str(initialization_count) + ").jpg")
                     image_1_path = imageName
                     initialization_count += 1
                     # make sure there is a little bit of differnce for the north class
@@ -1169,7 +1169,7 @@ class processing_thread(threading.Thread):
                     while (datetime.now() < start_time + timedelta(minutes=15)):
                         # first we take a photo within the loop
                         image_2 = photo.get_photo(camera)
-                        imageName = str("./sample_crop/image (" + str(initialization_count) + ").jpg")
+                        imageName = str("./datasetlow/image (" + str(initialization_count) + ").jpg")
                         image_2_path = imageName
                         print(imageName)
                         # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
