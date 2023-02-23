@@ -334,8 +334,10 @@ class shadow:
         y_min = data[counter_for_shadows]['ymin']
         x_centre_of_cloud = (x_min+x_max)/2
         y_centre_of_cloud = (y_min+y_max)/2
-        x_centre_of_cloud = round(x_centre_of_cloud)
-        y_centre_of_cloud = round(y_centre_of_cloud)
+        x_centre_of_cloud = round(x_centre_of_cloud, 0)
+        y_centre_of_cloud = round(y_centre_of_cloud, 0)
+        x_centre_of_cloud = int(x_centre_of_cloud)
+        y_centre_of_cloud = int(y_centre_of_cloud)
         x_cloud_lenght = abs(x_max - x_min)
         y_cloud_lenght = abs(y_max - y_min)
 
@@ -379,8 +381,10 @@ class shadow:
         constant_for_starting_point_correction = 10
         x_final = x_centre - constant_for_starting_point_correction*x_increase_final
         y_final = y_centre - constant_for_starting_point_correction*y_increase_final
-        x_final = round(x_final)
-        y_final = round(y_final)
+        x_final = round(x_final, 0)
+        x_final = int(x_final)
+        y_final = round(y_final, 0)
+        y_final = int(y_final)
         return x_final, y_final
     
     # here we calculate the angle used to seatch for shadows (it is mostly just formatting now as of v4.4)
@@ -416,7 +420,7 @@ class shadow:
             # we are aware that there might be a simpler solution but this is the only one we found consistent and fairly fast
 
             # calculate meta angle
-            angle_radians = angle /57.29577951
+            angle_radians =np.radians(angle)
             x_increase_meta = np.sin(angle_radians)
             y_increase_meta = np.cos(angle_radians)
             y_increase_meta = -y_increase_meta
@@ -1141,7 +1145,7 @@ class processing_thread(threading.Thread):
                                                     try:
                                                         # this piece of code will return either data or "error" string, that will happen in rare cases
                                                         # so that the loop does not crash completely and skip the cloud we use the "error" string
-                                                        result_shadow = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                        result_shadow = shadow.calculate_shadow(file_path=chop_image_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
                                                         
                                                         # here we simply pass if an unexpected though handlable error happens
                                                         if result_shadow == "error":
@@ -1150,7 +1154,7 @@ class processing_thread(threading.Thread):
                                                         # else we write the results into a csv table which we will try to get back on Earth for analysis
                                                         else:
                                                             # here we add the datum to a python dictionary
-                                                            data[counter_for_shadows]['shadow'] = shadow.calculate_shadow(file_path=image_2_path, x=x_centre_of_cloud, y=y_centre_of_cloud, angle=angle, image_id=sector_id, cloud_id=counter_for_shadows)
+                                                            data[counter_for_shadows]['shadow'] = result_shadow
                                                             
                                                             # here we run a simple csv writer to write into the file
                                                             with open('shadows.csv', 'a') as f:
