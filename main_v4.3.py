@@ -284,7 +284,7 @@ class ai:
         for obj in objs:
             if obj.score > 0.25:
                 #print(labels.get(obj.id, obj.id))
-                print('  id:    ', obj.id)
+                print('  id:    ', counter_for_ai_output)
                 print('  score: ', obj.score)
                 print('  bbox:  ', obj.bbox)
 
@@ -1087,7 +1087,8 @@ class photo_thread(threading.Thread):
         self.count = count
     # this is the main process that will take photos in a loop
     def run(self):
-        print("Starting: " + self.name + "\n")
+        to_print = "Starting: " + self.name
+        shadow.print_log(to_print)
         # first we initialize the process
         base_folder = Path(__file__).parent.resolve()
         data_file = base_folder / "data.csv"
@@ -1167,8 +1168,8 @@ class photo_thread(threading.Thread):
             with open("data.csv", "a", newline="") as f:
                 data_writer = writer(f)
                 data_writer.writerow(sense_data)    
-
-        print("Exiting: " + self.name + "\n")
+        to_print = "Exiting: " + str(self.name)
+        shadow.print_log(to_print)
 class processing_thread(threading.Thread):
     # we must make sure that initialization of each thread is done well
     def __init__(self, threadId, name, count):
