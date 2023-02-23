@@ -1,5 +1,5 @@
 # first version to include two threads
-# for further file history see main_old/main_v1.4.py
+# for further file history see main_old (version 1.0 to 4.4)
 import threading
 import time
 import cv2
@@ -39,17 +39,16 @@ import threading
 # classes for functions
 class gps:
     def cloud_position(chop_image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
-        #input hodnot
+        #input of values
         meridionalCircumference = 40008
         earthCircumference = 40075
         k = 0.12648                                                                           #constant for converting pixels to km
 
-        #finds pixel distance delta
+        # finds pixel distance delta
         txt = chop_image_path
         x = txt.split("_")
         chopCoordinatesX = x[2]
         chopCoordinatesY = x[3]      
-        #chopCoordinatesX, chopCoordinatesY = cloudCoordinates.split(", ")           
         distanceX = (float(chopCoordinatesX) - float(970)) * k                                  #location of cloud - center location (x axis)
         distanceY = (float(chopCoordinatesY) - float(970)) * k                                  #location of cloud - center location (y axis)
 
@@ -69,12 +68,12 @@ class gps:
         chopLatitude = float(dec_latitude) + (distanceY*360)/meridionalCircumference
         print("z. š.:", chopLatitude)
 
-        #find longtitude of the cloud
-
+        # find longitude of the cloud
         chopLongitude = float(dec_longitude) + (distanceX*360)/(earthCircumference*np.cos(chopLatitude * (np.pi/180)))
         print("z. d.:", chopLongitude)
         return(chopLatitude, chopLongitude)
     def convert_decimal_coordinates_to_legacy(latitude, longitude):
+        # conversion of degrees specifically for an gps class friendly format
         def conversion(coordinates):
             coordinates = float(coordinates)
             coordinates = abs(coordinates)
@@ -102,6 +101,7 @@ class gps:
 
         return latitude_data, latitude_ref, longitude_data, longitude_ref        
 class list:
+    # used for calculating north, sets some simple statistics functions
     global store_edoov_coefficient
     store_edoov_coefficient = []
     def get_median():
@@ -113,20 +113,20 @@ class list:
 class north:
     def find_edoov_coefficient(image_1, image_2):
 
-        #converting images to cv friendly readable format 
+        # converting images to cv friendly readable format 
         def convert_to_cv(image_1, image_2):
             image_1_cv = cv2.imread(image_1, 0)
             image_2_cv = cv2.imread(image_2, 0)
             return image_1_cv, image_2_cv
 
-        #finding same "things" on both images
+        # finding same "things" on both images
         def calculate_features(image_1, image_2, feature_number):
             orb = cv2.ORB_create(nfeatures = feature_number)
             keypoints_1, descriptors_1 = orb.detectAndCompute(image_1_cv, None)
             keypoints_2, descriptors_2 = orb.detectAndCompute(image_2_cv, None)
             return keypoints_1, keypoints_2, descriptors_1, descriptors_2
 
-        #connecting same "things" on photo
+        # connecting same "things" on photo
         def calculate_matches(descriptors_1, descriptors_2):
             try:
                 brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
@@ -135,14 +135,8 @@ class north:
                 return matches
             except:
                 return 0
-            
-        #nic čeho se obávat
-        def hack_ISS():
-            h=[]
-            all_informations = 1000101
-            h.append(all_informations)
 
-        #finding coordination of same "things" on both fotos
+        # finding coordination of same "things" on both fotos
         def find_matching_coordinates(keypoints_1, keypoints_2, matches):
             global x_1all_div
             global x_2all_div
@@ -157,12 +151,12 @@ class north:
                 image_2_idx = match.trainIdx
                 (x1,y1) = keypoints_1[image_1_idx].pt
                 (x2,y2) = keypoints_2[image_2_idx].pt
-                #we store all matched coordinates to list for further calculation
+                # we store all matched coordinates to list for further calculation
                 x_11all.append(x1)
                 x_22all.append(x2)
                 y_11all.append(y1)
                 y_22all.append(y2)
-            #this calculates us the median of all coordinations on output [x1, y1] and [x2,y2]
+            # this calculates us the median of all coordinations on output [x1, y1] and [x2,y2]
 
             try:
                 x_11all_div=statistics.median(x_11all)
@@ -175,7 +169,7 @@ class north:
                 y_11all_div=0
                 y_22all_div=0
 
-            #we calculate the angle of movemment of "things" on photo
+            # we calculate the angle of movemment of "things" on photo
             delta_x = x_22all_div - x_11all_div
             delta_y = y_11all_div - y_22all_div
             
@@ -184,12 +178,12 @@ class north:
                 edoov_coefficient=edoov_coefficient-360
             return edoov_coefficient
 
-        #using defined functions
+        # using defined functions
         image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
         keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
         matches = calculate_matches(descriptors_1, descriptors_2)
         edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
-        #calculating the relative rotation of camera on ISS
+        # calculating the relative rotation of camera on ISS
               
         list.add_edoov_coefficient(edoov_coefficient)
         list_medianu = list.get_median()
@@ -211,14 +205,14 @@ class north:
                     latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
             return latitude, latitude_ref
         
-        #converting latitude to decimal
+        # converting latitude to decimal
         def get_decimal_latitude(latitude, latitude_ref):
             decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
             if latitude_ref == "S":
                 decimal_degrees = -decimal_degrees
             return decimal_degrees
 
-        #getting latitude for using
+        # getting latitude for using
         def get_latitudes(image_1, image_2):    
             latitude_image_1_x, latitude_image_1_ref = get_latitude(image_1)
             latitude_image_1 = get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
@@ -226,12 +220,12 @@ class north:
             latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
             return latitude_image_1, latitude_image_2
 
-        #using defined functions
+        # using defined functions
         latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
-        #averaging latitudes for more accurate calculation 
+        # averaging latitudes for more accurate calculation 
         latitude_avg = (latitude_image_1+latitude_image_2)/2
 
-        #calculating the relative position of north for ISS (looks forward)
+        # calculating the relative position of north for ISS (looks forward)
         alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951)) * 57.29577951
         corrected_alpha_k=0
         if latitude_image_1>latitude_image_2:
@@ -239,25 +233,14 @@ class north:
         else:
             corrected_alpha_k=alpha_k
         
-        #combinating both informations to get real position of north on photo
+        # combinating both informations to get real position of north on photo
         poloha_severu = all_edoov_coefficient - corrected_alpha_k
         print("all edoov koeficient:", all_edoov_coefficient)
         if poloha_severu < 0:
             poloha_severu = poloha_severu + 360
         return poloha_severu
 class ai:
-    def draw_objects(draw, objs, labels):
-        count = 0
-        for obj in objs:
-            bbox = obj.bbox
-            draw.rectangle([(bbox.xmin, bbox.ymin), (bbox.xmax, bbox.ymax)],
-                        outline='red')
-            draw.text((bbox.xmin + 10, bbox.ymin + 10),
-                    '%s\n%.2f' % (count, obj.score),
-                    fill='red')
-            count += 1
-
-
+    # this is the class that works with the model itself
     def ai_model(image_path):
         open("./model/labelmap.txt")
         labels = './model/labelmap.txt'
@@ -268,17 +251,14 @@ class ai:
         _, scale = common.set_resized_input(
             interpreter, image.size, lambda size: image.resize(size, Image.ANTIALIAS))
 
-        # print('----INFERENCE TIME----')
-        # print('Note: The first inference is slow because it includes', 'loading the model into Edge TPU memory.')
+        # inferencing
         for _ in range(2):
             start = time.perf_counter()
             interpreter.invoke()
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0, scale)
 
-        # print('-------RESULTS--------')
-        if not objs:
-            print('No objects detected')
+        # appending onto a list
         counter_for_ai_output = 0
         ai_output = {}
         for obj in objs:
@@ -301,23 +281,22 @@ class ai:
                 pass
             counter_for_ai_output += 1
         image = image.convert('RGB')
-        # shadow.draw_objects(ImageDraw.Draw(image), objs, labels)
-        image.save('grace_hopper_processed.bmp')
         
-            
-        # image.show()
+        # saving into an image
         if os.path.exists('meta.jpg') == True:
             os.remove('meta.jpg')
         image.save('meta.jpg')
-
-        with open('ai_output.json', 'w', encoding='utf-8') as f:
-            json.dump(ai_output, f, ensure_ascii=False, indent=4)
         return ai_output
 class shadow:
+    # this is a big class containing all things necessary to calculate the lenght of a shadow from data generated by the ai model
+
+    # this function is used as for printing data (first used withing shadow so for legacy kept here)
     def print_log(data):
         with open('log.txt', 'a') as f:
             f.write(data)
             f.write("\n")
+
+    # this class gets coordinates from EXIF and converts them into a more friendly decimal format (not to be confused with photo.convert())
     class coordinates:
         def get_latitude(image):
             with open(image, 'rb') as image_file:
@@ -347,7 +326,7 @@ class shadow:
             longitude_formatted = str(str(decimal_degrees)+" "+longitude_ref)
             return longitude_formatted   
 
-
+    # here simply centres and lenghts of clouds are calculated, lenghts are further on used to remove too long objects and centres are used for shadow detection
     def calculate_cloud_data(counter_for_shadows):
         x_max = data[counter_for_shadows]['xmax']
         y_max = data[counter_for_shadows]['ymax']
@@ -364,14 +343,7 @@ class shadow:
 
         return x_centre_of_cloud, y_centre_of_cloud, x_cloud_lenght, y_cloud_lenght
 
-    # ignore the 'json' in the name, we replaced the file format with csv for simplicity, jsons are useful for export data - not metadata
-    def write_pixel_into_icon(count, x, y, cloud_id="not specified", image_id="not specified"):
-        with open('pixels.csv', 'a') as f:
-            writer = csv.writer(f)
-            data = [image_id, cloud_id, count, x, y]
-            writer.writerow(data)
-
-    # define classes
+    # here we define a subclass containing all we need to calculate sun data, i.e. altitude and azimuth, both can be triggered separately
     class sun_data:
         def altitude(coordinates_latitude, coordinates_longtitude, year, month, day, hour, minute, second):
             # use the NASA API to be able to calculate sun's position
@@ -382,15 +354,10 @@ class shadow:
             sun = ephem["Sun"]
             earth = ephem["Earth"]
 
-            # define where photo was taken(usually via EXIF data)
             # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
             location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
             altitude, azimuth, distance = sun_pos.altaz()
-
-            # print(f"Azimuth: {azimuth.degrees:.4f}")
-            # print(f"Altitude: {altitude.degrees:.4f}")
-
             altitude= float(altitude.degrees)
             return(altitude)
         def azimuth(coordinates_latitude, coordinates_longtitude, year, month, day, hour, minute, second):
@@ -402,7 +369,6 @@ class shadow:
             sun = ephem["Sun"]
             earth = ephem["Earth"]
 
-            # define where photo was taken(usually via EXIF data)
             # given coordinates calculate the altitude (how many degrees sun is above the horizon), additional data is redundant
             location = api.Topos(coordinates_latitude, coordinates_longtitude, elevation_m=500)
             sun_pos = (earth + location).at(ts.tt(year,month,day,hour,minute,second)).observe(sun).apparent()
@@ -410,6 +376,7 @@ class shadow:
             azimuth= float(azimuth.degrees)
             return(azimuth)
 
+    # because the brightest point needn't be the centre we ofset the starting pixel by a number defined partially by a constant 
     def starting_point_corrector(x_centre, y_centre, x_increase_final, y_increase_final):
         constant_for_starting_point_correction = 10
         x_final = x_centre - constant_for_starting_point_correction*x_increase_final
@@ -420,6 +387,7 @@ class shadow:
         y_final = int(y_final)
         return x_final, y_final
     
+    # here we calculate the angle used to seatch for shadows (it is mostly just formatting now as of v4.4)
     def calculate_angle_for_shadow(latitude, longitude, year, month, day, hour=0, minute=0, second=0):
         azimuth = shadow.sun_data.azimuth(latitude, longitude, year, month, day, hour, minute, second)
         total_angle = azimuth + 180
@@ -427,7 +395,8 @@ class shadow:
             total_angle -= 360
         return total_angle
 
-
+    # this is the most important function of the whole class, it calculates cloud height knowing only coordinates
+    # we use robust error handling to make sure the function does not cause a fatal error, it is a very complicated function
     def calculate_shadow(x, y, angle, cloud_id="not specified", image_id="not specified", file_path="not specified", image_direct="not specified"):
         try:
             # open specific cloud
@@ -441,15 +410,14 @@ class shadow:
 
 
             # get the width and height of the image for iterating over
-            # print(im.size) 
             total_x, total_y = im.size
-            # print(total_x, total_y)
 
-            # set coordinates from AI model
-            x = x
-            y = y
-            angle = angle # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
-
+            # the next lines of code are very complex, but the method is as follows
+            # 1) we need to find "how does x increase in regards to y and vice versa?"
+            # 2) we need that either x or y are set as a constant 1 whereas the other is used as addition to a sum
+            # 3) when the sum overflows we move a pixel in the less significant direction
+            # because of comparasions we need to work with absolute values, basic angles and sectors
+            # we are aware that there might be a simpler solution but this is the only one we found consistent and fairly fast
 
             # calculate meta angle
             angle_radians =np.radians(angle)
@@ -458,7 +426,6 @@ class shadow:
             y_increase_meta = -y_increase_meta
             x_increase_meta = np.round(x_increase_meta,5)
             y_increase_meta = np.round(y_increase_meta,5)
-            # print(x_increase_meta, y_increase_meta)
             x_increase_meta_abs = abs(x_increase_meta)
             y_increase_meta_abs = abs(y_increase_meta)
 
@@ -495,76 +462,72 @@ class shadow:
             y_increase_final_abs = abs(y_increase_final)
 
             # set values for future reference
-            ## do not alter the sums or code will break
             y_sum = 0
             x_sum = 0
             count = -1
-            ## set how many pixel you want to count via limit manually if you want (since v5 it is calculated automatically)
-            # limit = 100
-            ## do not alter list_of_values
             list_of_values = []
             list_of_red = []
 
-            # automatic limit calculation (turn off if you want to use manual)
+            # automatic limit calculation
+            # here we set basically how far we should search for shadows
             sun_altitude_for_limit = shadow.sun_data.altitude(latitude, longitude, year, month, day, hour, minute, second)
-            # print("altitude", sun_altitude_for_limit)
             sun_altitude_for_limit_radians = sun_altitude_for_limit*(np.pi/180)
             limit_cloud_height = 15000 #meters
             limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
             limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/126.48
             limit = limit_shadow_cloud_distance_pixels
-            # print("limit", limit)
 
-            # clear the whole txt file
-            with open('stiny.txt', 'w') as f:
-                f.write("\n")
-            with open('stiny_red.txt', 'w') as f:
-                f.write("\n")
-
+            # we create meta.jpg for testing
             if os.path.exists('meta.jpg') == False:
                 im2 = im.copy()
                 im.save('meta.jpg')
 
             # put quarter information back for pixel reading
-            ## first two lines in each if condition are mostly legacy for backwards-compatibility, code should function without them though not tested yet
+            ## first two lines are used for limit setting
+            ## please note that explanation for all quarters are very similar to quarter 1, hence please excuse that we did not write the documentation for every sector
             if q == 1:
+
+                # set increase with correct signage
                 x_increase_final = x_increase_final
                 y_increase_final = -y_increase_final
+
+                # correct the starting point
                 x,y = shadow.starting_point_corrector(x,y, x_increase_final, y_increase_final)
                 while True:
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:
+
                         # check if y_sum is bigger than 1
                         y_sum = abs(y_sum)
                         if y_sum >= 1:
                             y_sum -= 1
                             y -= 1
+
                         # read pixel value
                         data = (pix[x,y])
-                        # print(data)
+
+                        # save the value, also search in only red spectrum
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
+
+                        # append onto a list
                         list_of_red.append(value_red)
                         list_of_values.append(value)
+
+                        # edit the meta image for checking
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
+
                         # add to y_sum and move pixel x for 1
                         x += 1
                         y_sum += y_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs == y_increase_final_abs:               
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
@@ -572,8 +535,6 @@ class shadow:
                         im2.save('meta.jpg')
                         x += 1
                         y -= 1
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs < y_increase_final_abs:               
@@ -581,34 +542,18 @@ class shadow:
                         if x_sum >= 1:
                             x_sum -= 1
                             x += 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         y -= 1
                         x_sum += x_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
-                    #write into txt
-                    with open('stiny.txt', 'a') as f:
-                        value = str(value)
-                        f.write(value)
-                        f.write("\n")
-                    with open('stiny_red.txt', 'a') as f:
-                        value_red = str(value_red)
-                        f.write(value_red)
-                        f.write("\n")
                     if count > limit:
                         break
             if q == 2:
@@ -618,37 +563,26 @@ class shadow:
                 while True:
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:        
-                        # check if y_sum is bigger than 1
                         y_sum = abs(y_sum)
                         if y_sum >= 1:
                             y_sum -= 1
                             y += 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         x += 1
                         y_sum += y_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs == y_increase_final_abs:          
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
@@ -656,8 +590,6 @@ class shadow:
                         im2.save('meta.jpg')
                         x += 1
                         y += 1
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs < y_increase_final_abs:   
@@ -665,34 +597,18 @@ class shadow:
                         if x_sum >= 1:
                             x_sum -= 1
                             x += 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         y += 1
                         x_sum += x_increase_final_abs
-                        #write into txt
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
-                    with open('stiny.txt', 'a') as f:
-                        value = str(value)
-                        f.write(value)
-                        f.write("\n")
-                    with open('stiny_red.txt', 'a') as f:
-                        value_red = str(value_red)
-                        f.write(value_red)
-                        f.write("\n")
                     if count > limit:
                         break
             if q == 3:
@@ -702,37 +618,26 @@ class shadow:
                 while True:
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:
-                        # check if y_sum is bigger than 1
                         y_sum = abs(y_sum)
                         if y_sum >= 1:
                             y_sum -= 1
                             y += 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         x -= 1
                         y_sum += y_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs == y_increase_final_abs:
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
@@ -740,8 +645,6 @@ class shadow:
                         im2.save('meta.jpg')
                         x -= 1
                         y += 1
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs < y_increase_final_abs:
@@ -749,30 +652,18 @@ class shadow:
                         if x_sum >= 1:
                             x_sum -= 1
                             x -= 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         y += 1
                         x_sum += x_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
-                    #write into txt
-                    value = str(value)
-                    with open('stiny.txt', 'a') as f:
-                        f.write(value)
-                        f.write("\n")
                     if count > limit:
                         break
             if q == 4:
@@ -782,38 +673,26 @@ class shadow:
                 while True:
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:
-                        # check if y_sum is bigger than 1
                         y_sum = abs(y_sum)
                         if y_sum >= 1:
                             y_sum -= 1
                             y -= 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         x -= 1
                         y_sum += y_increase_final_abs
-                        # print(count)
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs == y_increase_final_abs:
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
@@ -821,8 +700,6 @@ class shadow:
                         im2.save('meta.jpg')
                         x -= 1
                         y -= 1
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
                     if x_increase_final_abs < y_increase_final_abs:
@@ -830,45 +707,24 @@ class shadow:
                         if x_sum >= 1:
                             x_sum -= 1
                             x -= 1
-                        # read pixel value
                         data = (pix[x,y])
-                        # print(data)
                         value = round(average(data))
                         value_red = data[0]
-                        # print(value)
-                        # print("red", value_red)
                         list_of_red.append(value_red)
                         list_of_values.append(value)
                         im2 = Image.open('meta.jpg')
                         im2.putpixel((x,y),(0,0,0,0))
                         im2.save('meta.jpg')
-                        # add to y_sum and move pixel x for 1
                         y -= 1
                         x_sum += x_increase_final_abs
-                        # print(count, limit)
-                        shadow.write_pixel_into_icon(count=count, x=x, y=y, cloud_id=cloud_id, image_id=image_id)
                         if x > total_x or y > total_y:
                             break
-                    #write into txt
-                    with open('stiny.txt', 'a') as f:
-                        value = str(value)
-                        f.write(value)
-                        f.write("\n")
-                    with open('stiny_red.txt', 'a') as f:
-                        value_red = str(value_red)
-                        f.write(value_red)
-                        f.write("\n")
                     if count > limit:
                         break
-
-            # # print for debugging
-            # print(x_increase_final, y_increase_final)
-            im2.save('meta.jpg')
             # set absolute final values
             x_increase_final_abs = abs(x_increase_final)
             y_increase_final_abs = abs(x_increase_final)
 
-            # print(list_of_values)
             # define a calculation method for cloud-shadow difference (the following one just takes the min and max values)
             def calculate_using_min_max(list_of_values):
                 def main():
@@ -885,18 +741,15 @@ class shadow:
                     return shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location
                 shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
                 while True:
+                    # in case that shadow is found before a cloud in the line, we delete the value as its false and repeat
                     if shadow_lenght <= 0:
-                        # print("př", list_of_values)
                         list_of_values.remove(cloud_high)
                         shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
-                        # print("When calculating via min max, the shadow resulted being negative, recalculation in progress.")
-                        # print("po", list_of_values)
                     else:
                         break
-                # find difference between the two pixel lenghts
-                # print("minmax", shadow_lenght)
                 return shadow_lenght
 
+            # define a calculation method for cloud-shadow difference (the following one takes the changes in values and their respective min max values)
             def calculate_using_maximum_change(list_of_values):
                 def main():
                     n = 0
@@ -921,8 +774,6 @@ class shadow:
 
                     # find difference between the two pixel lenghts
                     shadow_lenght = shadow_location - cloud_location
-                    # print("max difference", shadow_lenght)
-                    # im2.show()
                     return shadow_lenght, cloud_high, cloud_location
                 shadow_lenght, cloud_high, cloud_location = main()
                 while True:
@@ -931,102 +782,80 @@ class shadow:
                         item_to_be_deleted = list_of_values[cloud_location]
                         list_of_values.remove(item_to_be_deleted)
                         shadow_lenght, cloud_high, cloud_location = main()
-                        # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
                     else:
                         break
 
-                # find difference between the two pixel lenghts
-                # print("minmax", shadow_lenght)
                 return shadow_lenght
 
+            # here we calculate the shadow-cloud distance by each respective method
             shadow_lenght_min_max = calculate_using_min_max(list_of_values)
             shadow_lenght_max_difference = calculate_using_maximum_change(list_of_values)
             shadow_lenght_max_difference_red = calculate_using_maximum_change(list_of_red)
-            shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red)/3
 
-            difference_of_methods = abs(shadow_lenght_max_difference-shadow_lenght_min_max)
-            difference_of_methods = np.round(difference_of_methods,2)
-            # print("Difference between the two methods of cloud-shadow calculation is", difference_of_methods)
+            # we put the methods together
+            shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red)/3
 
             # calculate distance based on a distance in pixels
             lenght = int(shadow_lenght_final) * 126.48
 
-            # because original lenghts is not Archimedes-compatible we will have to convert
-            # print("angle", angle_final)
+            # because original lenghts are adjacent lenghts and not hypotenuse we will have to convert
             angle_final_radians = angle_final*(np.pi/180)
-            # print("lenght", lenght)
             if angle_final <= 45:
                 lenght = lenght/np.cos(angle_final_radians)
             if angle_final > 45:
                 lenght = lenght/np.sin(angle_final_radians)
-            # print("lenght2", lenght)
 
-            # print("Shadow is exactly", lenght, "meters from the cloud!")
-
+            # now we calculate the sun altitude using a function
             altitude = shadow.sun_data.altitude(latitude, longitude, year, month, day, hour, minute, second)
+
             # calculate final values
             altitude_radians = altitude*(np.pi/180)
             cloudheight = np.tan(altitude_radians)*lenght
             cloudheight = np.round(cloudheight,2)
-
-            # print("Shadow is exactly", cloudheight, "meters from ground!")
-            # print(list_of_values)
         except:
+            # sometimes the AI models returns negative integers, these break the code and are difficult to protect against
+            # so in case of an error we pass it to the outer function as well and make sure that the whole shadow process does not crash
             cloudheight = "error"
         return cloudheight    
 class photo:
+    # this is a small class containing a legacy method needed to convert angle into a special format used later
     def convert(angle):
         sign, degrees, minutes, seconds = angle.signed_dms()
         exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
         return sign < 0, exif_angle
-
-    def get_photo(camera):
-        location = ISS.coordinates()
-
-        # Convert the latitude and longitude to EXIF-appropriate representations
-        south, exif_latitude = photo.convert(location.latitude)
-        west, exif_longitude = photo.convert(location.longitude)
-
-        # Set the EXIF tags specifying the current location
-        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-
-        # Capture the image
-        imageName = ""
-        imageName = str("/image (" + str(initialization_count) + ").jpg")
-        camera.capture("./Pictures" + imageName)
 class split:
+    # this is a small class containing a method for cropping, chopping and rotating the original image into images that can be fed directly to the AI model
     def file_split(image_id, image_path, north_main):
         # check if the image ends with png or jpg or jpeg
         if (image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg")):
-            # Opens an image in RGB mode
+            # open
             im = Image.open(image_path)
+
+            # rotate
             im = im.rotate(north_main)
+
+            # crop
             left = 1075
             top = 520
             right = 3015
             bottom = 2460
-            # Cropped image of above dimension
-            # (It will not change original image)
             im1 = im.crop((left, top, right, bottom))
-            # Shows the image in image viewer
+            
+            # save as metadatum
             im1.save('meta.jpg')
-            # Slice
+            
+            # chop definition
             infile = 'meta.jpg'
             chopsize = 485
-
             img = Image.open(infile)
             width, height = img.size
 
-            # Metadata
+            # exif metadata
             image = Image.open(image_path)
             exif = image.info['exif']
 
-            # Save Chops of original image
+            # save Chops of original image
             within_loop_counter = 0
-
             for x0 in range(0, width, chopsize):
                 for y0 in range(0, height, chopsize):
                     box = (x0, y0,
@@ -1040,6 +869,7 @@ class split:
                     chop_latitude, chop_longitude = gps.cloud_position(file_name)
                     latitude, latitude_ref, longitude, longitude_ref = gps.convert_decimal_coordinates_to_legacy(chop_latitude, chop_longitude)
 
+                    # modify metadate to include more accurate coordinates (i.e. for the center of the chop - not the centre of the whole imaeg)
                     image = exify(file_name)
                     del image.gps_latitude
                     del image.gps_longitude
@@ -1055,6 +885,7 @@ class split:
                     within_loop_counter += 1
             del exif
 class properties:
+    # this is a small class containing methods for raw checking the quality of imagery
     def calculate_brightness(img_path):
         im = Image.open(img_path).convert('L')
         stat = ImageStat.Stat(im)
@@ -1065,6 +896,7 @@ class properties:
         contrast = img_grey.std()
         return contrast
 class exifmeta:
+    # this is a small class containing a method for date extraction that is not via the EXIF library but the PIL library
     def find_time_from_image(image_path):
         img = Image.open(image_path)
         img_exif_dict = img.getexif()
@@ -1085,16 +917,25 @@ class exifmeta:
         return year, month, day, hour, minute, second
 # classes for threads
 class photo_thread(threading.Thread):
+    # this thread, called "photo" or "auxiliary", is used as a simple data collecting thread, it takes photos and collects sense-hat data
+
     # we must make sure that initialization of each thread is done well
     def __init__(self, threadId, name, count):
         threading.Thread.__init__(self)
+
+        # we set threadID
         self.threadId = threadId
+        
+        # we set thread-name
         self.name = name
-        self.count = count
+        
     # this is the main process that will take photos in a loop
     def run(self):
+        
+        # we print into log.txt when we start a thread
         to_print = "Starting: " + self.name
         shadow.print_log(to_print)
+
         # first we initialize the process
         base_folder = Path(__file__).parent.resolve()
         data_file = base_folder / "data.csv"
@@ -1140,6 +981,7 @@ class photo_thread(threading.Thread):
             sleep(photo_sleep_interval)
             del imageName   
             
+            # we will also collect sense data just to collect as much as possible
             sense_data = []
             # Get environmental data
             sense_data.append(sense.get_temperature())
@@ -1173,13 +1015,16 @@ class photo_thread(threading.Thread):
             sense_data.append(gyro["z"])
             sense_data.append(datetime.now())
             
-            #print(sense_data)
+            # all the data is written into a csv file
             with open("data.csv", "a", newline="") as f:
                 data_writer = writer(f)
-                data_writer.writerow(sense_data)    
+                data_writer.writerow(sense_data)  
+        
+        # when exiting a branch we make sure to write it into the log
         to_print = "Exiting: " + str(self.name)
         shadow.print_log(to_print)
 class processing_thread(threading.Thread):
+    # this thread is the main processing one, it calculated all things necessary to calculate the cloud height, id est calculates north, runs AI models and does the math
     # we must make sure that initialization of each thread is done well
     def __init__(self, threadId, name, count):
         threading.Thread.__init__(self)
@@ -1260,7 +1105,7 @@ class processing_thread(threading.Thread):
                             # when we start a loop for all images in the chop, those were created with the split above, it will always be just 16 images
                             for images in os.listdir("./chop/"):
                                 
-                                # the name is as we have set it up in the split function
+                                # we must search for images as their names contain not only sector-id's but also coordinates, ergo that is best done via search 
                                 search_image_path = "astrochop_" + str(sector_id)
                                 def find(name, path):
                                     files = []
@@ -1378,22 +1223,23 @@ if __name__ == '__main__':
     # suppose we ignore photos taken in the complete darkness, i.e. half the time,
     # but because the processing is so much slower than the photographing we will have many unprocessed images that could take advatage of being run in the dark.
     # also because the processing is about 2 minutes/full image (as of v2.4),
-    # we would have to force-quit operation often just to take photos where the north class can actually detect similiar objects (when too far apart openCV would fail)
+    # we would have to force-quit operation often just in order to take photos in which the north class can detect similiar objects (when too far apart openCV would fail)
     
-    # first we define the threads
-    auxiliary_thread = photo_thread(1, "Thread1", 10)
-    main_thread = processing_thread(2, "Thread2", 5)
+    # first we define the threads, see details on each in their respective code
+    auxiliary_thread = photo_thread(1, "Thread1")
+    main_thread = processing_thread(2, "Thread2")
 
     # we need to turn on the camera for both threads
     camera = PiCamera()
     camera.resolution = (4056, 3040)
     sleep(3) # to ensure quality of pictures
     
-    # set the default interval for taking photos, it will be changed only in order to calculate the north, i.e. the first 4 minutes will have 5 seconds/photo, else 20 s/photo
+    # set the default interval for taking photos, this will be changed depending on day-night cycle
     photo_sleep_interval = 20
+
     # then we start the threads
     auxiliary_thread.start()
-    sleep(1)
+    sleep(10) # we set them slightly apart to make sure that we have a picture before calculating north
     main_thread.start()
 
     # and then we wait until they are finished 
