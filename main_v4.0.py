@@ -72,7 +72,7 @@ class list:
     def get_list():
         return store_edoov_coefficient
 class north:
-    def find_north(image_1, image_2):
+    def find_edoov_coefficient(image_1, image_2):
 
         #converting images to cv friendly readable format 
         def convert_to_cv(image_1, image_2):
@@ -144,40 +144,8 @@ class north:
             if edoov_coefficient >= 360:
                 edoov_coefficient=edoov_coefficient-360
             return edoov_coefficient
-        
-        #getting latitude of both images from EXIF data
-        def get_latitude(image):
-            with open(image, 'rb') as image_file:
-                img = exify(image_file)
-                if img.has_exif:
-                    try:
-                        latitude = img.get("gps_latitude")
-                        latitude_ref = img.get("gps_latitude_ref")
-                        if latitude == None:
-                            latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-                    except AttributeError:
-                        latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-                else:
-                    latitude, latitude_ref = (0.0, 0.0, 0.0), "A"
-            return latitude, latitude_ref
-        
-        #converting latitude to decimal
-        def get_decimal_latitude(latitude, latitude_ref):
-            decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
-            if latitude_ref == "S" or latitude_ref == "W":
-                decimal_degrees = -decimal_degrees
-            return decimal_degrees
-
-        #getting latitude for using
-        def get_latitudes(image_1, image_2):    
-            latitude_image_1_x, latitude_image_1_ref = get_latitude(image_1)
-            latitude_image_1 = get_decimal_latitude(latitude_image_1_x, latitude_image_1_ref)
-            latitude_image_2_x, latitude_image_2_ref = get_latitude(image_2)
-            latitude_image_2 = get_decimal_latitude(latitude_image_2_x, latitude_image_2_ref)
-            return latitude_image_1, latitude_image_2
 
         #using defined functions
-        latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
         image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) 
         keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
         matches = calculate_matches(descriptors_1, descriptors_2)
@@ -185,23 +153,9 @@ class north:
         #calculating the relative rotation of camera on ISS
               
         list.add_edoov_coefficient(edoov_coefficient)
-        median_edoov_coefficient=list.get_median()
-        #averaging latitudes for more accurate calculation 
-        latitude_avg = (latitude_image_1+latitude_image_2)/2
-
-        #calculating the relative position of north for ISS (looks forward)
-        alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951)) * 57.29577951
-        corrected_alpha_k=0
-        if latitude_image_1>latitude_image_2:
-            corrected_alpha_k=180-alpha_k
-        else:
-            corrected_alpha_k=alpha_k
+        list_medianu = list.get_median()
+        return list_medianu
         
-        #combinating both informations to get real position of north on photo
-        poloha_severu = median_edoov_coefficient - corrected_alpha_k
-        if poloha_severu < 0:
-            poloha_severu = poloha_severu + 360
-        return poloha_severu
     def find_north_fast(image_1, image_2):
         def get_latitude(image):
             with open(image, 'rb') as image_file:
@@ -235,7 +189,6 @@ class north:
 
         #using defined functions
         latitude_image_1, latitude_image_2 = get_latitudes(image_1, image_2)
-        #using defined functions
         #averaging latitudes for more accurate calculation 
         latitude_avg = (latitude_image_1+latitude_image_2)/2
 
@@ -1085,7 +1038,6 @@ class photo_thread(threading.Thread):
         sense.color.gain = 60
         sense.color.integration_cycles = 64
         start_time = datetime.now()
-        now_time = datetime.now()
         count_for_images_day = 0
         count_for_images_night = 0
         
@@ -1183,23 +1135,17 @@ class processing_thread(threading.Thread):
                 # initialise and calibrate the north data via north class
                 # initialization
                 try:
-                    while True:
-                        timescale = load.timescale()
-                        t = timescale.now()
-                        while (datetime.now() < start_time + timedelta(seconds=20)):
-                            i_1=str(initialization_count)
-                            before = "./datasetlow/image ("
-                            image_1=str(before + i_1 +").jpg")
-                            i_2=str(initialization_count+1)
-                            image_2=str(before + i_2 +").jpg")
-                            data_north = north.find_north(image_1, image_2)
-                            initialization_count += 1
-                            sleep(0)
-                            list_medianu = list.get_median()
-                            print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
-                            global all_edoov_coefficient
-                            all_edoov_coefficient = list_medianu
-                        break
+                    while (datetime.now() < start_time + timedelta(seconds=20)):
+                        i_1=str(initialization_count)
+                        before = "./datasetlow/image ("
+                        image_1=str(before + i_1 +").jpg")
+                        i_2=str(initialization_count+1)
+                        image_2=str(before + i_2 +").jpg")
+                        list_medianu = north.find_edoov_coefficient(image_1, image_2)
+                        initialization_count += 1
+                        print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
+                        global all_edoov_coefficient
+                        all_edoov_coefficient = list_medianu
                 except:
                     to_print = str("There was an error during the initialzitation")
                     shadow.print_log(to_print)
