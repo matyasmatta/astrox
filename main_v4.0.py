@@ -37,6 +37,31 @@ from os import listdir
 import threading
 
 # classes for functions
+class gps:
+    def cloudPosition(decimalLatitude, decimalLongitude, image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
+        #input hodnot
+        meridionalCircumference = 40008
+        earthCircumference = 40075
+        k = 0.12648                                                                           #constant for converting pixels to km
+
+        #finds pixel distance delta
+        txt = "astrochop_123_124_01"
+        x = txt.split("_")
+        chopCoordinatesX = x[2]
+        chopCoordinatesY = x[3]      
+        #chopCoordinatesX, chopCoordinatesY = cloudCoordinates.split(", ")           
+        distanceX = (float(chopCoordinatesX) - float(970)) * k                                  #location of cloud - center location (x axis)
+        distanceY = (float(chopCoordinatesY) - float(970)) * k                                  #location of cloud - center location (y axis)
+
+        #finds latitude of the cloud
+        chopLatitude = float(decimalLatitude) + (distanceY*360)/meridionalCircumference
+        print("z. š.:", chopLatitude)
+
+        #find longtitude of the cloud
+        chopLongitude = float(decimalLongitude) + (distanceX*360)/(earthCircumference*np.cos(chopLatitude * (np.pi/180)))
+        print("z. d.:", chopLongitude)
+        return(chopLatitude, chopLongitude)
+
 class list:
     global store_edoov_coefficient
     store_edoov_coefficient = []
@@ -980,11 +1005,12 @@ class photo:
         imageName = str("/image (" + str(initialization_count) + ").jpg")
         camera.capture("./Pictures" + imageName)
 class split:
-    def file_split(image_id, image_path):
+    def file_split(image_id, image_path, north_main):
         # check if the image ends with png or jpg or jpeg
         if (image_path.endswith(".png") or image_path.endswith(".jpg") or image_path.endswith(".jpeg")):
             # Opens an image in RGB mode
             im = Image.open(image_path)
+            im = im.rotate(north_main)
             left = 1075
             top = 520
             right = 3015
@@ -1013,7 +1039,7 @@ class split:
                     box = (x0, y0,
                             x0+chopsize if x0+chopsize <  width else  width - 1,
                             y0+chopsize if y0+chopsize < height else height - 1)
-                    file_name = "./chop/astrochop_" + str(within_loop_counter) + ".jpg"
+                    file_name = "./chop/astrochop_" + str(within_loop_counter) + "_" + str(x0) + "_" + str(y0) + ".jpg"
                     img.crop(box).save(file_name,exif=exif)
                     within_loop_counter += 1
             del exif
