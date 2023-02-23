@@ -120,7 +120,7 @@ class north:
             return image_1_cv, image_2_cv
 
         #finding same "things" on both images
-        def calculate_features(image_1, image_2, feature_number):
+        def calculate_features(image_1_cv, image_2_cv, feature_number):
             orb = cv2.ORB_create(nfeatures = feature_number)
             keypoints_1, descriptors_1 = orb.detectAndCompute(image_1_cv, None)
             keypoints_2, descriptors_2 = orb.detectAndCompute(image_2_cv, None)
