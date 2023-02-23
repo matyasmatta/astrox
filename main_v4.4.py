@@ -334,10 +334,8 @@ class shadow:
         y_min = data[counter_for_shadows]['ymin']
         x_centre_of_cloud = (x_min+x_max)/2
         y_centre_of_cloud = (y_min+y_max)/2
-        x_centre_of_cloud = round(x_centre_of_cloud, 0)
-        y_centre_of_cloud = round(y_centre_of_cloud, 0)
-        x_centre_of_cloud = int(x_centre_of_cloud)
-        y_centre_of_cloud = int(y_centre_of_cloud)
+        x_centre_of_cloud = round(x_centre_of_cloud)
+        y_centre_of_cloud = round(y_centre_of_cloud)
         x_cloud_lenght = abs(x_max - x_min)
         y_cloud_lenght = abs(y_max - y_min)
 
@@ -381,10 +379,8 @@ class shadow:
         constant_for_starting_point_correction = 10
         x_final = x_centre - constant_for_starting_point_correction*x_increase_final
         y_final = y_centre - constant_for_starting_point_correction*y_increase_final
-        x_final = round(x_final, 0)
-        x_final = int(x_final)
-        y_final = round(y_final, 0)
-        y_final = int(y_final)
+        x_final = round(x_final)
+        y_final = round(y_final)
         return x_final, y_final
     
     # here we calculate the angle used to seatch for shadows (it is mostly just formatting now as of v4.4)
@@ -420,7 +416,7 @@ class shadow:
             # we are aware that there might be a simpler solution but this is the only one we found consistent and fairly fast
 
             # calculate meta angle
-            angle_radians =np.radians(angle)
+            angle_radians = angle /57.29577951
             x_increase_meta = np.sin(angle_radians)
             y_increase_meta = np.cos(angle_radians)
             y_increase_meta = -y_increase_meta
