@@ -6,6 +6,7 @@ from pathlib import Path
 from picamera import PiCamera
 from orbit import ISS
 import sever_eda
+import list
 
 base_folder = Path(__file__).parent.resolve()
 data_file = base_folder / "data.csv"
@@ -47,8 +48,8 @@ def get_photo(camera):
 
     # Capture the image
     imageName = ""
-    imageName = str("./img_" + str(count) + ".jpg")
-    camera.capture(imageName)
+    imageName = str("/img_" + str(count) + ".jpg")
+    camera.capture("./zkouska koeficientu/photed" + imageName)
 
 
 def get_sense_data():
@@ -91,11 +92,12 @@ def get_sense_data():
         data_writer = writer(f)
         data_writer.writerow(sense_data)
 count = 0
-while (datetime.now() < start_time + timedelta(minutes=4.3)):
+while (datetime.now() < start_time + timedelta(minutes=0.3)):
     get_sense_data()
     print(datetime.now())
+    get_photo(camera)
     i_1=str(count)
-    before = "eda\direction12\photo_18"
+    before = "./zkouska koeficientu/uploaded/img_"
     image_1=str(before + i_1 +".jpg")
     i_2=str(count+1)
     #print(image_1)
@@ -107,5 +109,6 @@ while (datetime.now() < start_time + timedelta(minutes=4.3)):
     count+=1
     sleep(3)
     count += 1
-    
+    print(list.get_median())
+
 print("konec")
