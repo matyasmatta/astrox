@@ -1121,9 +1121,12 @@ class photo_thread(threading.Thread):
             if ISS.at(t).is_sunlit(ephemeris):
                 imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
                 count_for_images_day += 1
+                photo_sleep_interval = 14
+
             else:
                 imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
                 count_for_images_night += 1
+                photo_sleep_interval = 59
             location = ISS.coordinates()
             # Convert the latitude and longitude to EXIF-appropriate representations
             south, exif_latitude = photo.convert(location.latitude)
@@ -1134,7 +1137,7 @@ class photo_thread(threading.Thread):
             camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
             camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
             camera.capture(imageName)     
-            sleep(5)
+            sleep(photo_sleep_interval)
             del imageName   
             
             sense_data = []
