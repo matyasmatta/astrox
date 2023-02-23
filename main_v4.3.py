@@ -1012,6 +1012,7 @@ class split:
             im1 = im.crop((left, top, right, bottom))
             # Shows the image in image viewer
             im1.save('meta.jpg')
+            im1.show()
             # Slice
             infile = 'meta.jpg'
             chopsize = 485
