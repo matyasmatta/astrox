@@ -1,0 +1,190 @@
+Starting: Thread1
+Starting: Thread2
+There was an error during the initialzitation
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5837.87
+Cloud number 2 has a height of 4086.51
+Cloud number 3 has a height of 5604.35
+Cloud number 4 raised error
+Cloud number 5 raised error
+Cloud number 6 raised error
+Cloud number 7 raised error
+Cloud number 8 has a height of 5954.63
+Cloud number 9 raised error
+Skipped chop due to the brightness being221.5085414447087
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 4086.51
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 583.79
+Cloud number 7 has a height of 8990.32
+Cloud number 8 has a height of 5954.63
+Skipped chop due to the brightness being224.33483685175736
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 1050.82
+Cloud number 3 has a height of 1517.85
+Skipped chop due to the brightness being88.0916198821642
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6538.41
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 6421.65
+Cloud number 4 has a height of 4553.54
+Cloud number 5 raised error
+Cloud number 6 did not meet maximal lenght criteria
+Skipped chop due to the brightness being200.5485695028971
+Skipped chop due to the brightness being201.49348864573193
+Skipped chop due to the brightness being94.27475540033146
+Cloud number 0 raised error
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 raised error
+Cloud number 3 raised error
+Cloud number 4 raised error
+Cloud number 5 raised error
+Cloud number 6 has a height of 5604.35
+Skipped chop due to the brightness being217.1128300947126
+Skipped chop due to the brightness being193.0969347334627
+Cloud number 0 raised error
+Cloud number 0 has a height of 4320.02
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 11442.22
+Cloud number 5 did not meet maximal lenght criteria
+Skipped chop due to the brightness being221.5085414447087
+Skipped chop due to the brightness being236.1910713088267
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6560.39
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 4373.59
+Cloud number 5 has a height of 7481.14
+Cloud number 6 has a height of 3798.12
+Skipped chop due to the brightness being82.1104781094853
+Cloud number 0 has a height of 5064.16
+Cloud number 1 has a height of 7596.24
+Cloud number 2 raised error
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 5409.44
+Skipped chop due to the brightness being233.62026091711064
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 raised error
+Cloud number 2 raised error
+Cloud number 3 has a height of 8632.09
+Skipped chop due to the brightness being88.30574727385653
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4949.06
+Cloud number 3 has a height of 3452.84
+Skipped chop due to the brightness being221.52551127058078
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 raised error
+Skipped chop due to the brightness being94.1101864697134
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3683.02
+Cloud number 2 has a height of 3452.84
+Cloud number 3 has a height of 4373.59
+Cloud number 4 has a height of 5409.44
+Cloud number 5 did not meet maximal lenght criteria
+Skipped chop due to the brightness being224.99357217253373
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Skipped chop due to the brightness being92.00865320056155
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6560.39
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 4373.59
+Cloud number 5 has a height of 7481.14
+Cloud number 6 has a height of 3798.12
+Skipped chop due to the brightness being210.31532293719
+Skipped chop due to the brightness being85.10768607344085
+Cloud number 0 did not meet maximal lenght criteria
+Skipped chop due to the brightness being85.30289845580914
+Skipped chop due to the brightness being193.20029302128245
+Skipped chop due to the brightness being230.7729350332075
+Cloud number 0 has a height of 2722.65
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5104.97
+Skipped chop due to the brightness being88.49822357273831
+Skipped chop due to the brightness being200.4919813350593
+Skipped chop due to the brightness being229.10369206896283
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Skipped chop due to the brightness being89.97147179278329
+Skipped chop due to the brightness being200.12461515652714
+Skipped chop due to the brightness being224.68421612426854
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5672.19
+Cloud number 2 has a height of 6920.07
+Skipped chop due to the brightness being85.10768607344085
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2907.38
+Cloud number 2 raised error
+Cloud number 3 raised error
+Cloud number 4 has a height of 6262.05
+Cloud number 5 raised error
+Cloud number 6 raised error
+Cloud number 7 raised error
+Cloud number 0 raised error
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Skipped chop due to the brightness being213.50707285324066
+Cloud number 0 has a height of 4696.54
+Cloud number 1 has a height of 5032.0
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 raised error
+Cloud number 4 raised error
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6597.52
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5032.0
+Cloud number 4 has a height of 3913.78
+Cloud number 5 has a height of 3913.78
+Cloud number 6 has a height of 4249.25
+Cloud number 7 has a height of 4025.6
+Cloud number 8 has a height of 4920.18
+Cloud number 9 has a height of 2571.91
+Skipped chop due to the brightness being208.53822234692436
+Skipped chop due to the brightness being208.05802273071964
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 9169.43
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 7939.39
+Cloud number 2 raised error
+Cloud number 3 has a height of 6932.98
+Cloud number 4 raised error
+Cloud number 5 raised error
+Cloud number 6 has a height of 4361.07
+Cloud number 7 raised error
+Cloud number 8 has a height of 3354.67
+Skipped chop due to the brightness being206.36884288434464
+Skipped chop due to the brightness being228.16722719706647
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3801.96
+Cloud number 2 has a height of 3466.49
+Cloud number 3 has a height of 4137.43
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3242.85
+Cloud number 2 has a height of 5591.12
+Cloud number 3 has a height of 2460.09
+Cloud number 4 has a height of 4808.36
+Cloud number 5 has a height of 3690.14
+Cloud number 6 has a height of 6821.16
+Cloud number 7 has a height of 1565.51
+Cloud number 8 has a height of 5479.29
+Cloud number 9 has a height of 6262.05
+Skipped chop due to the brightness being200.05997487266401
+Skipped chop due to the brightness being203.86525432986028
+Cloud number 0 raised error
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+There was an error during the main runtime
+Exiting: Thread2
+Exiting: Thread1
+Done main thread
