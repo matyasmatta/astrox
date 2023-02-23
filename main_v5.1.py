@@ -2,39 +2,25 @@
 # for further file history see main_old (version 1.0 to 4.4)
 import threading
 import time
-import cv2
-import math
-import numpy as np
-import statistics
 from time import sleep
-import statistics
-import argparse
-import time
-from PIL import Image
-from PIL import ImageDraw
-from PIL import ImageStat
-from pycoral.adapters import common
-from pycoral.adapters import detect
-from pycoral.utils.dataset import read_label_file
-from pycoral.utils.edgetpu import make_interpreter
-import json
-import os
+import cv2
+import numpy as np
 from numpy import average 
+import statistics
+from PIL import Image, ImageStat
+from pycoral.adapters import common, detect
+from pycoral.utils.edgetpu import make_interpreter
 from skyfield import api
-from skyfield import almanac
+from skyfield.api import load
 import csv
+from csv import writer
 from sense_hat import SenseHat
 from datetime import timedelta, datetime
 from orbit import ISS, ephemeris
-from skyfield.api import load
-from csv import writer
 from pathlib import Path
 from picamera import PiCamera
-from orbit import ISS
 from exif import Image as exify
 import os
-from os import listdir
-import threading
 
 # classes for functions
 class directory:
@@ -1059,7 +1045,6 @@ class processing_thread(threading.Thread):
                 # first define all functions neccessary for operation and calibrate the camera
                 # pre-initialization
                 try:
-                    start_time =  datetime.now()
                     global initialization_count
                     initialization_count = 1  
                 except:
@@ -1116,7 +1101,7 @@ class processing_thread(threading.Thread):
                             
                             # calculate the north, see the north class, find_north function for more details, basically compares two images and uses also previous camera position data
                             north_main = north.find_north_fast(image_1=image_1_path, image_2=image_2_path)
-
+                            
                             # split image into many
                             split.file_split(north_main= north_main, image_id = full_image_id, image_path=image_2_path) # creates a ./chop/... folder and puts the chops into it with  "astrochop_n" syntax
                             
@@ -1176,7 +1161,7 @@ class processing_thread(threading.Thread):
                                                         else:
                                                             # here we add the datum to a python dictionary
                                                             data[counter_for_shadows]['shadow'] = result_shadow
-                                                            
+
                                                             # here we run a simple csv writer to write into the file
                                                             with open('shadows.csv', 'a') as f:
                                                                 writer = csv.writer(f)
@@ -1246,6 +1231,8 @@ if __name__ == '__main__':
     # also because the processing is about 2 minutes/full image (as of v2.4),
     # we would have to force-quit operation often just in order to take photos in which the north class can detect similiar objects (when too far apart openCV would fail)
     
+    start_time =  datetime.now()
+
     # first we define the threads, see details on each in their respective code
     auxiliary_thread = photo_thread(1, "Thread1")
     main_thread = processing_thread(2, "Thread2")
