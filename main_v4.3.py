@@ -422,7 +422,7 @@ class shadow:
     
     def calculate_angle_for_shadow(latitude, longitude, year, month, day, hour=0, minute=0, second=0):
         azimuth = shadow.sun_data.azimuth(latitude, longitude, year, month, day, hour, minute, second)
-        total_angle = azimuth - 180
+        total_angle = azimuth + 180
         while total_angle >= 360:
             total_angle -= 360
         return total_angle
