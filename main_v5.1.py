@@ -37,6 +37,17 @@ from os import listdir
 import threading
 
 # classes for functions
+class directory:
+    def get_size():
+        start_path = "./main/"
+        total_size = 0
+        for dirpath, dirnames, filenames in os.walk(start_path):
+            for f in filenames:
+                fp = os.path.join(dirpath, f)
+                # skip if it is symbolic link
+                if not os.path.islink(fp):
+                    total_size += os.path.getsize(fp)
+        return total_size
 class gps:
     def cloud_position(chop_image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
         #input of values
@@ -102,6 +113,7 @@ class gps:
         return latitude_data, latitude_ref, longitude_data, longitude_ref        
 class list:
     # used for calculating north, sets some simple statistics functions
+    # we are storing the relative rotation of camera on ISS that doesn't change with time 
     global store_edoov_coefficient
     store_edoov_coefficient = []
     def get_median():
@@ -111,6 +123,7 @@ class list:
     def get_list():
         return store_edoov_coefficient
 class north:
+    # this calculates calculating edoov_coefficient (=relative rotation of camera on ISS)
     def find_edoov_coefficient(image_1, image_2):
 
         # converting images to cv friendly readable format 
@@ -173,6 +186,7 @@ class north:
             delta_x = x_22all_div - x_11all_div
             delta_y = y_11all_div - y_22all_div
             
+            # combinig movemment of "things" to get edoov_coefficient (=relative rotation of camera on ISS) (between 0 and 360)
             edoov_coefficient = np.arctan2(delta_x,delta_y) * 57.29577951 + 180
             if edoov_coefficient >= 360:
                 edoov_coefficient=edoov_coefficient-360
@@ -183,13 +197,15 @@ class north:
         keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) 
         matches = calculate_matches(descriptors_1, descriptors_2)
         edoov_coefficient = find_matching_coordinates(keypoints_1,keypoints_2,matches)
-        # calculating the relative rotation of camera on ISS
-              
+
+        # storing edoov_coefficient (=relative rotation of camera on ISS) for future usages              
         list.add_edoov_coefficient(edoov_coefficient)
         list_medianu = list.get_median()
         return list_medianu
-        
+
+    # for fast calculation of north on picture
     def find_north_fast(image_1, image_2):
+        # getting coordinates of photo via exif
         def get_latitude(image):
             with open(image, 'rb') as image_file:
                 img = exify(image_file)
@@ -226,19 +242,24 @@ class north:
         latitude_avg = (latitude_image_1+latitude_image_2)/2
 
         # calculating the relative position of north for ISS (looks forward)
+            # it is counterwise angle that tells us where is north pole towards the movement of ISS
+            # if ISS is on 51° N the coefficient is 90°, when ISS moves to equator the coefficient is 135°
+            # then when ISS approach 51° S is coefficient 90°, and when ISS moves to equator again, the coefficient is 45°
+                # notice the equator situation, two coefficients for same place 
         alpha_k=np.arcsin(np.cos(51.8/57.29577951)/np.cos(latitude_avg/57.29577951)) * 57.29577951
         corrected_alpha_k=0
+        # correcting "the equator situation" with looking if ISS moves up or down
         if latitude_image_1>latitude_image_2:
             corrected_alpha_k=180-alpha_k
         else:
             corrected_alpha_k=alpha_k
         
         # combinating both informations to get real position of north on photo
-        poloha_severu = all_edoov_coefficient - corrected_alpha_k
+        north_position = all_edoov_coefficient - corrected_alpha_k
         print("all edoov koeficient:", all_edoov_coefficient)
-        if poloha_severu < 0:
-            poloha_severu = poloha_severu + 360
-        return poloha_severu
+        if north_position < 0:
+            north_position = north_position + 360
+        return north_position
 class ai:
     # this is the class that works with the model itself
     def ai_model(image_path):
@@ -956,30 +977,31 @@ class photo_thread(threading.Thread):
                                 'gyro_x', 'gyro_y', 'gyro_z',
                                 'datetime'])
 
-        while (datetime.now() < start_time + timedelta(minutes = 11)):
-            timescale = load.timescale()
-            t = timescale.now()
-            if ISS.at(t).is_sunlit(ephemeris):
-                imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
-                count_for_images_day += 1
-                photo_sleep_interval = 14
+        while (datetime.now() < start_time + timedelta(minutes = 11)): 
+            if directory.get_size() < 300000000: # cca. 2.8 gigabytes
+                timescale = load.timescale()
+                t = timescale.now()
+                if ISS.at(t).is_sunlit(ephemeris):
+                    imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
+                    count_for_images_day += 1
+                    photo_sleep_interval = 14
 
-            else:
-                imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
-                count_for_images_night += 1
-                photo_sleep_interval = 59
-            location = ISS.coordinates()
-            # Convert the latitude and longitude to EXIF-appropriate representations
-            south, exif_latitude = photo.convert(location.latitude)
-            west, exif_longitude = photo.convert(location.longitude)
-            # Set the EXIF tags specifying the current location
-            camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-            camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-            camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-            camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-            camera.capture(imageName)     
-            sleep(photo_sleep_interval)
-            del imageName   
+                else:
+                    imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
+                    count_for_images_night += 1
+                    photo_sleep_interval = 59
+                location = ISS.coordinates()
+                # Convert the latitude and longitude to EXIF-appropriate representations
+                south, exif_latitude = photo.convert(location.latitude)
+                west, exif_longitude = photo.convert(location.longitude)
+                # Set the EXIF tags specifying the current location
+                camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+                camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+                camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+                camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+                camera.capture(imageName)     
+                sleep(photo_sleep_interval)
+                del imageName   
             
             # we will also collect sense data just to collect as much as possible
             sense_data = []
