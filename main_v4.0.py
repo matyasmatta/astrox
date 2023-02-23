@@ -38,14 +38,14 @@ import threading
 
 # classes for functions
 class gps:
-    def cloudPosition(decimalLatitude, decimalLongitude, image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
+    def cloud_position(chop_image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
         #input hodnot
         meridionalCircumference = 40008
         earthCircumference = 40075
         k = 0.12648                                                                           #constant for converting pixels to km
 
         #finds pixel distance delta
-        txt = "astrochop_123_124_01"
+        txt = chop_image_path
         x = txt.split("_")
         chopCoordinatesX = x[2]
         chopCoordinatesY = x[3]      
@@ -54,14 +54,40 @@ class gps:
         distanceY = (float(chopCoordinatesY) - float(970)) * k                                  #location of cloud - center location (y axis)
 
         #finds latitude of the cloud
-        chopLatitude = float(decimalLatitude) + (distanceY*360)/meridionalCircumference
+        chopLatitude = float(latitude) + (distanceY*360)/meridionalCircumference
         print("z. š.:", chopLatitude)
 
         #find longtitude of the cloud
-        chopLongitude = float(decimalLongitude) + (distanceX*360)/(earthCircumference*np.cos(chopLatitude * (np.pi/180)))
+        chopLongitude = float(longitude) + (distanceX*360)/(earthCircumference*np.cos(chopLatitude * (np.pi/180)))
         print("z. d.:", chopLongitude)
         return(chopLatitude, chopLongitude)
+    def convert_decimal_coordinates_to_legacy(latitude, longitude):
+        def conversion(coordinates):
+            coordinates = float(coordinates)
+            coordinates = abs(coordinates)
+            degrees = coordinates//1
+            minutes = ((coordinates - coordinates//1)*60)//1
+            seconds = round(((((coordinates - coordinates//1)*60) - minutes//1)*60),5)
 
+            list = [degrees, minutes, seconds]
+            data = tuple(list)
+
+            return data
+
+        latitude_data = conversion(latitude)
+        longitude_data = conversion(longitude)
+
+        if float(latitude) >= 0:
+            latitude_ref = "N"
+        else:
+            latitude_ref = "S"
+
+        if float(longitude) >= 0:
+            longitude_ref = "E"
+        else:
+            longitude_ref = "W"
+
+        return latitude_data, latitude_ref, longitude_data, longitude_ref        
 class list:
     global store_edoov_coefficient
     store_edoov_coefficient = []
@@ -381,9 +407,9 @@ class shadow:
         y_final = int(y_final)
         return x_final, y_final
     
-    def calculate_angle_for_shadow(north, latitude, longitude, year, month, day, hour=0, minute=0, second=0):
+    def calculate_angle_for_shadow(latitude, longitude, year, month, day, hour=0, minute=0, second=0):
         azimuth = shadow.sun_data.azimuth(latitude, longitude, year, month, day, hour, minute, second)
-        total_angle = north + azimuth - 180
+        total_angle = azimuth - 180
         while total_angle >= 360:
             total_angle -= 360
         return total_angle
@@ -992,8 +1018,25 @@ class split:
                     box = (x0, y0,
                             x0+chopsize if x0+chopsize <  width else  width - 1,
                             y0+chopsize if y0+chopsize < height else height - 1)
-                    file_name = "./chop/astrochop_" + str(within_loop_counter) + "_" + str(x0) + "_" + str(y0) + ".jpg"
+                    file_name = "./chop/astrochop_" + str(within_loop_counter) + "_" + str(x0) + "_" + str(y0) + ".jpg",
                     img.crop(box).save(file_name,exif=exif)
+
+                    # we calculate the centre coordinates of the chop based on its name and original exif data
+                    chop_latitude, chop_longitude = gps.cloud_position(file_name)
+                    latitude, latitude_ref, longitude, longitude_ref = gps.convert_decimal_coordinates_to_legacy(chop_latitude, chop_longitude)
+
+                    image = exify(file_name)
+                    del image.gps_latitude
+                    del image.gps_longitude
+                    image.gps_latitude = latitude
+                    image.gps_latitude_ref = latitude_ref
+                    image.gps_longitude = longitude
+                    image.gps_longitude_ref = longitude_ref
+
+                    print(latitude, longitude, chop_latitude, chop_longitude)
+
+                    with open(file_name, 'wb') as new_image_file:
+                        new_image_file.write(image.get_file())
                     within_loop_counter += 1
             del exif
 class properties:
@@ -1019,7 +1062,7 @@ class exifmeta:
         minute = int(date[14:16])
         second = int(date[17:19])
 
-        return year, month, day, hour, minute, second        
+        return year, month, day, hour, minute, second
 # classes for threads
 class photo_thread(threading.Thread):
     # we must make sure that initialization of each thread is done well
@@ -1170,6 +1213,8 @@ class processing_thread(threading.Thread):
                         print(image_2_path)
 
                         # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
+                        global latitude
+                        global longitude
                         latitude = shadow.coordinates.get_latitude(image_2_path)
                         longitude = shadow.coordinates.get_longitude(image_2_path)
 
@@ -1205,7 +1250,7 @@ class processing_thread(threading.Thread):
                                         counter_for_shadows = 0
 
                                         # the angle where shadows shall lay is calculated using the north data and sun azimuth angle, see the shadow class for more details
-                                        angle = shadow.calculate_angle_for_shadow(north_main, latitude, longitude, year, month, day, hour, minute, second)
+                                        angle = shadow.calculate_angle_for_shadow(latitude, longitude, year, month, day, hour, minute, second)
 
                                         # this loop runs through all the clouds detected in an image and writes the data into the final csv file
                                         while counter_for_shadows <= 9:
