@@ -150,7 +150,7 @@ class north:
         #converting latitude to decimal
         def get_decimal_latitude(latitude, latitude_ref):
             decimal_degrees = latitude[0] + latitude[1] / 60 + latitude[2] / 3600
-            if latitude_ref == "S" or latitude_ref == "W":
+            if latitude_ref == "S":
                 decimal_degrees = -decimal_degrees
             return decimal_degrees
 
