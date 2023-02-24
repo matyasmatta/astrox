@@ -18,3 +18,8 @@ for i in range(n):
     if i == 1/4*n or i == 1/2*n or i == 3/4*n or i == n-1:
         print(alpha)
 print("third:", datetime.now() - t)
+
+eda = []
+
+while True or abs(eda[-1]-eda[-2]<1):
+    print(1)
