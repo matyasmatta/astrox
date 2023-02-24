@@ -949,7 +949,6 @@ class photo_thread(threading.Thread):
         sense = SenseHat()
         sense.color.gain = 60
         sense.color.integration_cycles = 64
-        start_time = datetime.now()
         count_for_images_day = 0
         count_for_images_night = 0
         

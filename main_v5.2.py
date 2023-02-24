@@ -1082,7 +1082,7 @@ class processing_thread(threading.Thread):
 
                     # the following is the main loop which will run for the majority of time on the ISS, the condition is so that it does not run for too long
                     while (datetime.now() < start_time + timedelta(minutes=10)):
-                        while initialization_count > count_for_images_day and (datetime.now() < start_time + timedelta(minutes=10)):
+                        while initialization_count >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=10)):
                             i_1=str(eda_count)
                             before = "./dataset/image ("
                             image_1=str(before + i_1 +").jpg")
