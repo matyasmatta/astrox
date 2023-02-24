@@ -21,6 +21,7 @@ from pathlib import Path
 from picamera import PiCamera
 from exif import Image as exify
 import os
+from gpiozero import CPUTemperature
 
 # classes for functions
 class directory:
@@ -1022,6 +1023,13 @@ class photo_thread(threading.Thread):
             sense_data.append(gyro["y"])
             sense_data.append(gyro["z"])
             sense_data.append(datetime.now())
+
+            cpu = CPUTemperature()                          
+            to_print = (f'CPU: {cpu.temperature}')
+            shadow.print_log(to_print)                
+            print(f'Sense HAT: {sense.temperature}')        #SMAZAT
+            print(f'CPU: {cpu.temperature}')                #SMAZAT
+
             
             # all the data is written into a csv file
             with open("data.csv", "a", newline="") as f:
