@@ -1061,11 +1061,14 @@ class processing_thread(threading.Thread):
                 # initialise and calibrate the north data via north class
                 # initialization
                 try:
-                    try:
-                        abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2])
-                    except:
-                        edoov_coefficient_exception = True
-                    while (datetime.now() < start_time + timedelta(seconds=60)) or (abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2]) > 0.5) or edoov_coefficient_exception:
+                    def accuracy():
+                        eda_bad_accuracy = False
+                        if len(store_edoov_coefficient) > 1:
+                            if abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2]) > 0.5:
+                                eda_bad_accuracy = True
+                        return eda_bad_accuracy
+                    eda_bad_accuracy = accuracy()
+                    while (datetime.now() < start_time + timedelta(seconds=60)) or eda_bad_accuracy:
                         i_1=str(eda_count)
                         before = "./dataset/image ("
                         image_1=str(before + i_1 +").jpg")
@@ -1076,11 +1079,8 @@ class processing_thread(threading.Thread):
                         print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
                         global all_edoov_coefficient
                         all_edoov_coefficient = list_medianu
-                        try:
-                            abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2])
-                            edoov_coefficient_exception = False
-                        except:
-                            edoov_coefficient_exception = True
+                        eda_bad_accuracy = accuracy()
+
                 except:
                     to_print = str("There was an error during the initialzitation")
                     shadow.print_log(to_print)
