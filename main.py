@@ -8,7 +8,6 @@
 # code runs from the if __name__ condition all the way down, NOT from the top to bottom (most is defined as functions)
 # all variables are written as to be self-explanatory so we hope it helps
 # code might seem complicated but it was tested thoroughly with real ISS data and should work perfectly
-# it order to work ALL folders need to be present as they are NOT created, please DO NOT remove them, they contain just readme's to not be empty
 # we need at least the shadows.csv, log.txt and main directory to be returned back to Earch!
 # we used classes as we all collaborated on the project and it was most sensible for the code to be updated through updating classes (originally we imported them as libraries)
     # hence some classes may seem very small but they are important
@@ -813,6 +812,11 @@ class photo:
         sign, degrees, minutes, seconds = angle.signed_dms()
         exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
         return sign < 0, exif_angle
+    def compress(image_path):
+        # we noticed that the rotate function has an in-built compression algorithm, we decided it would be useful for night images which we save for redundancy
+        im = Image.open(image_path)
+        im = im.rotate(0)
+        im.save(image_path) # we overwrite the original image with the compressed one to save space
 class split:
     # this is a small class containing a method for cropping, chopping and rotating the original image into images that can be fed directly to the AI model
     def file_split(image_id, image_path, north_main):
@@ -943,31 +947,35 @@ class photo_thread(threading.Thread):
                                 'gyro_x', 'gyro_y', 'gyro_z',
                                 'datetime'])
 
-        while (datetime.now() < start_time + timedelta(minutes = 175)): 
+        while (datetime.now() < start_time + timedelta(minutes = 173)): 
             if directory.get_size() < 3000000000: # cca. 2.8 gigabytes
                 timescale = load.timescale()
                 t = timescale.now()
-                if ISS.at(t).is_sunlit(ephemeris) == False:
-                    imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
+                def main():
+                    location = ISS.coordinates()
+                    # Convert the latitude and longitude to EXIF-appropriate representations
+                    south, exif_latitude = photo.convert(location.latitude)
+                    west, exif_longitude = photo.convert(location.longitude)
+                    # Set the EXIF tags specifying the current location
+                    camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+                    camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+                    camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+                    camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+                if ISS.at(t+0.00277777777).is_sunlit(ephemeris) and ISS.at(t-0.00277777777).is_sunlit(ephemeris):
+                    image_path = str("./main/img_" + str(count_for_images_day) + ".jpg")
                     count_for_images_day += 1
-                    photo_sleep_interval = 14*photo_multiplier # nutné SMAZAT
-
+                    photo_sleep_interval = 12*photo_multiplier
+                    main()
+                    camera.capture(image_path)
                 else:
-                    imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
+                    image_path = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
                     count_for_images_night += 1
-                    photo_sleep_interval = 59
-                location = ISS.coordinates()
-                # Convert the latitude and longitude to EXIF-appropriate representations
-                south, exif_latitude = photo.convert(location.latitude)
-                west, exif_longitude = photo.convert(location.longitude)
-                # Set the EXIF tags specifying the current location
-                camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-                camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-                camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-                camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-                camera.capture(imageName)     
+                    photo_sleep_interval = 45
+                    main()
+                    camera.capture(image_path)
+                    photo.compress(image_path)
                 sleep(photo_sleep_interval)
-                del imageName   
+                del image_path   
             else:
                 sleep(photo_sleep_interval)
             # we will also collect sense data just to collect as much as possible
@@ -1045,7 +1053,7 @@ class processing_thread(threading.Thread):
                                 eda_bad_accuracy = True
                         return eda_bad_accuracy
                     eda_bad_accuracy = True
-                    while (datetime.now() < start_time + timedelta(seconds=30)) or eda_bad_accuracy:
+                    while (datetime.now() < start_time + timedelta(seconds=256)) or eda_bad_accuracy:
                         global all_edoov_coefficient
                         if eda_count+1 < count_for_images_day:
                             try:
@@ -1055,7 +1063,7 @@ class processing_thread(threading.Thread):
                                 i_2=str(eda_count + 1)
                                 image_2=str(before + i_2 +".jpg")
                                 list_medianu = north.find_edoov_coefficient(image_1, image_2)
-                                to_print = "Edoov koeficient was defined at " + list_medianu + " counted clockwise."
+                                to_print = "Edoov koeficient was defined at " + str(list_medianu) + " counted clockwise."
                                 shadow.print_log(to_print)
                                 eda_bad_accuracy = accuracy()
                                 all_edoov_coefficient = list_medianu
@@ -1063,7 +1071,7 @@ class processing_thread(threading.Thread):
                             except:
                                 pass
                         else:
-                            to_print = "Waiting for an image, currently at", eda_count, "now going to sleep."
+                            to_print = "Waiting for an image, currently at " + str(eda_count)+ " now going to sleep."
                             shadow.print_log(to_print)
                             sleep(photo_sleep_interval)
                     global photo_multiplier
@@ -1085,17 +1093,27 @@ class processing_thread(threading.Thread):
                     full_image_id = 0
 
                     # the following is the main loop which will run for the majority of time on the ISS, the condition is so that it does not run for too long
-                    while (datetime.now() < start_time + timedelta(minutes=170)):
-                        while initialization_count + 1 >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=170)):
-                            i_1=str(eda_count)
-                            before = "main/img_"
-                            image_1=str(before + i_1 +".jpg")
-                            i_2=str(eda_count + 1)
-                            image_2=str(before + i_2 +".jpg")
-                            all_edoov_coefficient = north.find_edoov_coefficient()
-                            eda_count += 1
-                            while eda_count >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=170)):
-                                    sleep(10)
+                    while (datetime.now() < start_time + timedelta(minutes=173)):
+                        while initialization_count + 1 >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=173)):
+                            if eda_count+1 < count_for_images_day:
+                                try:
+                                    i_1=str(eda_count)
+                                    before = "main/img_"
+                                    image_1=str(before + i_1 +".jpg")
+                                    i_2=str(eda_count + 1)
+                                    image_2=str(before + i_2 +".jpg")
+                                    list_medianu = north.find_edoov_coefficient(image_1, image_2)
+                                    to_print = "Edoov koeficient was defined at " + str(list_medianu) + " counted clockwise."
+                                    shadow.print_log(to_print)
+                                    eda_bad_accuracy = accuracy()
+                                    all_edoov_coefficient = list_medianu
+                                    eda_count += 1
+                                except:
+                                    pass
+                            else:
+                                to_print = "Waiting for an image, currently at " + str(eda_count)+ " now going to sleep."
+                                shadow.print_log(to_print)
+                                sleep(photo_sleep_interval)
                         # we need to set the name up first
                         imageName = str("main/img_" + str(initialization_count) + ".jpg")
                         image_2_path = imageName
@@ -1245,6 +1263,10 @@ if __name__ == '__main__':
     
     start_time =  datetime.now()
 
+    # create directories
+    os.mkdir("./chop")
+    os.mkdir("./main")
+
     # first we define the threads, see details on each in their respective code
     auxiliary_thread = photo_thread(1, "Thread1")
     main_thread = processing_thread(2, "Thread2")
@@ -1256,9 +1278,9 @@ if __name__ == '__main__':
     
     # set the default interval for taking photos, this will be changed depending on day-night cycle
     global photo_sleep_interval
-    photo_sleep_interval = 15
+    photo_sleep_interval = 12
     global photo_multiplier
-    photo_multiplier = 0.28 # 4 seconds per photo
+    photo_multiplier = 1 # 4 seconds per photo
     # then we start the threads
     auxiliary_thread.start()
     sleep(10) # we set them slightly apart to make sure that we have a picture before calculating north

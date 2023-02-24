@@ -1,3 +1,4 @@
+General information:
 - created by Tomáš Rajchman, David Němec, Eduard Plic, Matyáš Matta and Lucie Kohoutková in early 2023
 - if copied please mention authors
 - created on the University of West Bohemia in NTIS research centre, thank you so much!
