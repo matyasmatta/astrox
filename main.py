@@ -1,5 +1,20 @@
-# first version to include two threads
-# for further file history see main_old (version 1.0 to 4.4)
+# created by Tomáš Rajchman, David Němec, Eduard Plic, Matyáš Matta and Lucie Kohoutková in early 2023
+# if copied please mention authors
+# created on the University of West Bohemia in NTIS research centre, thank you so much!
+
+# IMPORTANT: this code may return local errors but all are handled perfectly
+# this code does use two threads but their uses are explained clearly and made our whole operation a whole lot easier and reliable
+    # please see notes down below for more
+# code runs from the if __name__ condition all the way down, NOT from the top to bottom (most is defined as functions)
+# all variables are written as to be self-explanatory so we hope it helps
+# code might seem complicated but it was tested thoroughly with real ISS data and should work perfectly
+# it order to work ALL folders need to be present as they are NOT created, please DO NOT remove them, they contain just readme's to not be empty
+# we need at least the shadows.csv, log.txt and main directory to be returned back to Earch!
+# we used classes as we all collaborated on the project and it was most sensible for the code to be updated through updating classes (originally we imported them as libraries)
+    # hence some classes may seem very small but they are important
+# the code depends A LOT on the reliablity of skyfield data and coordinates, please make sure they are as close to current as possible else we get problems with coordinates and their calculations
+
+# all libraries were tested to be present on the AstroPi software by default
 import threading
 import time
 from time import sleep
@@ -25,7 +40,9 @@ from gpiozero import CPUTemperature
 
 # classes for functions
 class directory:
+    # this is a simple function with which we check the image folder size, we make sure we do not overrun 3 GiB but that is to be seen further down
     def get_size():
+        # code is mostly implementes as seen on StackOverflow
         start_path = "./main/"
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(start_path):
@@ -34,8 +51,10 @@ class directory:
                 # skip if it is symbolic link
                 if not os.path.islink(fp):
                     total_size += os.path.getsize(fp)
+        # returns the whole size
         return total_size
 class gps:
+    # this piece of code adjusts the coordinates of chops (they are different from the original centre of image obviously)
     def cloud_position(chop_image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
         #input of values
         meridionalCircumference = 40008
@@ -64,11 +83,9 @@ class gps:
             dec_longitude = - float(splitLongitude)
 
         chopLatitude = float(dec_latitude) + (distanceY*360)/meridionalCircumference
-        print("z. š.:", chopLatitude)
 
         # find longitude of the cloud
         chopLongitude = float(dec_longitude) + (distanceX*360)/(earthCircumference*np.cos(chopLatitude * (np.pi/180)))
-        print("z. d.:", chopLongitude)
         return(chopLatitude, chopLongitude)
     def convert_decimal_coordinates_to_legacy(latitude, longitude):
         # conversion of degrees specifically for an gps class friendly format
@@ -173,7 +190,7 @@ class north:
             delta_x = x_22all_div - x_11all_div
             delta_y = y_11all_div - y_22all_div
             
-            # combinig movemment of "things" to get edoov_coefficient (=relative rotation of camera on ISS) (between 0 and 360)
+            # combining movemment of "things" to get edoov_coefficient (=relative rotation of camera on ISS) (between 0 and 360)
             edoov_coefficient = np.arctan2(delta_x,delta_y) * 57.29577951 + 180
             if edoov_coefficient >= 360:
                 edoov_coefficient=edoov_coefficient-360
@@ -243,7 +260,6 @@ class north:
         
         # combinating both informations to get real position of north on photo
         north_position = all_edoov_coefficient - corrected_alpha_k
-        print("all edoov koeficient:", all_edoov_coefficient)
         if north_position < 0:
             north_position = north_position + 360
         return north_position
@@ -271,11 +287,6 @@ class ai:
         ai_output = {}
         for obj in objs:
             if obj.score > 0.25:
-                #print(labels.get(obj.id, obj.id))
-                print('  id:    ', counter_for_ai_output)
-                print('  score: ', obj.score)
-                print('  bbox:  ', obj.bbox)
-
                 # obj.bbox needs to be converted into a dictionary
                 bbox = obj.bbox
                 score = obj.score
@@ -291,9 +302,6 @@ class ai:
         image = image.convert('RGB')
         
         # saving into an image
-        if os.path.exists('meta.jpg') == True:
-            os.remove('meta.jpg')
-        image.save('meta.jpg')
         return ai_output
 class shadow:
     # this is a big class containing all things necessary to calculate the lenght of a shadow from data generated by the ai model
@@ -438,6 +446,7 @@ class shadow:
             y_increase_meta_abs = abs(y_increase_meta)
 
             # divide into quadrant and basic angle information
+            # quadrant is used for pixel by pixel fingerprint and angle_final is used for final Pythagorian correction
             if 0 <= angle <= 90:
                 q = 1
                 angle_final = angle 
@@ -485,23 +494,20 @@ class shadow:
             limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/126.48
             limit = limit_shadow_cloud_distance_pixels
 
-            # we create meta.jpg for testing
-            if os.path.exists('meta.jpg') == False:
-                im2 = im.copy()
-                im.save('meta.jpg')
-
             # put quarter information back for pixel reading
             ## first two lines are used for limit setting
             ## please note that explanation for all quarters are very similar to quarter 1, hence please excuse that we did not write the documentation for every sector
+            ## we apologise for repetitive code, but it works perfectly (which was remarkably difficult)
             if q == 1:
 
-                # set increase with correct signage
+                # set increase with correct signage, used for limits
                 x_increase_final = x_increase_final
                 y_increase_final = -y_increase_final
 
                 # correct the starting point
                 x,y = shadow.starting_point_corrector(x,y, x_increase_final, y_increase_final)
                 while True:
+                    # this is the count we use to run pixel by pixel
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:
 
@@ -522,11 +528,6 @@ class shadow:
                         list_of_red.append(value_red)
                         list_of_values.append(value)
 
-                        # edit the meta image for checking
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
-
                         # add to y_sum and move pixel x for 1
                         x += 1
                         y_sum += y_increase_final_abs
@@ -538,9 +539,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y -= 1
                         if x > total_x or y > total_y:
@@ -555,13 +553,12 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y -= 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
                             break
+                    # makes sure we do not run over the edge of the original chop image
+                    # limit is calculated automatically and is set by how high clouds we want to detect, when too high code returns odd results
                     if count > limit or x == (total_x - 1) or y == (total_y - 1) or x == 1 or y == 1:
                         break
             if q == 2:
@@ -580,9 +577,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -593,9 +587,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y += 1
                         if x > total_x or y > total_y:
@@ -610,9 +601,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y += 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -635,9 +623,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -648,9 +633,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y += 1
                         if x > total_x or y > total_y:
@@ -665,9 +647,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y += 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -690,9 +669,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -703,9 +679,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y -= 1
                         if x > total_x or y > total_y:
@@ -720,9 +693,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y -= 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -762,6 +732,12 @@ class shadow:
                 def main():
                     n = 0
                     list_of_changes = []
+
+                    # IMPORTANT: please note that this code will return EXCEPTIONS
+                    # it is NEVER a fatal error and IS HANDLED perfectly fine
+                    # it was the easiest method as to how to correct for clouds being after shadows (means we detected a different cloud)
+                    # the code one by one removes pixels that are detected as the brightest and simultaniously are after the shadow (returns negative lenght)
+                    # done as a loop that will return an error when there are no more objects in the list
                     while True:
                         try:
                             current_data = list_of_values[n]
@@ -774,6 +750,8 @@ class shadow:
                             n+=1
                         except:
                             break
+
+                    # self-explanatory
                     shadow_low = max(list_of_changes)
                     cloud_high = min(list_of_changes)
 
@@ -783,7 +761,11 @@ class shadow:
                     # find difference between the two pixel lenghts
                     shadow_lenght = shadow_location - cloud_location
                     return shadow_lenght, cloud_high, cloud_location
+                
+                # first we calculate
                 shadow_lenght, cloud_high, cloud_location = main()
+
+                # then we check for clouds after shadows and if necessary re-run the local main function (see above)
                 while True:
                     n = 0
                     if shadow_lenght <= 0:
@@ -870,7 +852,6 @@ class split:
                             x0+chopsize if x0+chopsize <  width else  width - 1,
                             y0+chopsize if y0+chopsize < height else height - 1)
                     file_name = "./chop/astrochop_" + str(within_loop_counter) + "_" + str(x0) + "_" + str(y0) + "_" + ".jpg"
-                    print(file_name)
                     img.crop(box).save(file_name,exif=exif)
 
                     # we calculate the centre coordinates of the chop based on its name and original exif data
@@ -885,8 +866,6 @@ class split:
                     image.gps_latitude_ref = latitude_ref
                     image.gps_longitude = longitude
                     image.gps_longitude_ref = longitude_ref
-
-                    print(latitude, longitude, chop_latitude, chop_longitude)
 
                     with open(file_name, 'wb') as new_image_file:
                         new_image_file.write(image.get_file())
@@ -964,14 +943,14 @@ class photo_thread(threading.Thread):
                                 'gyro_x', 'gyro_y', 'gyro_z',
                                 'datetime'])
 
-        while (datetime.now() < start_time + timedelta(minutes = 11)): 
-            if directory.get_size() < 300000000: # cca. 2.8 gigabytes
+        while (datetime.now() < start_time + timedelta(minutes = 175)): 
+            if directory.get_size() < 3000000000: # cca. 2.8 gigabytes
                 timescale = load.timescale()
                 t = timescale.now()
-                if ISS.at(t).is_sunlit(ephemeris):
+                if ISS.at(t).is_sunlit(ephemeris) == False:
                     imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
                     count_for_images_day += 1
-                    photo_sleep_interval = 14
+                    photo_sleep_interval = 14*photo_multiplier # nutné SMAZAT
 
                 else:
                     imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
@@ -989,7 +968,8 @@ class photo_thread(threading.Thread):
                 camera.capture(imageName)     
                 sleep(photo_sleep_interval)
                 del imageName   
-            
+            else:
+                sleep(photo_sleep_interval)
             # we will also collect sense data just to collect as much as possible
             sense_data = []
             # Get environmental data
@@ -1027,9 +1007,6 @@ class photo_thread(threading.Thread):
             cpu = CPUTemperature()                          
             to_print = (f'CPU: {cpu.temperature}')
             shadow.print_log(to_print)                
-            print(f'Sense HAT: {sense.temperature}')        #SMAZAT
-            print(f'CPU: {cpu.temperature}')                #SMAZAT
-
             
             # all the data is written into a csv file
             with open("data.csv", "a", newline="") as f:
@@ -1054,7 +1031,7 @@ class processing_thread(threading.Thread):
                 # pre-initialization
                 try:
                     global eda_count
-                    eda_count = 1  
+                    eda_count = 0  
                 except:
                     to_print = str("There was an error during pre-initialization")
                     shadow.print_log(to_print)
@@ -1064,23 +1041,33 @@ class processing_thread(threading.Thread):
                     def accuracy():
                         eda_bad_accuracy = False
                         if len(store_edoov_coefficient) > 1:
-                            if abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2]) > 0.5:
+                            if abs(all_edoov_coefficient - list_medianu) > 3:
                                 eda_bad_accuracy = True
                         return eda_bad_accuracy
-                    eda_bad_accuracy = accuracy()
-                    while (datetime.now() < start_time + timedelta(seconds=60)) or eda_bad_accuracy:
-                        i_1=str(eda_count)
-                        before = "./dataset/image ("
-                        image_1=str(before + i_1 +").jpg")
-                        i_2=str(eda_count + 1)
-                        image_2=str(before + i_2 +").jpg")
-                        eda_count += 1
-                        list_medianu = north.find_edoov_coefficient(image_1, image_2)
-                        print("Edoov koeficient was defined at", list_medianu, "counted clockwise.")
+                    eda_bad_accuracy = True
+                    while (datetime.now() < start_time + timedelta(seconds=30)) or eda_bad_accuracy:
                         global all_edoov_coefficient
-                        all_edoov_coefficient = list_medianu
-                        eda_bad_accuracy = accuracy()
-
+                        if eda_count+1 < count_for_images_day:
+                            try:
+                                i_1=str(eda_count)
+                                before = "main/img_"
+                                image_1=str(before + i_1 +".jpg")
+                                i_2=str(eda_count + 1)
+                                image_2=str(before + i_2 +".jpg")
+                                list_medianu = north.find_edoov_coefficient(image_1, image_2)
+                                to_print = "Edoov koeficient was defined at " + list_medianu + " counted clockwise."
+                                shadow.print_log(to_print)
+                                eda_bad_accuracy = accuracy()
+                                all_edoov_coefficient = list_medianu
+                                eda_count += 1
+                            except:
+                                pass
+                        else:
+                            to_print = "Waiting for an image, currently at", eda_count, "now going to sleep."
+                            shadow.print_log(to_print)
+                            sleep(photo_sleep_interval)
+                    global photo_multiplier
+                    photo_multiplier = 1
                 except:
                     to_print = str("There was an error during the initialzitation")
                     shadow.print_log(to_print)
@@ -1090,29 +1077,28 @@ class processing_thread(threading.Thread):
                 try:
                     # first we set the count for images where we will search for clouds
                     global initialization_count
-                    initialization_count = 1
-                    image_1_path = str("./dataset/image (" + str(initialization_count) + ").jpg")
+                    initialization_count = 0
+                    image_1_path = str("main/img_" + str(initialization_count) + ".jpg")
                     initialization_count +=1
 
                     # this id is what we will see in the final csv file
                     full_image_id = 0
 
                     # the following is the main loop which will run for the majority of time on the ISS, the condition is so that it does not run for too long
-                    while (datetime.now() < start_time + timedelta(minutes=10)):
-                        while initialization_count >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=10)):
+                    while (datetime.now() < start_time + timedelta(minutes=170)):
+                        while initialization_count + 1 >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=170)):
                             i_1=str(eda_count)
-                            before = "./dataset/image ("
-                            image_1=str(before + i_1 +").jpg")
+                            before = "main/img_"
+                            image_1=str(before + i_1 +".jpg")
                             i_2=str(eda_count + 1)
-                            image_2=str(before + i_2 +").jpg")
+                            image_2=str(before + i_2 +".jpg")
                             all_edoov_coefficient = north.find_edoov_coefficient()
                             eda_count += 1
-                            while eda_count >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=10)):
+                            while eda_count >= count_for_images_day and (datetime.now() < start_time + timedelta(minutes=170)):
                                     sleep(10)
                         # we need to set the name up first
-                        imageName = str("./dataset/image (" + str(initialization_count) + ").jpg")
+                        imageName = str("main/img_" + str(initialization_count) + ".jpg")
                         image_2_path = imageName
-                        print(image_2_path)
 
                         # then we define the coordinates, see class shadow subclass coordinates for details but it's mostly export from EXIF data
                         global latitude
@@ -1148,9 +1134,7 @@ class processing_thread(threading.Thread):
                                     files = files[0]
                                     return files
                                 chop_image_path = find(search_image_path, "./chop")
-                                print(chop_image_path)
                                 chop_image_path = "./chop/" + chop_image_path
-                                print(chop_image_path)
 
                                 # then we check if the image is not all-clouds or all-sea with a brightness function, see the respective class for more information
                                 if 50 < properties.calculate_brightness(chop_image_path) < 190 and properties.calculate_contrast(chop_image_path) > 10:
@@ -1257,6 +1241,7 @@ if __name__ == '__main__':
     # but because the processing is so much slower than the photographing we will have many unprocessed images that could take advatage of being run in the dark.
     # also because the processing is about 2 minutes/full image (as of v2.4),
     # we would have to force-quit operation often just in order to take photos in which the north class can detect similiar objects (when too far apart openCV would fail)
+    # two threads are briliant because even IF something in the processing goes unexpectedly wrong we will still get the data and photos for processing on Earth
     
     start_time =  datetime.now()
 
@@ -1270,8 +1255,10 @@ if __name__ == '__main__':
     sleep(3) # to ensure quality of pictures
     
     # set the default interval for taking photos, this will be changed depending on day-night cycle
-    photo_sleep_interval = 20
-
+    global photo_sleep_interval
+    photo_sleep_interval = 15
+    global photo_multiplier
+    photo_multiplier = 0.28 # 4 seconds per photo
     # then we start the threads
     auxiliary_thread.start()
     sleep(10) # we set them slightly apart to make sure that we have a picture before calculating north
