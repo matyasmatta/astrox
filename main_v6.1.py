@@ -813,6 +813,11 @@ class photo:
         sign, degrees, minutes, seconds = angle.signed_dms()
         exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
         return sign < 0, exif_angle
+    def compress(image_path):
+        # we noticed that the rotate function has an in-built compression algorithm, we decided it would be useful for night images which we save for redundancy
+        im = Image.open(image_path)
+        im = im.rotate(0)
+        im.save(image_path) # we overwrite the original image with the compressed one to save space
 class split:
     # this is a small class containing a method for cropping, chopping and rotating the original image into images that can be fed directly to the AI model
     def file_split(image_id, image_path, north_main):
@@ -947,27 +952,31 @@ class photo_thread(threading.Thread):
             if directory.get_size() < 3000000000: # cca. 2.8 gigabytes
                 timescale = load.timescale()
                 t = timescale.now()
+                def main():
+                    location = ISS.coordinates()
+                    # Convert the latitude and longitude to EXIF-appropriate representations
+                    south, exif_latitude = photo.convert(location.latitude)
+                    west, exif_longitude = photo.convert(location.longitude)
+                    # Set the EXIF tags specifying the current location
+                    camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+                    camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+                    camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+                    camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
                 if ISS.at(t).is_sunlit(ephemeris):
-                    imageName = str("./main/img_" + str(count_for_images_day) + ".jpg")
+                    image_path = str("./main/img_" + str(count_for_images_day) + ".jpg")
                     count_for_images_day += 1
-                    photo_sleep_interval = 14*photo_multiplier # nutné SMAZAT
-
+                    photo_sleep_interval = 13*photo_multiplier
+                    main()
+                    camera.capture(image_path)
                 else:
-                    imageName = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
+                    image_path = str("./main/night_img_" + str(count_for_images_night) + ".jpg")
                     count_for_images_night += 1
                     photo_sleep_interval = 59
-                location = ISS.coordinates()
-                # Convert the latitude and longitude to EXIF-appropriate representations
-                south, exif_latitude = photo.convert(location.latitude)
-                west, exif_longitude = photo.convert(location.longitude)
-                # Set the EXIF tags specifying the current location
-                camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-                camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-                camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-                camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-                camera.capture(imageName)     
+                    main()
+                    camera.capture(image_path)
+                    photo.compress(image_path)
                 sleep(photo_sleep_interval)
-                del imageName   
+                del image_path   
             else:
                 sleep(photo_sleep_interval)
             # we will also collect sense data just to collect as much as possible
