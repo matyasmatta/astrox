@@ -1,5 +1,20 @@
-# first version to include two threads
-# for further file history see main_old (version 1.0 to 4.4)
+# created by Tomáš Rajchman, David Němec, Eduard Plic, Matyáš Matta and Lucie Kohoutková in early 2023
+# if copied please mentions authors
+# created on the University of West Bohemia in NTIS research centre, thank you so much!
+
+# IMPORTANT: this code may return local errors but all are handled perfectly
+# this code does use two threads but their uses are explained clearly and made our whole operation a whole lot easier and reliable
+    # please see notes down below for more
+# code runs from the if __name__ condition all the way down, NOT from the top to bottom (most is defined as functions)
+# all variables are written as to be self-explanatory so we hope it helps
+# code might seem complicated but it was tested thoroughly with real ISS data and should work perfectly
+# it order to work ALL folders need to be present as they are NOT created, please DO NOT remove them, they contain just readme's to not be empty
+# we need at least the shadows.csv, log.txt and main directory to be returned back to Earch!
+# we used classes as we all collaborated on the project and it was most sensible for the code to be updated through updating classes (originally we imported them as libraries)
+    # hence some classes may seem very small but they are important
+# the code depends A LOT on the reliablity of skyfield data and coordinates, please make sure they are as close to current as possible else we get problems with coordinates and their calculations
+
+# all libraries were tested to be present on the AstroPi software by default
 import threading
 import time
 from time import sleep
@@ -25,7 +40,9 @@ from gpiozero import CPUTemperature
 
 # classes for functions
 class directory:
+    # this is a simple function with which we check the image folder size, we make sure we do not overrun 3 GiB but that is to be seen further down
     def get_size():
+        # code is mostly implementes as seen on StackOverflow
         start_path = "./main/"
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(start_path):
@@ -34,8 +51,10 @@ class directory:
                 # skip if it is symbolic link
                 if not os.path.islink(fp):
                     total_size += os.path.getsize(fp)
+        # returns the whole size
         return total_size
 class gps:
+    # this piece of code adjusts the coordinates of chops (they are different from the original centre of image obviously)
     def cloud_position(chop_image_path): #centerCoordinates and cloudCoordinates in xxx.xx, xxx.xx format
         #input of values
         meridionalCircumference = 40008
@@ -173,7 +192,7 @@ class north:
             delta_x = x_22all_div - x_11all_div
             delta_y = y_11all_div - y_22all_div
             
-            # combinig movemment of "things" to get edoov_coefficient (=relative rotation of camera on ISS) (between 0 and 360)
+            # combining movemment of "things" to get edoov_coefficient (=relative rotation of camera on ISS) (between 0 and 360)
             edoov_coefficient = np.arctan2(delta_x,delta_y) * 57.29577951 + 180
             if edoov_coefficient >= 360:
                 edoov_coefficient=edoov_coefficient-360
@@ -249,6 +268,7 @@ class north:
         return north_position
 class ai:
     # this is the class that works with the model itself
+    # implementation was as seen on StackOverflow and many AI models tutorials so we apologise for the not-so clean code
     def ai_model(image_path):
         open("./model/labelmap.txt")
         labels = './model/labelmap.txt'
@@ -438,6 +458,7 @@ class shadow:
             y_increase_meta_abs = abs(y_increase_meta)
 
             # divide into quadrant and basic angle information
+            # quadrant is used for pixel by pixel fingerprint and angle_final is used for final Pythagorian correction
             if 0 <= angle <= 90:
                 q = 1
                 angle_final = angle 
@@ -485,23 +506,20 @@ class shadow:
             limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/126.48
             limit = limit_shadow_cloud_distance_pixels
 
-            # we create meta.jpg for testing
-            if os.path.exists('meta.jpg') == False:
-                im2 = im.copy()
-                im.save('meta.jpg')
-
             # put quarter information back for pixel reading
             ## first two lines are used for limit setting
             ## please note that explanation for all quarters are very similar to quarter 1, hence please excuse that we did not write the documentation for every sector
+            ## we apologise for repetitive code, but it works perfectly (which was remarkably difficult)
             if q == 1:
 
-                # set increase with correct signage
+                # set increase with correct signage, used for limits
                 x_increase_final = x_increase_final
                 y_increase_final = -y_increase_final
 
                 # correct the starting point
                 x,y = shadow.starting_point_corrector(x,y, x_increase_final, y_increase_final)
                 while True:
+                    # this is the count we use to run pixel by pixel
                     count += 1
                     if x_increase_final_abs > y_increase_final_abs:
 
@@ -522,11 +540,6 @@ class shadow:
                         list_of_red.append(value_red)
                         list_of_values.append(value)
 
-                        # edit the meta image for checking
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
-
                         # add to y_sum and move pixel x for 1
                         x += 1
                         y_sum += y_increase_final_abs
@@ -538,9 +551,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y -= 1
                         if x > total_x or y > total_y:
@@ -555,13 +565,12 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y -= 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
                             break
+                    # makes sure we do not run over the edge of the original chop image
+                    # limit is calculated automatically and is set by how high clouds we want to detect, when too high code returns odd results
                     if count > limit or x == (total_x - 1) or y == (total_y - 1) or x == 1 or y == 1:
                         break
             if q == 2:
@@ -580,9 +589,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -593,9 +599,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x += 1
                         y += 1
                         if x > total_x or y > total_y:
@@ -610,9 +613,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y += 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -635,9 +635,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -648,9 +645,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y += 1
                         if x > total_x or y > total_y:
@@ -665,9 +659,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y += 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -690,9 +681,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y_sum += y_increase_final_abs
                         if x > total_x or y > total_y:
@@ -703,9 +691,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         x -= 1
                         y -= 1
                         if x > total_x or y > total_y:
@@ -720,9 +705,6 @@ class shadow:
                         value_red = data[0]
                         list_of_red.append(value_red)
                         list_of_values.append(value)
-                        im2 = Image.open('meta.jpg')
-                        im2.putpixel((x,y),(0,0,0,0))
-                        im2.save('meta.jpg')
                         y -= 1
                         x_sum += x_increase_final_abs
                         if x > total_x or y > total_y:
@@ -762,6 +744,12 @@ class shadow:
                 def main():
                     n = 0
                     list_of_changes = []
+
+                    # IMPORTANT: please note that this code will return EXCEPTIONS
+                    # it is NEVER a fatal error and IS HANDLED perfectly fine
+                    # it was the easiest method as to how to correct for clouds being after shadows (means we detected a different cloud)
+                    # the code one by one removes pixels that are detected as the brightest and simultaniously are after the shadow (returns negative lenght)
+                    # done as a loop that will return an error when there are no more objects in the list
                     while True:
                         try:
                             current_data = list_of_values[n]
@@ -774,6 +762,8 @@ class shadow:
                             n+=1
                         except:
                             break
+
+                    # self-explanatory
                     shadow_low = max(list_of_changes)
                     cloud_high = min(list_of_changes)
 
@@ -783,7 +773,11 @@ class shadow:
                     # find difference between the two pixel lenghts
                     shadow_lenght = shadow_location - cloud_location
                     return shadow_lenght, cloud_high, cloud_location
+                
+                # first we calculate
                 shadow_lenght, cloud_high, cloud_location = main()
+
+                # then we check for clouds after shadows and if necessary re-run the local main function (see above)
                 while True:
                     n = 0
                     if shadow_lenght <= 0:
