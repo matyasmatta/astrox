@@ -1053,7 +1053,7 @@ class processing_thread(threading.Thread):
                 # initialise and calibrate the north data via north class
                 # initialization
                 try:
-                    while (datetime.now() < start_time + timedelta(seconds=60)):
+                    while (datetime.now() < start_time + timedelta(seconds=60)) or (abs(store_edoov_coefficient[-1] - store_edoov_coefficient[-2]) > 0.5):
                         i_1=str(eda_count)
                         before = "./dataset/image ("
                         image_1=str(before + i_1 +").jpg")
