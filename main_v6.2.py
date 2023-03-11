@@ -767,7 +767,7 @@ class shadow:
 
                 # then we check for clouds after shadows and if necessary re-run the local main function (see above)
                 while True:
-                    n = 0
+                    n = constant_for_starting_point_correction
                     if shadow_lenght <= 0:
                         item_to_be_deleted = list_of_values[cloud_location]
                         list_of_values.remove(item_to_be_deleted)
