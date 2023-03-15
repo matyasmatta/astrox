@@ -1,0 +1,1290 @@
+Starting: Thread1
+Starting: Thread2
+Waiting for an image, currently at 0 now going to sleep.
+CPU: 62.809
+CPU: 66.218
+Edoov koeficient was defined at 113.720192290438 counted clockwise.
+Edoov koeficient was defined at 78.40031680451634 counted clockwise.
+Waiting for an image, currently at 2 now going to sleep.
+CPU: 67.192
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Waiting for an image, currently at 3 now going to sleep.
+CPU: 66.218
+CPU: 64.757
+Edoov koeficient was defined at 90.89920082706058 counted clockwise.
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Waiting for an image, currently at 5 now going to sleep.
+CPU: 64.27
+Edoov koeficient was defined at 108.80151063982294 counted clockwise.
+Waiting for an image, currently at 6 now going to sleep.
+CPU: 69.627
+CPU: 64.27
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Edoov koeficient was defined at 108.80151063982294 counted clockwise.
+Waiting for an image, currently at 8 now going to sleep.
+CPU: 65.244
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Waiting for an image, currently at 9 now going to sleep.
+CPU: 68.166
+CPU: 64.27
+Edoov koeficient was defined at 101.76918195841081 counted clockwise.
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Waiting for an image, currently at 11 now going to sleep.
+CPU: 65.244
+Edoov koeficient was defined at 101.76918195841081 counted clockwise.
+Waiting for an image, currently at 12 now going to sleep.
+CPU: 65.731
+CPU: 65.731
+Edoov koeficient was defined at 103.88282898920787 counted clockwise.
+Edoov koeficient was defined at 101.76918195841081 counted clockwise.
+Waiting for an image, currently at 14 now going to sleep.
+CPU: 65.244
+Edoov koeficient was defined at 99.65553492761376 counted clockwise.
+Waiting for an image, currently at 15 now going to sleep.
+CPU: 65.244
+CPU: 65.731
+Edoov koeficient was defined at 96.5439021842215 counted clockwise.
+Edoov koeficient was defined at 93.43226944082923 counted clockwise.
+Waiting for an image, currently at 17 now going to sleep.
+CPU: 64.27
+Edoov koeficient was defined at 95.21860055030247 counted clockwise.
+CPU: 66.218
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 7061.19
+Didn't find shadow of cloud number 4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1835.91
+Cloud number 2 has a height of 3106.93
+Cloud number 3 has a height of 2400.81
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 4519.16
+Cloud number 6 has a height of 3106.93
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4801.61
+Cloud number 2 has a height of 2542.03
+Cloud number 3 has a height of 3248.15
+Cloud number 4 has a height of 3248.15
+CPU: 64.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 has a height of 3106.93
+Cloud number 1 has a height of 4095.49
+Cloud number 2 has a height of 4660.39
+Cloud number 3 has a height of 1835.91
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 5225.28
+Cloud number 6 has a height of 1835.91
+Cloud number 7 has a height of 1271.01
+Cloud number 0 has a height of 3813.04
+Cloud number 1 has a height of 4095.49
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 4095.49
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 4377.94
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 4095.49
+Cloud number 9 has a height of 2542.03
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1412.24
+Cloud number 2 has a height of 7484.87
+Cloud number 3 has a height of 1835.91
+Cloud number 4 has a height of 847.34
+Cloud number 5 has a height of 141.22
+CPU: 65.244
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 has a height of 1977.13
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4660.39
+Cloud number 3 has a height of 8332.21
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 4377.94
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 has a height of 3389.37
+Cloud number 8 has a height of 4236.72
+Cloud number 9 has a height of 6072.63
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2118.36
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 1977.13
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 3530.6
+Cloud number 8 has a height of 3248.15
+Cloud number 9 did not meet maximal lenght criteria
+CPU: 64.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 has a height of 6501.14
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2455.99
+Cloud number 3 has a height of 2311.52
+Cloud number 4 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 3756.21
+Cloud number 7 has a height of 3322.81
+Cloud number 8 has a height of 1300.23
+Cloud number 0 has a height of 8234.78
+Cloud number 1 did not meet maximal lenght criteria
+CPU: 65.731
+Cloud number 2 has a height of 1733.64
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 5200.91
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 3756.21
+Cloud number 3 has a height of 1733.64
+Cloud number 4 has a height of 6501.14
+Cloud number 5 has a height of 4478.56
+Cloud number 6 has a height of 3033.87
+Cloud number 7 has a height of 1011.29
+Didn't find shadow of cloud number 8
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+CPU: 64.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 3033.87
+Cloud number 3 has a height of 4189.62
+Cloud number 4 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 3756.21
+Cloud number 7 has a height of 2455.99
+Cloud number 8 has a height of 6645.61
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3756.21
+Cloud number 2 has a height of 3756.21
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2311.52
+Cloud number 2 has a height of 2744.93
+Cloud number 3 has a height of 6934.55
+Cloud number 4 has a height of 2455.99
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 7079.02
+Cloud number 7 has a height of 4189.62
+Cloud number 8 has a height of 3467.28
+Cloud number 9 has a height of 4189.62
+CPU: 64.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 has a height of 6501.14
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2455.99
+Cloud number 3 has a height of 2311.52
+Cloud number 4 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 3756.21
+Cloud number 7 has a height of 3322.81
+Cloud number 8 has a height of 1300.23
+CPU: 66.705
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 3399.03
+Cloud number 5 has a height of 4581.3
+Cloud number 6 has a height of 1477.84
+Cloud number 7 has a height of 3842.38
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4581.3
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 443.35
+Cloud number 4 has a height of 3546.81
+Cloud number 5 has a height of 1182.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 1625.62
+Cloud number 5 has a height of 4285.73
+Cloud number 6 has a height of 7093.62
+Cloud number 7 has a height of 4137.95
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3103.46
+CPU: 65.244
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 3842.38
+Cloud number 3 has a height of 3103.46
+Cloud number 4 has a height of 5172.43
+Cloud number 5 has a height of 5024.65
+Cloud number 6 has a height of 2068.97
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 7093.62
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5024.65
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 3399.03
+Cloud number 6 has a height of 4433.51
+Cloud number 7 has a height of 1921.19
+Cloud number 8 has a height of 886.7
+Cloud number 9 has a height of 3399.03
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4285.73
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 3842.38
+Cloud number 5 has a height of 1625.62
+Cloud number 6 has a height of 6650.27
+Cloud number 7 has a height of 4285.73
+Cloud number 8 has a height of 2216.76
+Cloud number 9 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 7832.54
+Cloud number 3 has a height of 2807.89
+Cloud number 4 has a height of 7241.41
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 6945.84
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 3546.81
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6502.49
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 1034.49
+Cloud number 4 has a height of 3694.6
+Cloud number 5 has a height of 6650.27
+Cloud number 6 has a height of 5911.35
+Cloud number 7 has a height of 3103.46
+Didn't find shadow of cloud number 8
+Cloud number 9 has a height of 2955.68
+CPU: 63.296
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 has a height of 6354.7
+Cloud number 1 has a height of 2955.68
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5172.43
+Cloud number 4 has a height of 4433.51
+Cloud number 5 has a height of 2955.68
+Cloud number 6 has a height of 8423.68
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 3694.6
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2364.54
+Cloud number 3 has a height of 3103.46
+Cloud number 4 has a height of 6798.06
+Cloud number 5 has a height of 2660.11
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 63.783
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 3399.03
+Cloud number 5 has a height of 4581.3
+Cloud number 6 has a height of 1477.84
+Cloud number 7 has a height of 3842.38
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2872.61
+Cloud number 2 has a height of 1965.47
+Cloud number 3 has a height of 755.95
+Cloud number 4 has a height of 3326.18
+Cloud number 5 has a height of 5291.65
+Cloud number 6 has a height of 907.14
+Cloud number 7 has a height of 755.95
+Didn't find shadow of cloud number 8
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2267.85
+Cloud number 3 has a height of 4838.08
+Cloud number 4 has a height of 3326.18
+Cloud number 5 did not meet maximal lenght criteria
+CPU: 64.27
+Cloud number 6 has a height of 4989.27
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3779.75
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 6954.74
+Cloud number 4 has a height of 3477.37
+Cloud number 5 has a height of 2267.85
+Cloud number 6 has a height of 2721.42
+Cloud number 7 has a height of 8920.21
+Cloud number 8 has a height of 3023.8
+Cloud number 9 has a height of 3023.8
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1209.52
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6501.17
+Cloud number 3 has a height of 3174.99
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 2721.42
+CPU: 62.809
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 2570.23
+Cloud number 4 has a height of 5442.84
+Cloud number 5 has a height of 4686.89
+Cloud number 6 has a height of 5745.22
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 9 has a height of 3628.56
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1814.28
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 8466.64
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 2267.85
+CPU: 63.296
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 has a height of 8013.07
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5442.84
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4838.08
+Cloud number 2 has a height of 4838.08
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2872.61
+Cloud number 2 has a height of 1965.47
+Cloud number 3 has a height of 755.95
+Cloud number 4 has a height of 3326.18
+Cloud number 5 has a height of 5291.65
+Cloud number 6 has a height of 907.14
+Cloud number 7 has a height of 755.95
+Didn't find shadow of cloud number 8
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3094.28
+Didn't find shadow of cloud number 2
+Cloud number 3 has a height of 1083.0
+Cloud number 4 has a height of 3867.85
+CPU: 63.296
+Cloud number 0 has a height of 6807.41
+Cloud number 1 has a height of 4331.99
+Cloud number 2 has a height of 6807.41
+Cloud number 3 has a height of 3867.85
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 4022.56
+Cloud number 7 has a height of 2165.99
+Cloud number 8 has a height of 2011.28
+Cloud number 9 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6343.27
+Didn't find shadow of cloud number 2
+Didn't find shadow of cloud number 3
+Didn't find shadow of cloud number 4
+Cloud number 5 has a height of 3867.85
+Cloud number 6 has a height of 2475.42
+Cloud number 7 has a height of 464.14
+Cloud number 8 has a height of 618.86
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4796.13
+Cloud number 2 has a height of 5260.27
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 3558.42
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 0 has a height of 4177.27
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2011.28
+Didn't find shadow of cloud number 3
+Didn't find shadow of cloud number 4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3558.42
+Cloud number 2 has a height of 3403.71
+Cloud number 3 has a height of 928.28
+Cloud number 4 has a height of 5260.27
+Cloud number 5 has a height of 3867.85
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 5105.56
+Cloud number 8 has a height of 6652.7
+Cloud number 9 has a height of 3094.28
+CPU: 62.809
+Cloud number 0 has a height of 3248.99
+Cloud number 1 has a height of 5879.13
+Cloud number 2 has a height of 5105.56
+Cloud number 3 has a height of 5569.7
+Cloud number 4 has a height of 2320.71
+Cloud number 5 has a height of 2475.42
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 has a height of 2939.56
+Cloud number 8 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 1547.14
+Cloud number 3 has a height of 2630.14
+Cloud number 4 has a height of 6652.7
+Cloud number 5 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 6
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3248.99
+Cloud number 2 has a height of 618.86
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 4
+Cloud number 5 has a height of 3558.42
+Cloud number 6 has a height of 2475.42
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 4950.84
+Cloud number 9 has a height of 3248.99
+CPU: 62.322
+Cloud number 0 has a height of 2630.14
+Cloud number 1 has a height of 3248.99
+Cloud number 2 has a height of 4022.56
+Cloud number 3 has a height of 4796.13
+Cloud number 4 has a height of 2475.42
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 5879.13
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3248.99
+Cloud number 4 has a height of 3558.42
+Cloud number 5 has a height of 1856.57
+Cloud number 6 has a height of 5260.27
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 2011.28
+Cloud number 9 has a height of 8818.69
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1392.42
+Cloud number 2 has a height of 1547.14
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 0 has a height of 6807.41
+Cloud number 1 has a height of 4331.99
+Cloud number 2 has a height of 6807.41
+Cloud number 3 has a height of 3867.85
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 4022.56
+Cloud number 7 has a height of 2165.99
+Cloud number 8 has a height of 2011.28
+Cloud number 9 did not meet maximal lenght criteria
+CPU: 63.783
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5542.94
+Cloud number 2 has a height of 4117.61
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 1266.96
+Cloud number 5 has a height of 791.85
+Cloud number 6 has a height of 4751.09
+Cloud number 7 has a height of 1266.96
+Cloud number 8 has a height of 1900.44
+Cloud number 9 has a height of 2217.18
+Cloud number 0 has a height of 6018.05
+Cloud number 1 has a height of 3642.5
+Cloud number 2 has a height of 5067.83
+Cloud number 3 has a height of 3325.76
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 5542.94
+Cloud number 6 has a height of 7918.49
+Cloud number 7 has a height of 2217.18
+Cloud number 8 has a height of 1583.7
+Cloud number 9 has a height of 3959.24
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3167.4
+Cloud number 0 has a height of 3959.24
+Cloud number 1 has a height of 3325.76
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5226.2
+Cloud number 4 did not meet maximal lenght criteria
+CPU: 61.835
+Cloud number 0 has a height of 6968.27
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6334.79
+Cloud number 3 has a height of 4275.98
+Cloud number 4 has a height of 4434.35
+Cloud number 5 has a height of 4434.35
+Cloud number 6 has a height of 2217.18
+Cloud number 7 has a height of 4117.61
+Cloud number 8 has a height of 2850.66
+Cloud number 9 has a height of 2692.29
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 7126.64
+Cloud number 2 has a height of 4592.72
+Cloud number 0 has a height of 5542.94
+Cloud number 1 has a height of 7918.49
+Cloud number 2 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 3
+Cloud number 4 has a height of 9185.45
+Cloud number 5 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 3325.76
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6018.05
+Cloud number 2 has a height of 4909.46
+Cloud number 3 has a height of 2058.81
+Cloud number 4 has a height of 4909.46
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 1425.33
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 9 did not meet maximal lenght criteria
+CPU: 64.757
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6334.79
+Cloud number 3 has a height of 6334.79
+Cloud number 4 has a height of 6651.53
+Cloud number 5 has a height of 3009.03
+Cloud number 6 has a height of 6018.05
+Cloud number 7 has a height of 1900.44
+Cloud number 8 has a height of 7443.38
+Cloud number 9 has a height of 475.11
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6334.79
+Cloud number 3 has a height of 5384.57
+Cloud number 4 has a height of 4275.98
+Cloud number 0 has a height of 3009.03
+Didn't find shadow of cloud number 1
+Didn't find shadow of cloud number 2
+Cloud number 3 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 4
+Cloud number 0 has a height of 4275.98
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 3642.5
+Cloud number 3 has a height of 6809.9
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 6809.9
+Cloud number 6 has a height of 4592.72
+Cloud number 7 has a height of 3167.4
+Cloud number 8 has a height of 3642.5
+Cloud number 9 has a height of 4909.46
+CPU: 62.809
+Cloud number 0 has a height of 2850.66
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3800.87
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 5067.83
+Cloud number 6 has a height of 6334.79
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 9 has a height of 3959.24
+Cloud number 0 has a height of 7443.38
+Cloud number 1 has a height of 950.22
+Cloud number 2 has a height of 4909.46
+Didn't find shadow of cloud number 3
+Cloud number 4 has a height of 2692.29
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 2375.55
+Cloud number 7 has a height of 6493.16
+Cloud number 8 has a height of 5384.57
+Cloud number 9 has a height of 4751.09
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5384.57
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5384.57
+Cloud number 5 has a height of 2058.81
+Cloud number 6 has a height of 4592.72
+Cloud number 7 has a height of 6334.79
+Cloud number 8 has a height of 1425.33
+Cloud number 9 has a height of 4434.35
+Cloud number 0 has a height of 6018.05
+Cloud number 1 has a height of 3642.5
+Cloud number 2 has a height of 5067.83
+Cloud number 3 has a height of 3325.76
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 5542.94
+Cloud number 6 has a height of 7918.49
+Cloud number 7 has a height of 2217.18
+Cloud number 8 has a height of 1583.7
+Cloud number 9 has a height of 3959.24
+CPU: 66.218
+Cloud number 0 has a height of 2594.21
+Cloud number 1 has a height of 5026.27
+Cloud number 2 has a height of 6161.24
+Cloud number 3 has a height of 5188.41
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 4215.58
+Cloud number 7 has a height of 2269.93
+Cloud number 8 has a height of 3729.17
+Cloud number 9 has a height of 3891.31
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3567.03
+Cloud number 2 has a height of 5674.82
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5350.55
+Cloud number 5 has a height of 2269.93
+Cloud number 6 has a height of 3242.76
+Cloud number 7 has a height of 6485.51
+CPU: 66.705
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5026.27
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 7458.34
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 1945.65
+Cloud number 7 has a height of 3080.62
+Cloud number 0 has a height of 6809.79
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 5350.55
+Cloud number 3 has a height of 4215.58
+Cloud number 4 has a height of 2594.21
+Cloud number 5 has a height of 6971.93
+Cloud number 6 has a height of 4539.86
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 6971.93
+Cloud number 9 has a height of 6161.24
+Cloud number 0 has a height of 3729.17
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 1134.96
+Cloud number 5 has a height of 2432.07
+Cloud number 6 has a height of 4539.86
+Cloud number 7 has a height of 5674.82
+Cloud number 8 has a height of 6809.79
+Cloud number 9 has a height of 6809.79
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+CPU: 63.296
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 1945.65
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 2269.93
+Cloud number 5 has a height of 4702.0
+Cloud number 6 has a height of 3729.17
+Cloud number 7 has a height of 3567.03
+Cloud number 8 has a height of 3404.89
+Cloud number 9 has a height of 7296.2
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 8431.17
+Cloud number 4 has a height of 2269.93
+Cloud number 5 has a height of 4864.13
+Cloud number 6 has a height of 4864.13
+Cloud number 7 has a height of 810.69
+Cloud number 8 has a height of 2918.48
+Cloud number 9 has a height of 6809.79
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+CPU: 62.809
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 0 has a height of 1459.24
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6809.79
+Cloud number 3 has a height of 2594.21
+Cloud number 4 has a height of 6323.37
+Cloud number 5 has a height of 2918.48
+Cloud number 6 has a height of 5836.96
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1459.24
+Cloud number 2 has a height of 4702.0
+Cloud number 3 has a height of 1945.65
+Cloud number 4 has a height of 1297.1
+Cloud number 5 has a height of 3404.89
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6647.65
+Cloud number 3 has a height of 2918.48
+Cloud number 4 has a height of 4539.86
+Cloud number 5 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 810.69
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3567.03
+Cloud number 2 has a height of 5674.82
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5350.55
+Cloud number 5 has a height of 2269.93
+Cloud number 6 has a height of 3242.76
+Cloud number 7 has a height of 6485.51
+CPU: 62.809
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2324.76
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 3819.25
+Cloud number 7 has a height of 1660.55
+Cloud number 8 has a height of 6310.07
+Cloud number 9 has a height of 3819.25
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3155.04
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+CPU: 62.322
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 1826.6
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 5645.85
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 8302.73
+Cloud number 5 has a height of 5645.85
+Cloud number 6 has a height of 3487.14
+Cloud number 7 has a height of 2988.98
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5479.8
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 has a height of 7140.34
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5645.85
+Cloud number 2 has a height of 4151.36
+Cloud number 3 has a height of 498.16
+CPU: 61.348
+Cloud number 0 has a height of 3985.31
+Cloud number 1 has a height of 5147.69
+Cloud number 2 has a height of 3155.04
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 6974.29
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 3487.14
+Cloud number 7 has a height of 4815.58
+Cloud number 8 has a height of 2656.87
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3653.2
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 1494.49
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 0 has a height of 3155.04
+Cloud number 1 has a height of 4151.36
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3155.04
+Cloud number 2 has a height of 2656.87
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+CPU: 60.374
+Cloud number 0 has a height of 3819.25
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5645.85
+Cloud number 5 has a height of 7306.4
+Cloud number 6 has a height of 3155.04
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 9
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2324.76
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 3819.25
+Cloud number 7 has a height of 1660.55
+Cloud number 8 has a height of 6310.07
+Cloud number 9 has a height of 3819.25
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1360.63
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5782.68
+Cloud number 4 has a height of 3231.5
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 2 has a height of 3571.66
+Cloud number 3 has a height of 7653.55
+Skipped chop due to the brightness being46.22125190830915
+CPU: 60.374
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 3231.5
+Cloud number 3 has a height of 4592.13
+Cloud number 4 has a height of 7313.39
+Cloud number 5 has a height of 7653.55
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 9 has a height of 5782.68
+Skipped chop due to the brightness being48.02408343813897
+Cloud number 0 did not meet maximal lenght criteria
+Skipped chop due to the brightness being46.490580205916594
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 6803.16
+Cloud number 2 has a height of 4251.97
+Cloud number 3 has a height of 5782.68
+Cloud number 4 has a height of 3231.5
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 3061.42
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 4422.05
+Cloud number 9 has a height of 4932.29
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2891.34
+Cloud number 3 has a height of 4932.29
+Cloud number 4 has a height of 4592.13
+Cloud number 5 has a height of 2211.03
+Cloud number 6 has a height of 1020.47
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 9 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4422.05
+Cloud number 3 did not meet maximal lenght criteria
+CPU: 60.861
+Cloud number 0 has a height of 6463.0
+Cloud number 1 has a height of 6633.08
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 8333.87
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5102.37
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 2721.26
+Cloud number 7 has a height of 6463.0
+Cloud number 8 has a height of 4251.97
+Cloud number 9 has a height of 5952.76
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4932.29
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3061.42
+Cloud number 4 has a height of 4592.13
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2551.18
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 60.861
+Cloud number 0 has a height of 5053.46
+Cloud number 1 has a height of 3485.14
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 6447.51
+Cloud number 0 has a height of 4530.69
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3833.66
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 has a height of 4704.94
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 59.4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 2613.86
+Cloud number 0 has a height of 3833.66
+Cloud number 1 has a height of 5924.74
+Cloud number 2 has a height of 2613.86
+Cloud number 3 has a height of 3659.4
+Didn't find shadow of cloud number 4
+Cloud number 5 has a height of 6796.03
+Cloud number 6 has a height of 9061.37
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2439.6
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+CPU: 59.4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4530.69
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 4182.17
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4356.43
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 has a height of 4530.69
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3833.66
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4106.5
+Didn't find shadow of cloud number 2
+Cloud number 3 did not meet maximal lenght criteria
+CPU: 60.861
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3035.24
+Cloud number 2 has a height of 3213.78
+Cloud number 3 has a height of 4999.22
+Cloud number 4 has a height of 3035.24
+Cloud number 5 has a height of 1071.26
+Cloud number 6 has a height of 4999.22
+Cloud number 7 has a height of 1963.98
+Cloud number 8 has a height of 3927.96
+Cloud number 9 did not meet maximal lenght criteria
+Skipped chop due to the brightness being39.215284760239285
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 1249.81
+Cloud number 3 has a height of 3570.87
+Didn't find shadow of cloud number 4
+Cloud number 5 has a height of 1428.35
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 3213.78
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Skipped chop due to the brightness being40.52407930224594
+CPU: 58.913
+Didn't find shadow of cloud number 0
+Cloud number 1 has a height of 4820.68
+Cloud number 2 has a height of 1071.26
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4463.59
+Cloud number 2 has a height of 3749.42
+Cloud number 3 has a height of 2142.52
+Cloud number 4 has a height of 3570.87
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 has a height of 4106.5
+Cloud number 8 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4463.59
+Cloud number 2 has a height of 4820.68
+Cloud number 3 has a height of 3749.42
+Cloud number 4 has a height of 5356.31
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 3392.33
+Cloud number 7 has a height of 4820.68
+Cloud number 8 has a height of 2499.61
+Cloud number 9 did not meet maximal lenght criteria
+Cloud number 0 has a height of 4285.05
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 5534.85
+Cloud number 4 has a height of 5713.4
+Didn't find shadow of cloud number 5
+Cloud number 6 has a height of 6070.48
+Cloud number 7 did not meet maximal lenght criteria
+Cloud number 8 has a height of 1071.26
+Cloud number 9 did not meet maximal lenght criteria
+CPU: 59.887
+Cloud number 0 did not meet maximal lenght criteria
+Skipped chop due to the brightness being40.30385960535732
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 5891.94
+Cloud number 3 has a height of 1428.35
+Cloud number 4 has a height of 8570.09
+Cloud number 5 has a height of 3927.96
+Cloud number 6 has a height of 5356.31
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3035.24
+Cloud number 2 has a height of 3213.78
+Cloud number 3 has a height of 4999.22
+Cloud number 4 has a height of 3035.24
+Cloud number 5 has a height of 1071.26
+Cloud number 6 has a height of 4999.22
+Cloud number 7 has a height of 1963.98
+Cloud number 8 has a height of 3927.96
+Cloud number 9 did not meet maximal lenght criteria
+Skipped chop due to the brightness being43.12911367488468
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4758.37
+CPU: 61.348
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Skipped chop due to the brightness being40.25216588367803
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 4758.37
+Cloud number 6 has a height of 1830.14
+Cloud number 7 has a height of 3294.26
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 has a height of 2928.23
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+CPU: 61.835
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 2 has a height of 5490.43
+Didn't find shadow of cloud number 3
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 2562.2
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4026.32
+Cloud number 3 has a height of 4758.37
+Cloud number 4 has a height of 2562.2
+Cloud number 5 has a height of 4209.33
+Cloud number 6 has a height of 2562.2
+Cloud number 7 has a height of 2928.23
+CPU: 59.4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2562.2
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4209.33
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 3660.29
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4758.37
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2251.91
+Cloud number 2 has a height of 2814.88
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3377.86
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 4316.16
+Cloud number 5 has a height of 1688.93
+Didn't find shadow of cloud number 6
+CPU: 60.861
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 4316.16
+Didn't find shadow of cloud number 2
+Cloud number 3 has a height of 7506.36
+Cloud number 4 has a height of 6568.06
+Cloud number 5 has a height of 5066.79
+Didn't find shadow of cloud number 6
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Skipped chop due to the brightness being46.739907943636965
+CPU: 60.374
+Cloud number 0 has a height of 1876.59
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 7506.36
+Cloud number 3 has a height of 2064.25
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 1688.93
+Cloud number 2 has a height of 2627.23
+Didn't find shadow of cloud number 3
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 did not meet maximal lenght criteria
+Cloud number 6 has a height of 6380.4
+Cloud number 7 has a height of 6192.75
+Skipped chop due to the brightness being13.157669441980032
+Cloud number 0 has a height of 3002.54
+Cloud number 1 has a height of 1876.59
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 has a height of 4879.13
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 2064.25
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 5442.11
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 2439.57
+Cloud number 5 has a height of 3002.54
+Cloud number 6 has a height of 4691.47
+Didn't find shadow of cloud number 7
+Didn't find shadow of cloud number 8
+Cloud number 9 did not meet maximal lenght criteria
+CPU: 58.913
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3377.86
+Cloud number 2 did not meet maximal lenght criteria
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 4316.16
+Cloud number 5 has a height of 1688.93
+Didn't find shadow of cloud number 6
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 2310.02
+Cloud number 2 has a height of 6160.06
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 has a height of 5390.05
+Cloud number 5 has a height of 3080.03
+Didn't find shadow of cloud number 6
+Cloud number 7 has a height of 5967.55
+Cloud number 8 has a height of 5967.55
+Cloud number 9 has a height of 4042.54
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.913
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4620.04
+Cloud number 3 did not meet maximal lenght criteria
+Cloud number 4 did not meet maximal lenght criteria
+Cloud number 5 has a height of 4620.04
+Cloud number 6 did not meet maximal lenght criteria
+Cloud number 7 has a height of 3850.04
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 6545.06
+CPU: 58.913
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3850.04
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+CPU: 59.4
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.913
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 2 has a height of 4344.81
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 1
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5529.75
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.913
+Cloud number 1 has a height of 3949.82
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 5332.26
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.426
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.426
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 57.452
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 57.939
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3745.8
+Cloud number 2 has a height of 5202.5
+Cloud number 3 has a height of 3537.7
+Cloud number 4 has a height of 1872.9
+Cloud number 5 has a height of 3537.7
+Cloud number 6 has a height of 3537.7
+Cloud number 7 has a height of 3537.7
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 57.939
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+CPU: 58.426
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3745.8
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 did not meet maximal lenght criteria
+Didn't find shadow of cloud number 2
+CPU: 58.426
+Exiting: Thread1
+Cloud number 0 did not meet maximal lenght criteria
+Cloud number 1 has a height of 3745.8
+Cloud number 2 has a height of 5202.5
+Cloud number 3 has a height of 3537.7
+Cloud number 4 has a height of 1872.9
+Cloud number 5 has a height of 3537.7
+Cloud number 6 has a height of 3537.7
+Cloud number 7 has a height of 3537.7
+Exiting: Thread2
+Done main thread
