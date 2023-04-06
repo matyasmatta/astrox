@@ -1,3 +1,4 @@
+
 ######## Webcam Object Detection Using Tensorflow-trained Classifier #########
 #
 # Author: Evan Juras
@@ -22,13 +23,6 @@ import sys
 import time
 from threading import Thread
 import importlib.util
-from PIL import Image
-from picamera.array import PiRGBArray # Generates a 3D RGB array
-from picamera import PiCamera # Provides a Python interface for the RPi Camera Module
-import time # Provides time-related functions
-import cv2 # OpenCV library
-
-n = 0
 
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
@@ -75,7 +69,7 @@ class VideoStream:
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
-                    default='./model')
+                    required=True)
 parser.add_argument('--graph', help='Name of the .tflite file, if different than detect.tflite',
                     default='detect.tflite')
 parser.add_argument('--labels', help='Name of the labelmap file, if different than labelmap.txt',
@@ -224,15 +218,19 @@ while True:
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
 
     # Draw framerate in corner of frame
-    cv2.putText(frame,'Tady bude vyska',(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
+    cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
     # All the results have been drawn on the frame, so it's time to display it.
-    n += 1
-    filename = "./image"+str(n)+".jpg"
-    cv2.imwrite(str(filename), frame)
-    im2 = Image.open(filename)
-    im2.show()
+    cv2.imshow('Object detector', frame)
 
+    # Calculate framerate
+    t2 = cv2.getTickCount()
+    time1 = (t2-t1)/freq
+    frame_rate_calc= 1/time1
+
+    # Press 'q' to quit
+    if cv2.waitKey(1) == ord('q'):
+        break
 
 # Clean up
 cv2.destroyAllWindows()
