@@ -253,7 +253,7 @@ while True:
     vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
     print("prepona", vzdalenost_prepona_cm)
-    vyska = 1.19175359259 * vzdalenost_prepona_cm
+    vyska = 1.19175359259 * vzdalenost_prepona_cm *3
     print(vyska)
     vyska = round(vyska)
 
