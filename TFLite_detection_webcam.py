@@ -256,7 +256,7 @@ while True:
 
 
         # Draw framerate in corner of frame
-        text = "Výška: "+vyska
+        text = "Výška: "+vyska+" cm"
     except:
         text = "Error"
 
