@@ -3,13 +3,17 @@ from time import sleep
 from csv import writer
 from pathlib import Path
 from picamera import PiCamera
-import pygame
 
-pygame.init()
+from sense_hat import SenseHat
+from time import sleep
+sense = SenseHat()
 
-# to spam the pygame.KEYDOWN event every 100ms while key being pressed
-pygame.key.set_repeat(100, 100)
+e = (0, 0, 0)
+w = (255, 255, 255)
 
+sense.clear()
+
+       
 base_folder = Path(__file__).parent.resolve()
 camera = PiCamera()
 camera.resolution = (4056, 3040)
@@ -19,9 +23,10 @@ x=100
 while x < 999:
     imageName = ""
     imageName = str("./img_" + str(x) + ".jpg")
-    camera.capture(imageName)
-    while 1:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYUP:
-                print("stop")
-                x+=1
+    while True:
+        for event in sense.stick.get_events():
+        # Check if the joystick was pressed
+            if event.action == "pressed":
+                    camera.capture(imageName)
+                    x=x+1
+
