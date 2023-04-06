@@ -216,13 +216,13 @@ while True:
             xmax = int(min(imW,(boxes[i][3] * imW)))
             print(classes)
 
-            if classes == "mrak":
+            if object_name == "mrak":
                 mrak.xmin = xmin
                 mrak.ymin = ymin
                 mrak.xmax = xmax
                 mrak.ymax = ymax
             
-            if classes == "stin":
+            if object_name == "stin":
                 stin.xmin = xmin
                 stin.ymin = ymin
                 stin.xmax = xmax
