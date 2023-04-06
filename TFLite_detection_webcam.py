@@ -228,7 +228,6 @@ while True:
                 stin_ymin = ymin
                 stin_xmax = xmax
                 stin_ymax = ymax
-                print("stinxman", stin.xmax)
 
             cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
 
