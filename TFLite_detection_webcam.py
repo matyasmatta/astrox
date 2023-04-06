@@ -249,7 +249,7 @@ while True:
     vzdalenost_x = int(np.round(vzdalenost_x))
     vzdalenost_y = int(np.round(vzdalenost_y))
 
-    vzdalenost_prepona_px = np.sqrt(vzdalenost_x^2 + vzdalenost_y^2)
+    vzdalenost_prepona_px = np.sqrt(vzdalenost_x**2 + vzdalenost_y**2)
     vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
     print("prepona", vzdalenost_prepona_cm)
@@ -259,7 +259,7 @@ while True:
 
 
     # Draw framerate in corner of frame
-    text = "Vyska: "+vyska+" cm"
+    text = str("Vyska: "+str(vyska)+" cm")
 
     cv2.putText(frame,text,(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
