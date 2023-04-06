@@ -237,28 +237,25 @@ while True:
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
-    try:
-        print("mrak_xmin", mrak_xmin)
-        mrak_centre_x = (mrak_xmin+mrak_xmax)/2
-        print("mrak_centre_x", mrak_centre_x)
-        mrak_centre_y = (mrak_ymin+mrak_ymax)/2
-        print("mrak_centre_y", mrak_centre_y)
-        stin_centre_x = (stin_xmin+stin_xmax)/2
-        stin_centre_y = (stin_ymin+stin_ymax)/2
-        vzdalenost_x = abs(mrak_centre_x - stin_centre_x)
-        vzdalenost_y = abs(mrak_centre_y - stin_centre_y)
-        vzdalenost_prepona_px = np.sqrt(vzdalenost_x^2 + vzdalenost_y^2)
-        vzdalenost_prepona_cm = vzdalenost_prepona_px/85
+    print("mrak_xmin", mrak_xmin)
+    mrak_centre_x = (mrak_xmin+mrak_xmax)/2
+    print("mrak_centre_x", mrak_centre_x)
+    mrak_centre_y = (mrak_ymin+mrak_ymax)/2
+    print("mrak_centre_y", mrak_centre_y)
+    stin_centre_x = (stin_xmin+stin_xmax)/2
+    stin_centre_y = (stin_ymin+stin_ymax)/2
+    vzdalenost_x = abs(mrak_centre_x - stin_centre_x)
+    vzdalenost_y = abs(mrak_centre_y - stin_centre_y)
+    vzdalenost_prepona_px = np.sqrt(vzdalenost_x^2 + vzdalenost_y^2)
+    vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
-        print("prepona", vzdalenost_prepona_cm)
-        vyska = 1.19175359259 * vzdalenost_prepona_cm
-        print(vyska)
+    print("prepona", vzdalenost_prepona_cm)
+    vyska = 1.19175359259 * vzdalenost_prepona_cm
+    print(vyska)
 
 
-        # Draw framerate in corner of frame
-        text = "Výška: "+vyska+" cm"
-    except:
-        text = "Error"
+    # Draw framerate in corner of frame
+    text = "Výška: "+vyska+" cm"
 
     cv2.putText(frame,text,(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
