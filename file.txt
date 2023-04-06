@@ -1,1 +1,7 @@
 https://www.youtube.com/watch?v=aimSGOAUI8Y
+
+admin@astro-pi-kit:~ $ /bin/python /home/admin/stream.py
+Traceback (most recent call last):
+  File "/home/admin/stream.py", line 228, in <module>
+    cv2.imwrite(str(filename), frame)
+cv2.error: OpenCV(4.5.5) /tmp/pip-wheel-zspzgea0/opencv-contrib-python-headless_d2ab14f9b3904c4193d75ebd94c66803/opencv/modules/imgcodecs/src/loadsave.cpp:730: error: (-2:Unspecified error) could not find a writer for the specified extension in function 'imwrite_'
