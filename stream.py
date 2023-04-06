@@ -228,11 +228,6 @@ while True:
     cv2.imwrite(str(filename), frame)
     im2 = Image.open(filename)
     im2.show()
-
-    # Press 'q' to quit
-    if cv2.waitKey(1) == ord('q'):
-        break
-
 # Clean up
 cv2.destroyAllWindows()
 videostream.stop()
