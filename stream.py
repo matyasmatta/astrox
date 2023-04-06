@@ -22,11 +22,13 @@ import sys
 import time
 from threading import Thread
 import importlib.util
+import PIL
 from PIL import Image
 from picamera.array import PiRGBArray # Generates a 3D RGB array
 from picamera import PiCamera # Provides a Python interface for the RPi Camera Module
 import time # Provides time-related functions
 import cv2 # OpenCV library
+import numpy
 
 n = 0
 
@@ -226,12 +228,10 @@ while True:
     # Draw framerate in corner of frame
     cv2.putText(frame,'Tady bude vyska',(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
-    # All the results have been drawn on the frame, so it's time to display it.
-    n += 1
-    filename = "./image"+str(n)+".jpg"
-    cv2.imwrite(str(filename), frame)
-    im2 = Image.open(filename)
-    im2.show()
+    # test
+    def toImgPIL(imgOpenCV): return Image.fromarray(cv2.cvtColor(imgOpenCV, cv2.COLOR_BGR2RGB));
+    Pillow_image = toImgPIL(cv2.imread(frame))
+    Pillow_image.show()
 
 
 # Clean up
