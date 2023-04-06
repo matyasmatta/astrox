@@ -238,9 +238,11 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
     try:
-        print(mrak_xmin)
+        print("mrak_xmin", mrak_xmin)
         mrak_centre_x = (mrak_xmin+mrak_xmax)/2
+        print("mrak_centre_x", mrak_centre_x)
         mrak_centre_y = (mrak_ymin+mrak_ymax)/2
+        print("mrak_centre_y", mrak_centre_y)
         stin_centre_x = (stin_xmin+stin_xmax)/2
         stin_centre_y = (stin_ymin+stin_ymax)/2
         vzdalenost_x = abs(mrak_centre_x - stin_centre_x)
@@ -248,7 +250,7 @@ while True:
         vzdalenost_prepona_px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
         vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
-        print(vzdalenost_prepona_cm)
+        print("prepona", vzdalenost_prepona_cm)
         vyska = 1.19175359259 * vzdalenost_prepona_cm
         print(vyska)
 
