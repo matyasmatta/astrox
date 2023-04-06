@@ -196,6 +196,15 @@ while True:
     scores = interpreter.get_tensor(output_details[scores_idx]['index'])[0] # Confidence of detected objects
 
     # Loop over all detections and draw detection box if confidence is above minimum threshold
+    ai_output = {}
+
+    class mrak:
+        pass
+    class stin:
+        pass
+    class vzdalenost:
+        pass
+
     for i in range(len(scores)):
         if ((scores[i] > min_conf_threshold) and (scores[i] <= 1.0)):
 
@@ -205,7 +214,19 @@ while True:
             xmin = int(max(1,(boxes[i][1] * imW)))
             ymax = int(min(imH,(boxes[i][2] * imH)))
             xmax = int(min(imW,(boxes[i][3] * imW)))
+
+            if classes == "mrak":
+                mrak.xmin = xmin
+                mrak.ymin = ymin
+                mrak.xmax = xmax
+                mrak.ymax = ymax
             
+            if classes == "stin":
+                stin.xmin = xmin
+                stin.ymin = ymin
+                stin.xmax = xmax
+                stin.ymax = ymax
+
             cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
 
             # Draw label
@@ -214,7 +235,19 @@ while True:
             labelSize, baseLine = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2) # Get font size
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
-            cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label text
+            cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
+
+    mrak.centre_x = (mrak.xmin+mrak.xmax)/2
+    mrak.centre_y = (mrak.ymin+mrak.ymax)/2
+    stin.centre_x = (stin.xmin+stin.xmax)/2
+    stin.centre_y = (stin.ymin+stin.ymax)/2
+    vzdalenost.x = abs(mrak.centre_x - stin.centre_x)
+    vzdalenost.y = abs(mrak.centre_y - stin.centre_y)
+    vzdalenost.prepona.px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
+    vzdalenost.prepona.cm = vzdalenost.prepona.px/85
+
+    print(vzdalenost.prepona.cm)
+
 
     # Draw framerate in corner of frame
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
