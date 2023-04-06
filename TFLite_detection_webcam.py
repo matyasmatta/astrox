@@ -246,6 +246,9 @@ while True:
     stin_centre_y = (stin_ymin+stin_ymax)/2
     vzdalenost_x = abs(mrak_centre_x - stin_centre_x)
     vzdalenost_y = abs(mrak_centre_y - stin_centre_y)
+    vzdalenost_x = int(np.round(vzdalenost_x))
+    vzdalenost_y = int(np.round(vzdalenost_y))
+
     vzdalenost_prepona_px = np.sqrt(vzdalenost_x^2 + vzdalenost_y^2)
     vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
