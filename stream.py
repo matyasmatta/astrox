@@ -222,7 +222,6 @@ while True:
     cv2.putText(frame,'Tady bude výška',(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
     # All the results have been drawn on the frame, so it's time to display it.
-    cv2.imshow('Object detector', frame)
     n += 1
     cv2.imwrite("image"+n, frame)
 
