@@ -214,6 +214,7 @@ while True:
             xmin = int(max(1,(boxes[i][1] * imW)))
             ymax = int(min(imH,(boxes[i][2] * imH)))
             xmax = int(min(imW,(boxes[i][3] * imW)))
+            print(classes)
 
             if classes == "mrak":
                 mrak.xmin = xmin
