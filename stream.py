@@ -224,8 +224,9 @@ while True:
 
     # All the results have been drawn on the frame, so it's time to display it.
     n += 1
-    cv2.imwrite("image"+str(n), frame)
-    im2 = Image.open()
+    filename = "./image"+str(n)
+    cv2.imwrite(filename, frame)
+    im2 = Image.open(filename)
     im2.show()
 
     # Press 'q' to quit
