@@ -23,6 +23,8 @@ import time
 from threading import Thread
 import importlib.util
 
+n = 0
+
 # Define VideoStream class to handle streaming of video from webcam in separate processing thread
 # Source - Adrian Rosebrock, PyImageSearch: https://www.pyimagesearch.com/2015/12/28/increasing-raspberry-pi-fps-with-python-and-opencv/
 class VideoStream:
@@ -221,6 +223,8 @@ while True:
 
     # All the results have been drawn on the frame, so it's time to display it.
     cv2.imshow('Object detector', frame)
+    n += 1
+    cv2.imwrite("image"+n, frame)
 
     # Calculate framerate
     t2 = cv2.getTickCount()
