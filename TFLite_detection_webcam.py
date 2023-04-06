@@ -218,16 +218,16 @@ while True:
             print(object_name)
 
             if object_name == "mrak":
-                mrak.xmin = xmin
-                mrak.ymin = ymin
-                mrak.xmax = xmax
-                mrak.ymax = ymax
+                mrak_xmin = xmin
+                mrak_ymin = ymin
+                mrak_xmax = xmax
+                mrak_ymax = ymax
             
             if object_name == "stin":
-                stin.xmin = xmin
-                stin.ymin = ymin
-                stin.xmax = xmax
-                stin.ymax = ymax
+                stin_xmin = xmin
+                stin_ymin = ymin
+                stin_xmax = xmax
+                stin_ymax = ymax
                 print("stinxman", stin.xmax)
 
             cv2.rectangle(frame, (xmin,ymin), (xmax,ymax), (10, 255, 0), 2)
@@ -239,18 +239,18 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
     try:
-        print(mrak.xmin)
-        mrak.centre_x = (mrak.xmin+mrak.xmax)/2
-        mrak.centre_y = (mrak.ymin+mrak.ymax)/2
-        stin.centre_x = (stin.xmin+stin.xmax)/2
-        stin.centre_y = (stin.ymin+stin.ymax)/2
-        vzdalenost.x = abs(mrak.centre_x - stin.centre_x)
-        vzdalenost.y = abs(mrak.centre_y - stin.centre_y)
-        vzdalenost.prepona.px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
-        vzdalenost.prepona.cm = vzdalenost.prepona.px/85
+        print(mrak_xmin)
+        mrak_centre_x = (mrak_xmin+mrak_xmax)/2
+        mrak_centre_y = (mrak_ymin+mrak_ymax)/2
+        stin_centre_x = (stin_xmin+stin_xmax)/2
+        stin_centre_y = (stin_ymin+stin_ymax)/2
+        vzdalenost_x = abs(mrak_centre_x - stin_centre_x)
+        vzdalenost_y = abs(mrak_centre_y - stin_centre_y)
+        vzdalenost_prepona_px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
+        vzdalenost_prepona_cm = vzdalenost_prepona_px/85
 
-        print(vzdalenost.prepona.cm)
-        vyska = 1.19175359259 * vzdalenost.prepona.cm
+        print(vzdalenost_prepona_cm)
+        vyska = 1.19175359259 * vzdalenost_prepona_cm
         print(vyska)
 
 
