@@ -255,10 +255,11 @@ while True:
     print("prepona", vzdalenost_prepona_cm)
     vyska = 1.19175359259 * vzdalenost_prepona_cm
     print(vyska)
+    vyska = round(vyska)
 
 
     # Draw framerate in corner of frame
-    text = "Výška: "+vyska+" cm"
+    text = "Vyska: "+vyska+" cm"
 
     cv2.putText(frame,text,(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
