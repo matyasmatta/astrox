@@ -229,8 +229,9 @@ while True:
     cv2.putText(frame,'Tady bude vyska',(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
     # test
+    Pillow_image.close()
     def toImgPIL(imgOpenCV): return Image.fromarray(cv2.cvtColor(imgOpenCV, cv2.COLOR_BGR2RGB));
-    Pillow_image = toImgPIL(cv2.imread(frame))
+    Pillow_image = toImgPIL(frame)
     Pillow_image.show()
 
 
