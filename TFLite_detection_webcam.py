@@ -239,6 +239,7 @@ while True:
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
     try:
+        print(mrak.xmin)
         mrak.centre_x = (mrak.xmin+mrak.xmax)/2
         mrak.centre_y = (mrak.ymin+mrak.ymax)/2
         stin.centre_x = (stin.xmin+stin.xmax)/2
