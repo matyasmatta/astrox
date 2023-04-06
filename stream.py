@@ -22,6 +22,7 @@ import sys
 import time
 from threading import Thread
 import importlib.util
+from PIL import Image
 
 n = 0
 
@@ -223,12 +224,9 @@ while True:
 
     # All the results have been drawn on the frame, so it's time to display it.
     n += 1
-    cv2.imwrite("image"+n, frame)
-
-    # Calculate framerate
-    t2 = cv2.getTickCount()
-    time1 = (t2-t1)/freq
-    frame_rate_calc= 1/time1
+    cv2.imwrite("image"+str(n), frame)
+    im2 = Image.open()
+    im2.show()
 
     # Press 'q' to quit
     if cv2.waitKey(1) == ord('q'):
