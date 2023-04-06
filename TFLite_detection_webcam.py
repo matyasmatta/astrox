@@ -236,20 +236,26 @@ while True:
             label_ymin = max(ymin, labelSize[1] + 10) # Make sure not to draw label too close to top of window
             cv2.rectangle(frame, (xmin, label_ymin-labelSize[1]-10), (xmin+labelSize[0], label_ymin+baseLine-10), (255, 255, 255), cv2.FILLED) # Draw white box to put label text in
             cv2.putText(frame, label, (xmin, label_ymin-7), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 0), 2) # Draw label tex
+    try:
+        mrak.centre_x = (mrak.xmin+mrak.xmax)/2
+        mrak.centre_y = (mrak.ymin+mrak.ymax)/2
+        stin.centre_x = (stin.xmin+stin.xmax)/2
+        stin.centre_y = (stin.ymin+stin.ymax)/2
+        vzdalenost.x = abs(mrak.centre_x - stin.centre_x)
+        vzdalenost.y = abs(mrak.centre_y - stin.centre_y)
+        vzdalenost.prepona.px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
+        vzdalenost.prepona.cm = vzdalenost.prepona.px/85
 
-    mrak.centre_x = (mrak.xmin+mrak.xmax)/2
-    mrak.centre_y = (mrak.ymin+mrak.ymax)/2
-    stin.centre_x = (stin.xmin+stin.xmax)/2
-    stin.centre_y = (stin.ymin+stin.ymax)/2
-    vzdalenost.x = abs(mrak.centre_x - stin.centre_x)
-    vzdalenost.y = abs(mrak.centre_y - stin.centre_y)
-    vzdalenost.prepona.px = np.sqrt(vzdalenost.x^2 + vzdalenost.y^2)
-    vzdalenost.prepona.cm = vzdalenost.prepona.px/85
-
-    print(vzdalenost.prepona.cm)
+        print(vzdalenost.prepona.cm)
+        vyska = 1.19175359259 * vzdalenost.prepona.cm
+        print(vyska)
 
 
-    # Draw framerate in corner of frame
+        # Draw framerate in corner of frame
+        text = "Výška: "+vyska
+    except:
+        pass
+
     cv2.putText(frame,'FPS: {0:.2f}'.format(frame_rate_calc),(30,50),cv2.FONT_HERSHEY_SIMPLEX,1,(255,255,0),2,cv2.LINE_AA)
 
     # All the results have been drawn on the frame, so it's time to display it.
