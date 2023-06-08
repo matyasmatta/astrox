@@ -1,0 +1,72 @@
+{
+    "0": {
+        "xmin": -2,
+        "ymin": -7,
+        "xmax": 499,
+        "ymax": 504,
+        "accuracy": 0.99609375
+    },
+    "1": {
+        "xmin": 102,
+        "ymin": 123,
+        "xmax": 479,
+        "ymax": 493,
+        "accuracy": 0.05078125
+    },
+    "2": {
+        "xmin": 70,
+        "ymin": 40,
+        "xmax": 376,
+        "ymax": 406,
+        "accuracy": 0.04296875
+    },
+    "3": {
+        "xmin": 100,
+        "ymin": 491,
+        "xmax": 200,
+        "ymax": 503,
+        "accuracy": 0.04296875
+    },
+    "4": {
+        "xmin": -19,
+        "ymin": 16,
+        "xmax": 72,
+        "ymax": 101,
+        "accuracy": 0.0390625
+    },
+    "5": {
+        "xmin": -20,
+        "ymin": 86,
+        "xmax": 127,
+        "ymax": 441,
+        "accuracy": 0.03125
+    },
+    "6": {
+        "xmin": 436,
+        "ymin": 146,
+        "xmax": 528,
+        "ymax": 420,
+        "accuracy": 0.03125
+    },
+    "7": {
+        "xmin": -493,
+        "ymin": -538,
+        "xmax": 561,
+        "ymax": 855,
+        "accuracy": 0.03125
+    },
+    "8": {
+        "xmin": 4,
+        "ymin": -1,
+        "xmax": 14,
+        "ymax": 8,
+        "accuracy": 0.03125
+    },
+    "9": {
+        "xmin": 86,
+        "ymin": 1,
+        "xmax": 434,
+        "ymax": 57,
+        "accuracy": 0.02734375
+    }
+}

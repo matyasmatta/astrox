@@ -39,6 +39,7 @@ from pycoral.utils.dataset import read_label_file
 from pycoral.utils.edgetpu import make_interpreter
 import json
 import os
+from os import listdir
 
 
 def draw_objects(draw, objs, labels):
@@ -106,7 +107,7 @@ def ai_model(image_path):
     # image.show()
     if os.path.exists('meta.jpg') == True:
         os.remove('meta.jpg')
-    image.save('meta.jpg')
+    image.save(r'C:\Users\kiv\Downloads\AstroX/meta/meta_' + images + '.bmp')
 
     with open('ai_output.json', 'w', encoding='utf-8') as f:
         json.dump(ai_output, f, ensure_ascii=False, indent=4)
@@ -114,6 +115,7 @@ def ai_model(image_path):
 
 
 if __name__ == '__main__':
-    for files in 
-    data = ai_model('zchop.meta.x000.y000.n011.jpg')
-    print(data)
+    folder_dir = r"C:\Users\kiv\Downloads\AstroX\data_chops_elected"
+    for images in os.listdir(folder_dir):
+        data = ai_model(folder_dir + "/" + images)
+        print(data)

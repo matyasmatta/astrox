@@ -8,7 +8,7 @@ from PIL import Image
 
 photoID = 0
 # get the path or directory
-folder_dir = r"C:\Users\kiv\Documents\GitHub\astrox\data"
+folder_dir = r"C:\Users\kiv\Documents\GitHub\astrox\elected"
 for images in os.listdir(folder_dir):
     photoID += 1
     # check if the image ends with png or jpg or jpeg
@@ -17,7 +17,7 @@ for images in os.listdir(folder_dir):
         # display
         print(images)
         # Opens a image in RGB mode
-        im = Image.open("./data/" + images)
+        im = Image.open(r"C:\Users\kiv\Documents\GitHub\astrox\elected/" + images)
         left = 16
         top = 10
         right = 4056
@@ -46,5 +46,6 @@ for images in os.listdir(folder_dir):
                         y0+chopsize if y0+chopsize < height else height - 1)
                 print('%s %s' % (infile, box))
 
-                images_path = './data_chop/' + images[0] + "_x" + str(x0) + "_y" + str(y0) + ".jpg"
-                img.crop(box).save(images_path,exif=exif)
+                images_path = "C:/Users/kiv/Downloads/AstroX/data_chops_elected/" + images[0] + "_x" + str(x0) + "_y" + str(y0) + ".jpg"
+                if ((x0 == 2020 or x0 == 1515) and (y0 == 505 or y0 == 1010 or y0 == 1515)):
+                    img.crop(box).save(images_path,exif=exif)
