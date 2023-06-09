@@ -71,33 +71,33 @@ class ai:
                     '%s\n%.2f' % (count, obj.score),
                     fill='red')
             count += 1
-    def ai_model(image_path):
-        open(r"model\labelmap.txt")
-        labels = r'model\labelmap.txt'
-        interpreter = make_interpreter(r'model\edgetpu.tflite')
+    def ai_model(path):
+        open(r"model2\labelmap.txt")
+        labels = 'model2\labelmap.txt'
+        interpreter = make_interpreter(r'model/edgetpu.tflite')
         interpreter.allocate_tensors()
 
-        image = Image.open(image_path)
+        image = Image.open(path)
         _, scale = common.set_resized_input(
             interpreter, image.size, lambda size: image.resize(size, Image.ANTIALIAS))
         print(scale)
 
-        # print('----INFERENCE TIME----')
-        # print('Note: The first inference is slow because it includes', 'loading the model into Edge TPU memory.')
-        for _ in range(2):
+        print('----INFERENCE TIME----')
+        print('Note: The first inference is slow because it includes', 'loading the model into Edge TPU memory.')
+        for _ in range(10):
             start = time.perf_counter()
             interpreter.invoke()
             inference_time = time.perf_counter() - start
             objs = detect.get_objects(interpreter, 0, scale)
             print('%.2f ms' % (inference_time * 1000))
 
-        # print('-------RESULTS--------')
+        print('-------RESULTS--------')
         if not objs:
             print('No objects detected')
         counter_for_ai_output = 0
         ai_output = {}
         for obj in objs:
-            #print(labels.get(obj.id, obj.id))
+            print(labels.get(obj.id, obj.id))
             print('  id:    ', obj.id)
             print('  score: ', obj.score)
             print('  bbox:  ', obj.bbox)
@@ -535,7 +535,8 @@ class exif_metadata:
             metadata['longitude'] = get_longitude(path)
 
 if __name__ == '__main__':
-    path = 'data_chop\img_330_x1515_y1010.jpg'
+    path = 'zchop.meta.x000.y000.n011.jpg'
+    path = str(path)
     data = ai.ai_model(path)
     counter_for_shadows = 0
     global metadata
