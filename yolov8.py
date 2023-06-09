@@ -84,8 +84,8 @@ def get_results(result, path, name):
                 else:
                     centre_var = "ycentre"
                 check = []
-                for counter in range(20):
-                    check.append(centre[a]+counter-10)
+                for counter in range(16):
+                    check.append(centre[a]+counter-8)
                 resemble = False
                 for sub_counter in range(i_for_photos-1):
                     try:
@@ -107,7 +107,7 @@ def get_results(result, path, name):
                 print("true")
 
             width = bbox['xmax']-bbox['xmin']
-            if bbox['accuracy'] > 0.6 and resemble_x == False and resemble_y == False and width < 100:
+            if bbox['accuracy'] > 0.65 and resemble_x == False and resemble_y == False and width < 100:
                 draw.rectangle([bbox['xmin'], bbox['ymin'], bbox['xmax'], bbox['ymax']], outline='red')
                 draw.text((bbox['xmin'] + 10, bbox['ymin'] + 10), text = str(i_for_photos), fill='red')
 
@@ -125,7 +125,7 @@ def get_results(result, path, name):
 
     except:
         pass
-    image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_3/meta_' + name +'.bmp')
+    image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_' + name +'.bmp')
     print(skipped)
 
 # Load a model
