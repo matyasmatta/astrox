@@ -68,22 +68,11 @@ def starting_point_corrector(x_centre, y_centre, x_increase_final, y_increase_fi
     return x_final, y_final
 
 def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id="not specified"):
-    # open specific cloud
-    im = Image.open(file_path) # Can be many different formats.
-    pix = im.load()
-
-    # get the width and height of the image for iterating over
-    # print(im.size) 
+    im = Image.open(file_path)
+    pix = im.load() 
     total_x, total_y = im.size
     total_x -= 1
     total_y -= 1
-    # print(total_x, total_y)
-
-    # set coordinates from AI model
-    x = x
-    y = y
-    angle = angle # set the angle (formatted as reduced edoov coefficient) for search, i.e. clockwise
-
 
     # calculate meta angle
     angle_radians =np.radians(angle)
@@ -92,7 +81,6 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     y_increase_meta = -y_increase_meta
     x_increase_meta = np.round(x_increase_meta,5)
     y_increase_meta = np.round(y_increase_meta,5)
-    # print(x_increase_meta, y_increase_meta)
     x_increase_meta_abs = abs(x_increase_meta)
     y_increase_meta_abs = abs(y_increase_meta)
 
@@ -124,10 +112,6 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         x_increase_final = 0
         y_increase_final = 1
 
-    # set absolute final values
-    x_increase_final_abs = abs(x_increase_final)
-    y_increase_final_abs = abs(y_increase_final)
-
     # set values for future reference
     ## do not alter the sums or code will break
     y_sum = 0
@@ -146,7 +130,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     limit_cloud_height = 7500 #not meters
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
     limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
-    limit = limit_shadow_cloud_distance_pixels
+    limit = 30
     # print("limit", limit)
 
     # clear the whole txt file
@@ -155,9 +139,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     with open('stiny_red.txt', 'w') as f:
         f.write("\n")
 
-    if os.path.exists('meta.jpg') == False:
+    if os.path.exists('meta.bmp') == False:
         im2 = im.copy()
-        im.save('meta.jpg')
+        im.save('meta.bmp')
 
     x_increase_abs = abs(x_increase_final)
     y_increase_abs = abs(y_increase_final)
@@ -194,13 +178,13 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         value_red = data[0]
         list_of_red.append(value_red)
         list_of_values.append(value)
-        im2 = Image.open('meta.jpg')
+        im2 = Image.open('meta.bmp')
         im2.putpixel((x,y),(0,0,0,0))
-        im2.save('meta.jpg')
+        im2.save('meta.bmp')
 
     # # print for debugging
     # print(x_increase_final, y_increase_final)
-    im2.save('meta.jpg')
+    im2.save('meta.bmp')
     # set absolute final values
     x_increase_final_abs = abs(x_increase_final)
     y_increase_final_abs = abs(x_increase_final)
@@ -226,57 +210,8 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 # print("př", list_of_values)
                 list_of_values.remove(cloud_high)
                 shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
-                # print("When calculating via min max, the shadow resulted being negative, recalculation in progress.")
-                # print("po", list_of_values)
             else:
                 break
-        with open('pixels.csv', "r") as f:
-            csv_file = csv.reader(f, delimiter=",")
-            for row in csv_file:
-                # print(row)
-                if not ''.join(row).strip():
-                    pass
-                else:
-                    try:
-                        if int(row[1]) == cloud_id and int(row[0]) == image_id and int(row[2]) == shadow_location:
-                            x = row[3]
-                            y = row[4]
-                            x = int(x)
-                            y = int(y)
-                            im3 = Image.open('meta.jpg')
-                            im3.putpixel((x,y),(255,255,255,0))
-                            print("found it!", x, y, shadow_location)
-                            im3.show()
-                            im3.save('meta.jpg')
-                            break
-                        else:
-                            pass
-                    except:
-                        pass
-        with open('pixels.csv', "r") as f:
-            csv_file = csv.reader(f, delimiter=",")
-            for row in csv_file:
-                if not ''.join(row).strip():
-                    pass
-                else:
-                    try:
-                        if int(row[1]) == cloud_id and int(row[0]) == image_id and int(row[2]) == cloud_location:
-                            x = row[3]
-                            y = row[4]
-                            x = int(x)
-                            y = int(y)
-                            im3 = Image.open('meta.jpg')
-                            im3.putpixel((x,y),(255,0,0,0))
-                            print("found it!", x, y, cloud_location)
-                            im3.show()
-                            im3.save('meta.jpg')
-                            break
-                        else:
-                            pass
-                    except:
-                        pass
-        # find difference between the two pixel lenghts
-        # print("minmax", shadow_lenght)
         return shadow_lenght
 
     def calculate_using_maximum_change(list_of_values):

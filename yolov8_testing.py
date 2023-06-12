@@ -125,7 +125,7 @@ def get_results(result, path, name):
 
     except:
         pass
-    image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_' + name +'.bmp')
+    image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_7/meta_' + name +'.bmp')
     print(skipped)
     
 # Load a model
