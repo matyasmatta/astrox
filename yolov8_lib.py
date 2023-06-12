@@ -127,14 +127,15 @@ def get_results(result, path, name):
         pass
     image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_' + name +'.bmp')
     print(skipped)
-
-# Load a model
-model = YOLO("yolov8_latest.pt")  # load a pretrained model (recommended for training)
-class_list = model.model.names
-scale_show = 100
-for file_name in os.listdir(r'C:\Users\kiv\Downloads\AstroX\chops'):
-    file_path = r'C:\Users\kiv\Downloads\AstroX\chops/'+ file_name
-    results = model(file_path)  # predict on an image
-    img = cv2.imread(file_path)
-    img = resize_image(img, 200)
-    get_results(results, file_path, file_name)
+    
+def main():
+    # Load a model
+    model = YOLO("yolov8_latest.pt")  # load a pretrained model (recommended for training)
+    class_list = model.model.names
+    scale_show = 100
+    for file_name in os.listdir(r'C:\Users\kiv\Downloads\AstroX\chops'):
+        file_path = r'C:\Users\kiv\Downloads\AstroX\chops/'+ file_name
+        results = model(file_path)  # predict on an image
+        img = cv2.imread(file_path)
+        img = resize_image(img, 200)
+        get_results(results, file_path, file_name)

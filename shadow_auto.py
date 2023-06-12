@@ -1,0 +1,3 @@
+import yolov8_lib
+
+yolov8_lib.get_results
