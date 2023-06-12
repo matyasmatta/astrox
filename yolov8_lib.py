@@ -136,6 +136,3 @@ def get_results(path, name):
     image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_' + name +'.bmp')
     print(skipped)
     return ai_output
-
-var = get_results(r'C:\Users\kiv\Downloads\AstroX\chops\corrected_img_21_3.jpg', 'corrected_img_21_3.jpg')
-print(var)
