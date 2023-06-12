@@ -53,8 +53,16 @@ def draw_box(img, result, class_list) :
                     , text_color, 2 ,cv2.LINE_AA)
     return out_image
 
-def get_results(result, path, name):
-    xyxy= result[0].boxes.data.numpy()
+def get_results(path, name):
+    # configuration (migrated from main())
+    model = YOLO("yolov8_latest.pt")
+    class_list = model.model.names
+    scale_show = 100
+    results = model(path) 
+    img = cv2.imread(path)
+    img = resize_image(img, 200)
+
+    xyxy= results[0].boxes.data.numpy()
     i_for_search = 0
     i_for_photos = 0
     bbox = {}
@@ -127,15 +135,7 @@ def get_results(result, path, name):
         pass
     image.save(r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_' + name +'.bmp')
     print(skipped)
-    
-def main():
-    # Load a model
-    model = YOLO("yolov8_latest.pt")  # load a pretrained model (recommended for training)
-    class_list = model.model.names
-    scale_show = 100
-    for file_name in os.listdir(r'C:\Users\kiv\Downloads\AstroX\chops'):
-        file_path = r'C:\Users\kiv\Downloads\AstroX\chops/'+ file_name
-        results = model(file_path)  # predict on an image
-        img = cv2.imread(file_path)
-        img = resize_image(img, 200)
-        get_results(results, file_path, file_name)
+    return ai_output
+
+var = get_results(r'C:\Users\kiv\Downloads\AstroX\chops\corrected_img_21_3.jpg', 'corrected_img_21_3.jpg')
+print(var)
