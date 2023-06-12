@@ -5,6 +5,8 @@ import PySimpleGUI as sg
 import numpy as np
 import csv
 from tkinter import messagebox
+import tkinter as tk
+
 
 list_of_cisilko = []
 ultra_destroy = 0
@@ -24,7 +26,7 @@ def resize_image(img) :
     return resized
 
 def write_valid(tuple1, tuple2):
-    global cisilko
+    global cisilkoout
     global list_of_clouds
     list_of_clouds.append(image_name)
     list_of_clouds.append(str(cisilko))
@@ -39,7 +41,7 @@ def write_valid(tuple1, tuple2):
     list_of_clouds.append(str(distance_px))
     distance_m=distance_px*126.8
     list_of_clouds.append(str(distance_m))
-    with open('output.csv', mode='a', newline='') as file:
+    with open('eda/output.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(list_of_clouds)
@@ -56,7 +58,7 @@ def write_invalid():
     list_to_write.append(image_name)
     list_to_write.append(str(cisilko))
     list_to_write.append('False')
-    with open('output.csv', mode='a', newline='') as file:
+    with open('eda/output.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(list_to_write)
@@ -107,7 +109,7 @@ def manual():
             break
         for i in range(1,5):
             if ultra_destroy == 1:
-                with open('output.csv', mode='a', newline='') as file:
+                with open('eda/output.csv', mode='a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow(['shiiiiit - ultra destroy'])
                 break
@@ -115,7 +117,7 @@ def manual():
             global cisilko, image_name, list_of_clouds
             image_name = 'img_'+str(p)+'_'+str(i)
             #image_path = r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_corrected_'+image_name+'.jpg.bmp'
-            image_path = 'meta_corrected_img_23_2.jpg.bmp'
+            image_path = 'eda/meta_corrected_img_23_2.jpg.bmp'
             global img
             img = cv2.imread(image_path, 1)
             img = resize_image(img)
@@ -139,14 +141,14 @@ def manual():
                 #start skipnutí chopu
                 if key == 45:  # Stisknuta klávesa '-'
                     print("Žádné mraky")
-                    with open('output.csv', mode='a', newline='') as file:
+                    with open('eda/output.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'no clouds'))
                     break
                 elif key == 43:  # Stisknuta klávesa '+'
                     print("Obrázek je moc světlý") 
-                    with open('output.csv', mode='a', newline='') as file:
+                    with open('eda/output.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'too bright'))  
@@ -175,8 +177,21 @@ def manual():
                         prev_key = key
                         validation = False                                
                 elif key == 27: #ESC
-                    ultra_destroy = 1
-                    break
+                    result = messagebox.askquestion("Potvrzení", "Opravdu chcete zrušit celý program?")
+                    if result == "yes":
+                        ultra_destroy = 1
+                        break
+                elif key == 98:
+                    result = messagebox.askquestion("Potvrzení", "Opravdu chcete zrušit měření mraku?")
+                    if result == "yes":
+                        global first_point
+                        first_point = (0, 0)
+                        try:
+                            list_of_cisilko.remove(cisilko)
+                        except:
+                            pass
+                        validation = False
+                        geting_pixels = False
                 elif key == 105:
                     messagebox.showinfo('Udělané mraky', sorted(list_of_cisilko))
                 #konec nastavení čísílka
@@ -242,7 +257,7 @@ def main():
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
-    with open('output.csv', mode='w', newline='') as file:
+    with open('eda/output.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(('chop', 'cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m'))
