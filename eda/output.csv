@@ -1,0 +1,13 @@
+chop,cloud number,valid,x mrak,y mrak,x stin,y stin
+img_0_1,0,False
+img_0_1,no clouds
+img_0_2,0,False
+img_0_2,1,True,710,870,591,750
+img_0_2,no clouds
+img_0_3,too bright
+img_0_3,no clouds
+img_0_4,too bright
+img_0_4,too bright
+img_0_4,too bright
+img_0_4,too bright
+img_0_4,too bright

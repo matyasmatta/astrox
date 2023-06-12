@@ -18,22 +18,41 @@ def resize_image(img, scale_percent) :
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     return resized
 
-def write(distance):
+def write_valid(tuple1, tuple2):
     global cisilko
+    global list_of_clouds
     list_of_clouds.append(image_name)
     list_of_clouds.append(str(cisilko))
     list_of_clouds.append('True')
-    list_of_clouds.append(str(distance))
-def distance(tuple1, tuple2):
-    x1,y1=tuple1
-    x2,y2=tuple2
-    distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-    print('Distance in pixels:', distance)
-    write(distance)
-    fill()
-    cv2.putText(img, "Set cloud", (600, 1040), cv2.FONT_HERSHEY_SIMPLEX ,1, (255, 0, 0), 2)
-    cv2.imshow('image', img)
+    x1,y1 = tuple1
+    x2,y2= tuple2
+    list_of_clouds.append(str(x1))
+    list_of_clouds.append(str(y1))
+    list_of_clouds.append(str(x2))
+    list_of_clouds.append(str(y2))
+    with open('eda/output.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        # Zápis dat ze seznamu
+        writer.writerow(list_of_clouds)
+
+    list_of_clouds = list()
+
+    print('NAPSAL JSEM USPESNY MRAK')
+
     return 
+
+def write_invalid():
+    list_to_write = []
+    list_to_write.append(image_name)
+    list_to_write.append(str(cisilko))
+    list_to_write.append('False')
+    with open('eda/output.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        # Zápis dat ze seznamu
+        writer.writerow(list_to_write)
+    print('NAPSAL JSEM NEUSPESNY MRAK')
+
+
 def click_event(event, x, y, parms, args):
     global first_point, second_point, cisilko
     # checking for left mouse clicks
@@ -57,7 +76,7 @@ def click_event(event, x, y, parms, args):
             cv2.line(img, first_point, second_point, (256, 0, 0), 3)
             print('Line coordinates are:', first_point, second_point)
             cv2.imshow('image', img)
-            distance(first_point, second_point)
+            write_valid(first_point, second_point)
             first_point = (0,0)
             second_point = (0,0)
             cv2.setMouseCallback('image', do_nothing)
@@ -96,12 +115,19 @@ def manual():
                 #start skipnutí chopu
                 if key == 45:  # Stisknuta klávesa '-'
                     print("Žádné mraky")
+                    with open('eda/output.csv', mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        # Zápis dat ze seznamu
+                        writer.writerow((image_name, 'no clouds'))
                     break
                 elif key == 43:  # Stisknuta klávesa '+'
-                    print("Obrázek je moc světlý")   
+                    print("Obrázek je moc světlý") 
+                    with open('eda/output.csv', mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        # Zápis dat ze seznamu
+                        writer.writerow((image_name, 'too bright'))  
+                    break
                 #konec skipnutí chopu
-                global cisilko
-                cisilko = -1
                 #nastavení čísílka
                 if key == 2490368:  # Šipka nahoru
                     cisilko += 1
@@ -145,6 +171,7 @@ def manual():
                     if key == 48 + annotation_mode:
                         print(cisilko, 'is not valid')
                         geting_pixels = False
+                        write_invalid()
                     elif key == 49 + annotation_mode:
                         print(cisilko, 'is valid, continue with distance')
                         geting_pixels = True
@@ -160,78 +187,9 @@ def manual():
                     cv2.imshow('image', img)
                     cv2.setMouseCallback('image', click_event)
                 #konec získání pixelů
-            global list_of_clouds
-            print('\n----\n\nFINÁLNÍ LIST\n', (list_of_clouds))
-            with open('output.txt', 'a') as file:
-                # Zápis seznamu do souboru
-                file.write(image_path)
-                file.write('\n')
-                for item in list_of_clouds:
-                    file.write(str(item) + '\n')
-                file.write('\n')
-
-
-            with open('output.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                # Zápis dat ze seznamu
-                writer.writerows(list_of_clouds)
-                print('měl bych to mít NAPSANEEEEEEEEEEEEEEE')
-
-            list_of_clouds = list()
 
     # close the window
     cv2.destroyAllWindows()
-
-'''
-                if key == 2490368: #šipka hore
-                    cisilko +=1
-                if key >= 48 and key <= 57:  # Kontrola, zda je stisknuto číslo 0 až 9
-                    if prev_key is not None:
-                        fill()
-                        cv2.putText(img, "Validate", (600, 1040), cv2.FONT_HERSHEY_SIMPLEX ,1, (255, 0, 0), 2)
-                        cv2.imshow('image', img)
-                        cisilko = int(chr(prev_key) + chr(key))
-                        print("Currently working with:" + str(cisilko))
-                        prev_key = None
-                        points = np.array([[200, 1010], [200, 1050], [600, 1050], [600, 1010]], np.int32)
-                        cv2.fillPoly(img, [points], (255, 255, 255))
-                        cv2.imshow('image', img)  
-                        cv2.putText(img, "Cloud No.:" + str(cisilko), (200, 1040), cv2.FONT_HERSHEY_SIMPLEX ,1, (255, 0, 0), 2)
-                        cv2.imshow('image', img)
-                        key = cv2.waitKey(0)
-                        if key == 48 + annotation_mode:
-                            print(cisilko, 'is not valid')
-                        elif key == 49 + annotation_mode:
-                            print(cisilko, 'is valid, continue with distance')
-                            fill()
-                            cv2.putText(img, "Set cloud pixel", (600, 1040), cv2.FONT_HERSHEY_SIMPLEX ,1, (255, 0, 0), 2)
-                            cv2.imshow('image', img)
-                            cv2.setMouseCallback('image', click_event)
-                        elif key == 50 + annotation_mode:
-                            print("Image", image_name, "was skipped.")
-                            break
-                        else:
-                            print('Invalid key was pressed')
-                    else:
-                        prev_key = key
-                elif key == 27: #ESC
-                    print("Image", image_name, "was skipped.")
-                    break
-
-
-            global list_of_clouds
-            print('\n----\n\nFINÁLNÍ LIST\n', (list_of_clouds))
-            with open('output.txt', 'a') as file:
-                # Zápis seznamu do souboru
-                file.write(image_path)
-                file.write('\n')
-                for item in list_of_clouds:
-                    file.write(str(item) + '\n')
-                file.write('\n')
-            list_of_clouds = list()
-    # close the window
-    cv2.destroyAllWindows()
-'''
 
 def destroy():
     key = cv2.waitKey(1) & 0xFF
@@ -248,7 +206,13 @@ def main():
     second_point = (0,0)
     manual()
 
+
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
+    with open('eda/output.csv', mode='w', newline='') as file:
+        writer = csv.writer(file)
+        # Zápis dat ze seznamu
+        writer.writerow(('chop', 'cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin'))
+    list_of_clouds = []
     main()
