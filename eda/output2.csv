@@ -70,3 +70,7 @@ chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdal
 img_0_1, ,0,True,315,354,288,319,44.204072210600685,5605.076356304166,31.93750237930078,3220.991706627399
 img_0_2,no clouds
 img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,True,298,379,275,271,110.42191811411355,14001.499216869599,31.93750237930078,8046.047902124183
+img_0_1, ,22,False
+img_0_1,shiiiiit - ultra destroy
