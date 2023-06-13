@@ -30,3 +30,43 @@ img_0_1, ,11,True,411,330,399,289,42.720018726587654,5416.898374531314,31.937502
 img_0_1, ,11,True,282,377,272,337,41.23105625617661,5228.097933283194,31.93750237930078,3004.3587302073115
 img_0_1,shiiiiit - ultra destroy
 chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,False
+img_0_1, ,1,True,290,291,269,241,54.230987451824994,6876.489208891409,31.93750237930078,3951.6169458852028
+img_0_1, ,1,True,240,281,219,248,39.11521443121589,4959.809189878175,31.93750237930078,2850.184948699926
+img_0_1, ,1,True,229,340,221,321,20.615528128088304,2614.048966641597,31.93750237930078,1502.1793651036558
+img_0_1, ,1,True,315,401,287,355,53.85164807134504,6828.388975446551,31.93750237930078,3923.9758499992427
+img_0_2, ,77,False
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,False
+img_0_1, ,22,True,416,338,416,315,23.0,2916.4,31.93750237930078,1675.927251667646
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,True,269,372,243,306,70.9365914038728,8994.75979001107,0,0.0
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,True,400,401,392,366,35.90264614203248,4552.455530809719,31.93750237930078,2616.0966554961965
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,True,358,338,324,287,61.29437168288782,7772.126329390176,31.93750237930078,4466.300342486842
+img_0_2,no clouds
+img_0_3,too bright
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1,shiiiiit - ultra destroy
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1,shiiiiit - ultra destroy
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1,shiiiiit - ultra destroy
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku
+img_0_1, ,0,True,315,354,288,319,44.204072210600685,5605.076356304166,31.93750237930078,3220.991706627399
+img_0_2,no clouds
+img_0_3,too bright

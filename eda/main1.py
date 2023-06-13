@@ -25,7 +25,7 @@ def resize_image(img) :
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     return resized
 
-def write_to_csv(optional_arg1=(), optional_arg2=()):
+def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
     global image_name, variable_getting_pixels
     list_to_write = []
     list_to_write.append(image_name)
@@ -33,8 +33,8 @@ def write_to_csv(optional_arg1=(), optional_arg2=()):
     list_to_write.append(str(cisilko))
     list_to_write.append(str(variable_getting_pixels))
     if variable_getting_pixels == True:
-        x1,y1 = optional_arg1
-        x2,y2= optional_arg2
+        x1,y1 = optional_arg2
+        x2,y2= optional_arg3
         list_to_write.append(str(x1))
         list_to_write.append(str(y1))
         list_to_write.append(str(x2))
@@ -43,8 +43,8 @@ def write_to_csv(optional_arg1=(), optional_arg2=()):
         list_to_write.append(str(distance_px))
         distance_m=distance_px*126.8
         list_to_write.append(str(distance_m))
-        list_to_write.append(str(altitude))
-        cloud_high = math.tan(altitude)*distance_m
+        list_to_write.append(str(optional_arg1))
+        cloud_high = math.tan(optional_arg1)*distance_m
         list_to_write.append(cloud_high)
     with open('eda/output2.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
@@ -63,15 +63,12 @@ def write_to_csv(optional_arg1=(), optional_arg2=()):
     getting_cisilko = True
 
 def click_event(event, x, y, parms, args):
-    # checking for left mouse clicks
+
     if event == cv2.EVENT_LBUTTONDOWN:
-        # displaying the coordinates
-        # on the Shell
-        # displaying the coordinates
-        # on the image window
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(img, str(x) + ',' +str(y), (x, y), font,0.25*size_of_everything, (255, 0, 0), 1*size_of_everything)
+        #psaní textu
+        cv2.putText(img, str(x) + ',' +str(y), (x, y), cv2.FONT_HERSHEY_SIMPLEX,0.25*size_of_everything, (255, 0, 0), 1*size_of_everything)
         cv2.imshow('image', img)
+
         global first_point, second_point
         if first_point == (0, 0):
             first_point = (x, y)
@@ -82,7 +79,7 @@ def click_event(event, x, y, parms, args):
             second_point = (x, y)
             cv2.line(img, first_point, second_point, (256, 0, 0), 1*size_of_everything)
             cv2.imshow('image', img)
-            write_to_csv(first_point, second_point)
+            write_to_csv(altitude, first_point, second_point)
             first_point = (0,0)
             second_point = (0,0)
             cv2.setMouseCallback('image', do_nothing)
@@ -96,8 +93,11 @@ def fill():
     cv2.imshow('image', img)    
 
 def manual():
-    global img, altitude, list_of_clouds, first_point, second_point, ultra_destroy, cisilko, list_of_cisilko
-    global image_name, variable_getting_pixels
+    global img, ultra_destroy, cisilko, list_of_cisilko
+    global first_point, second_point
+    first_point = (0,0)
+    second_point = (0,0)
+    global image_name
     for p in range (367):
         if ultra_destroy == 1:
             break     
@@ -114,45 +114,38 @@ def manual():
             #image_path = r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_corrected_'+image_name+'.jpg.bmp'
             image_path = 'eda\meta_corrected_img_23_2.jpg.bmp'
             image_path_for_sun = 'eda/img_23.jpg'
+            global altitude
             altitude = get_sun(image_path_for_sun)   
             img = cv2.imread(image_path, 1)
             img = resize_image(img)
-            img = cv2.copyMakeBorder(img, 0, int(25*size_of_everything), 0, 0, cv2.BORDER_CONSTANT, value=(255,255,255))
+            #přidat spodek
+            img = cv2.copyMakeBorder(img, 0, int(25*size_of_everything), 0, 0, cv2.BORDER_CONSTANT, value=(255,255,255)) 
+            #napsat jméno obrázku
             img = cv2.putText(img, image_name, (10*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
-            # displaying the image
             cv2.imshow('image', img)
         
-            # setting mouse handler for the image
-            # and calling the click_event() function
+            #psaní
             fill()
             cv2.putText(img, "Set cloud", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
             cv2.imshow('image', img)
+
+            global getting_cisilko, variable_validation, variable_getting_pixels
             getting_cisilko = True
             variable_validation = False
             variable_getting_pixels = False
             while True:
-
                 # wait for a key to be pressed to exit
                 key = cv2.waitKeyEx(0)
                 print('klíč je:', key)             
 
                 if key == 45:  # Stisknuta klávesa '-'
                     print("Žádné mraky")
-                    with open('eda/output.csv', mode='a', newline='') as file:
-                        writer = csv.writer(file)
-                        # Zápis dat ze seznamu
-                        writer.writerow((image_name, 'no clouds'))
                     with open('eda/output2.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'no clouds'))
                     break
                 elif key == 43:  # Stisknuta klávesa '+'
-                    print("Obrázek je moc světlý") 
-                    with open('eda/output.csv', mode='a', newline='') as file:
-                        writer = csv.writer(file)
-                        # Zápis dat ze seznamu
-                        writer.writerow((image_name, 'too bright'))  
                     with open('eda/output2.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
@@ -195,11 +188,13 @@ def manual():
                 if variable_validation == True:
                     getting_cisilko = False
                     list_of_cisilko.append(cisilko)
+
+                    #napsání validate
                     fill()
                     cv2.putText(img, "Validate", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
                     cv2.imshow('image', img)
                     
-                    #napsání CLoud No. XY
+                    #napsání Cloud No. XY
                     points = np.array([[100*size_of_everything, 505*size_of_everything],
                    [100*size_of_everything, 525*size_of_everything],
                    [300*size_of_everything, 525*size_of_everything],
@@ -208,7 +203,8 @@ def manual():
                     cv2.imshow('image', img)  
                     cv2.putText(img, "Cloud No.:" + str(cisilko), (100*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
                     cv2.imshow('image', img)
-                                        
+
+                    #samotná validace
                     key = cv2.waitKey(0)
                     if key == 48 + annotation_mode:
                         print(cisilko, 'is not valid')
@@ -219,6 +215,7 @@ def manual():
                     elif key == 49 + annotation_mode:
                         print(cisilko, 'is valid, continue with distance')
                         variable_getting_pixels = True
+                        variable_validation = False
                     else:
                         messagebox.showinfo('Zpráva','Jiná klávesa než 0 nebo 1 - znovu napiš číslo mraku')
                         getting_cisilko = True
@@ -229,14 +226,19 @@ def manual():
                 #start získání pixelů
                 if variable_getting_pixels == True:
                     variable_validation = False
+
+                    #naspsání Set cloud pixel
                     fill()
                     cv2.putText(img, "Set cloud pixel", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
                     cv2.imshow('image', img)
+
+                    #nevim moc co ale čeká (vlastně ne nebo nevím) to na kliknutí
                     cv2.setMouseCallback('image', click_event)
-                    if key == 98:
+
+                    #zrušení měření jednoho mraku
+                    if key == 98: #klávesa b
                         result = messagebox.askquestion("Potvrzení", "Opravdu chcete zrušit měření mraku?")
                         if result == "yes":
-                            global first_point
                             first_point = (0, 0)
                             try:
                                 list_of_cisilko.remove(cisilko)
@@ -315,17 +317,9 @@ def get_sun(image_path):
     # now we calculate the sun altitude using a function
     altitude = altitude(latitude, longitude, year, month, day, hour, minute, second)
     return altitude
-'''
-def validation():
-
-def getting_pixels():'''
 
 def main():
-    global altitude, list_of_clouds, first_point, second_point, ultra_destroy
-    altitude = 0
-    list_of_clouds = list()
-    first_point = (0,0)
-    second_point = (0,0)
+    global ultra_destroy
     ultra_destroy = 0
     manual()
 
