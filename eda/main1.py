@@ -29,6 +29,7 @@ def write_valid(tuple1, tuple2):
     global cisilkoout
     global list_of_clouds
     list_of_clouds.append(image_name)
+    list_of_clouds.append(' ')
     list_of_clouds.append(str(cisilko))
     list_of_clouds.append('True')
     x1,y1 = tuple1
@@ -56,6 +57,7 @@ def write_valid(tuple1, tuple2):
 def write_invalid():
     list_to_write = []
     list_to_write.append(image_name)
+    list_to_write.append(' ')
     list_to_write.append(str(cisilko))
     list_to_write.append('False')
     with open('eda/output.csv', mode='a', newline='') as file:
@@ -108,6 +110,7 @@ def manual():
         if ultra_destroy == 1:
             break
         for i in range(1,5):
+            list_of_cisilko = []
             if ultra_destroy == 1:
                 with open('eda/output.csv', mode='a', newline='') as file:
                     writer = csv.writer(file)
@@ -194,7 +197,12 @@ def manual():
                         geting_pixels = False
                 elif key == 105:
                     messagebox.showinfo('Udělané mraky', sorted(list_of_cisilko))
+                elif key == 112:
+                    result = messagebox.askquestion("Potvrzení", "Pokračovat na další mrak")
+                    if result == "yes":
+                        break
                 #konec nastavení čísílka
+                
                 geting_pixels = False
                 #start validace
                 if validation == True:
@@ -260,6 +268,6 @@ if __name__=="__main__":
     with open('eda/output.csv', mode='w', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
-        writer.writerow(('chop', 'cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m'))
+        writer.writerow(('chop', 'error?','cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m', 'vyska slunce', 'vyska mraku'))
     list_of_clouds = []
     main()
