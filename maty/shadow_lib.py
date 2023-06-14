@@ -230,7 +230,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     cloudheight = np.tan(altitude_radians)*lenght
     cloudheight = np.round(cloudheight,2)
 
-    return cloudheight
+    return cloudheight, shadow_lenght_final
 
 if __name__ == '__main__':
     cloudheight = calculate_shadow('zchop.meta.x000.y000.n011.jpg', 294,199,270)
