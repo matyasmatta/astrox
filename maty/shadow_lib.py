@@ -111,7 +111,6 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     if q == 4:
         x_dir = -1
         y_dir = -1
-    print(x_increase_abs, y_increase_abs, x_dir, y_dir)
 
     x_sum = 0
     y_sum = 0
@@ -140,7 +139,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     # set absolute final values
     x_increase_final_abs = abs(x_increase_final)
     y_increase_final_abs = abs(x_increase_final)
-
+    
     def calculate_using_min_max(list_of_values):
         def main():
             # find items in list correspoding to the lowest and highest point

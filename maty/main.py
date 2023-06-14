@@ -35,7 +35,9 @@ for files in os.listdir(folder_path):
     azimuth = exifmeta.sun_data.azimuth(exifmeta.get_latitude(path), exifmeta.get_longitude(path), year, month, day, hour, minute, second)
     angle = (north + azimuth + 180) % 360
     for i in range(len(ai_output)):
-        shadow_output = shadow_lib.calculate_shadow(x=ai_output[i]['xcentre'], y=ai_output[i]['ycentre'],file_path=path, angle = angle, run_path = run_path, file_name = files)
+        try: shadow_output = shadow_lib.calculate_shadow(x=ai_output[i]['xcentre'], y=ai_output[i]['ycentre'],file_path=path, angle = angle, run_path = run_path, 
+        file_name = files)
+        except: shadow_output = "Error was raised properly"
         ai_output[i]["shadow_lenght"] = shadow_output
     with open(run_path + "/ai_output/ai_output_" + files +".json", "w") as outfile:
         json.dump(ai_output, outfile, indent=4, default=lambda x: x.tolist() if isinstance(x, np.ndarray) else str(x))
