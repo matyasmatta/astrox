@@ -166,7 +166,7 @@ def main():
     first_point = (0,0)
     second_point = (0,0)
     global image_name
-    for p in range (367):
+    for p in range (23,25):
         if ultra_destroy == 1:
             break     
         for i in range(1,5):
