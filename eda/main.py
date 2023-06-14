@@ -44,7 +44,8 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
         distance_m=distance_px*126.8
         list_to_write.append(str(distance_m))
         list_to_write.append(str(optional_arg1))
-        cloud_high = math.tan(optional_arg1)*distance_m
+        altitude_rad = optional_arg1/180*np.pi
+        cloud_high = math.tan(altitude_rad)*distance_m
         list_to_write.append(cloud_high)
     with open('eda/output2.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
