@@ -219,6 +219,14 @@ def main():
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'too bright'))  
                     break
+                elif key == 110: #klávesa n - všechny mraky jsou nevalidní
+                    result = messagebox.askquestion("Potvrzení", "Jsou všechny mraky nevalidní?")
+                    if result == "yes":
+                        variable_getting_pixels = False
+                        for cisilko in range(0,100):
+                            write_to_csv()
+                        break
+
                 elif key == 27: #ESC
                     result = messagebox.askquestion("Potvrzení", "Opravdu chcete zrušit celý program?")
                     if result == "yes":
