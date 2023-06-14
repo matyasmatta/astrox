@@ -17,12 +17,10 @@ def write_pixel_into_json(count, x, y, cloud_id="not specified", image_id="not s
 
 def starting_point_corrector(x_centre, y_centre, x_increase_final, y_increase_final):
     constant_for_starting_point_correction = 10
-    x_final = x_centre - constant_for_starting_point_correction*x_increase_final
-    y_final = y_centre - constant_for_starting_point_correction*y_increase_final
-    x_final = round(x_final, 0)
-    x_final = int(x_final)
-    y_final = round(y_final, 0)
-    y_final = int(y_final)
+    x_final = x_centre + constant_for_starting_point_correction*x_increase_final
+    y_final = y_centre + constant_for_starting_point_correction*y_increase_final
+    x_final = round(x_final)
+    y_final = round(y_final)
     return x_final, y_final
 
 def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id="not specified", run_path = "./", file_name = "not_specified"):
@@ -32,7 +30,9 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     total_x -= 1
     total_y -= 1
 
-    meta_name =  run_path +"/meta_shadow/meta" + file_name + ".bmp"
+    meta_name =  run_path +"/meta_shadow/meta_" + file_name + ".bmp"
+    pixels_txt_classic_name = run_path +"/pixel_txt/normal_" + file_name + str(cloud_id) + ".txt"
+    pixels_txt_red_name = run_path +"/pixel_txt/classic_" + file_name + str(cloud_id) + ".txt"
 
     # calculate meta angle
     angle_radians =np.radians(angle)
@@ -88,10 +88,6 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     limit = limit_shadow_cloud_distance_pixels
 
     # clear the whole txt file
-    with open('stiny.txt', 'w') as f:
-        f.write("\n")
-    with open('stiny_red.txt', 'w') as f:
-        f.write("\n")
 
     if os.path.exists(meta_name) == False:
         im2 = im.copy()
@@ -111,6 +107,8 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     if q == 4:
         x_dir = -1
         y_dir = -1
+
+    x, y = starting_point_corrector(x, y, x_increase_final, y_increase_final)
 
     x_sum = 0
     y_sum = 0
@@ -136,9 +134,12 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         im2.save(meta_name)
         count += 1
     im2.save(meta_name)
-    # set absolute final values
-    x_increase_final_abs = abs(x_increase_final)
-    y_increase_final_abs = abs(x_increase_final)
+    with open(pixels_txt_classic_name, "a") as file:
+        for i in range(len(list_of_values)):
+            file.write(str(list_of_values[i]) + "\n") 
+    with open(pixels_txt_red_name, "a") as file:
+        for i in range(len(list_of_red)):
+            file.write(str(list_of_red[i]) + "\n") 
     
     def calculate_using_min_max(list_of_values):
         def main():
@@ -160,11 +161,13 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
             else:
                 break
-        return shadow_lenght
+        return shadow_lenght, cloud_location
 
     def calculate_using_maximum_change(list_of_values):
-        def main():
-            n = 0
+        _, n = calculate_using_min_max(list_of_values)
+        print("The n coefficient for max_change was set to", n,)
+    
+        def main(n):
             list_of_changes = []
             while n < len(list_of_values):
                 try:
@@ -189,13 +192,12 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             # print("max difference", shadow_lenght)
             # im2.show()
             return shadow_lenght, cloud_high, cloud_location
-        shadow_lenght, cloud_high, cloud_location = main()
+        shadow_lenght, cloud_high, cloud_location = main(n)
         while True:
-            n = 0
             if shadow_lenght <= 0:
                 item_to_be_deleted = list_of_values[cloud_location]
                 list_of_values.remove(item_to_be_deleted)
-                shadow_lenght, cloud_high, cloud_location = main()
+                shadow_lenght, cloud_high, cloud_location = main(n)
                 # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
             else:
                 break
@@ -208,13 +210,23 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         distanceinmeters = int(distanceinpixels)*142
         return distanceinmeters
     
-    shadow_lenght_min_max = calculate_using_min_max(list_of_values)
+    shadow_lenght_min_max, _ = calculate_using_min_max(list_of_values)
+    shadow_lenght_min_max_red, _ = calculate_using_min_max(list_of_red)
     shadow_lenght_max_difference = calculate_using_maximum_change(list_of_values)
     shadow_lenght_max_difference_red = calculate_using_maximum_change(list_of_red)
-    shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red)/3
+    
+    if abs(shadow_lenght_min_max_red - shadow_lenght_min_max) > 10:
+        shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max)/2
+        message = "Difference between methods was too high"
+    else:
+        shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red+shadow_lenght_min_max_red)/4
+    all_methods = list()
+    all_methods.append(shadow_lenght_min_max)
+    all_methods.append(shadow_lenght_min_max_red)
+    all_methods.append(shadow_lenght_max_difference)
+    all_methods.append(shadow_lenght_max_difference_red)
+    difference_of_methods = max(all_methods) - min(all_methods)
 
-    difference_of_methods = abs(shadow_lenght_max_difference-shadow_lenght_min_max)
-    difference_of_methods = np.round(difference_of_methods,2)
 
     # calculate distance using said function
     lenght = distance(60, shadow_lenght_final)
@@ -230,7 +242,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     cloudheight = np.tan(altitude_radians)*lenght
     cloudheight = np.round(cloudheight,2)
 
-    return cloudheight, shadow_lenght_final
+    return cloudheight, shadow_lenght_final, shadow_lenght_min_max, shadow_lenght_max_difference, difference_of_methods
 
 if __name__ == '__main__':
     cloudheight = calculate_shadow('zchop.meta.x000.y000.n011.jpg', 294,199,270)
