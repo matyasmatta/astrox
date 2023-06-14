@@ -46,7 +46,7 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
         list_to_write.append(str(optional_arg1))
         cloud_high = math.tan(optional_arg1)*distance_m
         list_to_write.append(cloud_high)
-    with open('eda/output2.csv', mode='a', newline='') as file:
+    with open('eda/output_david.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(list_to_write)
@@ -173,7 +173,7 @@ def main():
             list_of_cisilko = []
             prev_key = None
             if ultra_destroy == 1:
-                with open('eda/output2.csv', mode='a', newline='') as file:
+                with open('eda/output_david.csv', mode='a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([image_name, 'shiiiiit - ultra destroy'])
                 break
@@ -208,13 +208,13 @@ def main():
 
                 if key == 45:  # Stisknuta klávesa '-'
                     print("Žádné mraky")
-                    with open('eda/output2.csv', mode='a', newline='') as file:
+                    with open('eda/output_david.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'no clouds'))
                     break
                 elif key == 43:  # Stisknuta klávesa '+'
-                    with open('eda/output2.csv', mode='a', newline='') as file:
+                    with open('eda/output_david.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'too bright'))  
@@ -331,8 +331,8 @@ def main():
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
-    size_of_everything = 1 # 1 je cca 505 px
-    with open('eda/output2.csv', mode='a', newline='') as file:
+    size_of_everything = 2 # 1 je cca 505 px
+    with open('eda/output_david.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(('chop', 'error?','cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m', 'vyska slunce', 'vyska mraku'))
