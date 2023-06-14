@@ -180,8 +180,8 @@ def main():
             # reading the image
             image_name = 'img_'+str(p)+'_'+str(i)
             #image_path = r'C:\Users\kiv\Downloads\AstroX\meta_yolo_5/meta_corrected_'+image_name+'.jpg.bmp'
-            image_path = 'eda\meta_corrected_img_23_2.jpg.bmp'
-            image_path_for_sun = 'eda/img_23.jpg'
+            image_path = 'eda\meta_corrected_'+image_name+'.jpg.bmp'
+            image_path_for_sun = 'eda/img_'+str(p)+'.jpg'
             global altitude
             altitude = get_sun(image_path_for_sun)   
             img = cv2.imread(image_path, 1)
