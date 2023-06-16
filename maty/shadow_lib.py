@@ -84,7 +84,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     sun_altitude_for_limit_radians = altitude*(np.pi/180)
     limit_cloud_height = 7500 #not meters
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
-    limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/142
+    limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/126.48
     limit = limit_shadow_cloud_distance_pixels
 
     # clear the whole txt file
@@ -229,7 +229,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
 
 
     # calculate distance using said function
-    lenght = distance(60, shadow_lenght_final)
+    lenght = shadow_lenght_final*126.48
 
     # because original lenghts is not Archimedes-compatible we will have to convert
     angle_final_radians = angle_final*(np.pi/180)
