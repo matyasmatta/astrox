@@ -82,7 +82,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     altitude = exifmeta.sun_data.altitude(exifmeta.get_latitude(file_path), exifmeta.get_longitude(file_path), year, month, day, hour, minute, second)
 
     sun_altitude_for_limit_radians = altitude*(np.pi/180)
-    limit_cloud_height = 7500 #not meters
+    limit_cloud_height = 3000 #not meters
     limit_shadow_cloud_distance = limit_cloud_height/np.tan(sun_altitude_for_limit_radians)
     limit_shadow_cloud_distance_pixels = limit_shadow_cloud_distance/126.48
     limit = limit_shadow_cloud_distance_pixels
@@ -207,7 +207,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     # define a simple function to calculate distance based on a given FOV and distance in pixels
     def distance(fieldOfView, distanceinpixels):
         fieldOfViewRadians = fieldOfView*(np.pi/180)
-        distanceinmeters = int(distanceinpixels)*142
+        distanceinmeters = int(distanceinpixels)*126.48
         return distanceinmeters
     
     shadow_lenght_min_max, _ = calculate_using_min_max(list_of_values)
