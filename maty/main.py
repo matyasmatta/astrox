@@ -25,7 +25,7 @@ os.mkdir(run_path+"/ai_output_csv")
 os.mkdir(run_path+"/pixel_txt")
 del folder_path, i, file, run_count
 
-folder_path = r'C:\Users\kiv\Downloads\AstroX\test\1/'
+folder_path = r'C:\Users\kiv\Downloads\AstroX\test\3/'
 for files in os.listdir(folder_path):
 
     path = folder_path + "/" + files
