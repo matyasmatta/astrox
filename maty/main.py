@@ -23,16 +23,17 @@ os.mkdir(run_path+"/meta_shadow")
 os.mkdir(run_path+"/ai_output_json")
 os.mkdir(run_path+"/ai_output_csv")
 os.mkdir(run_path+"/pixel_txt")
+os.mkdir(run_path+"/pixel_graph")
 del folder_path, i, file, run_count
 
-folder_path = r'C:\Users\kiv\Downloads\AstroX\test\3/'
+folder_path = r'C:\Users\kiv\Downloads\AstroX\chops'
 for files in os.listdir(folder_path):
 
     path = folder_path + "/" + files
     ai_output = yolov8_lib.get_results(path = path, name=files, run_path=run_path)
     ai_output = {k: v for k, v in ai_output.items() if v} # Empty items are created, hence need to be removed
 
-    path2 = folder_path + "/" + files[0:14] + str(int(re.findall(r'\d+', files)[0]) + 1) + files[-6:]
+    path2 = r'C:\Users\kiv\Downloads\AstroX\chops' + "/" + files[0:14] + str(int(re.findall(r'\d+', files)[0]) + 1) + files[-6:]
     north = north_lib.find_north_fast(path, path2)
     year, month, day, hour, minute, second = exifmeta.find_time(path)
     azimuth = exifmeta.sun_data.azimuth(exifmeta.get_latitude(path), exifmeta.get_longitude(path), year, month, day, hour, minute, second)
