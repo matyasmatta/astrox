@@ -41,7 +41,7 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
         list_to_write.append(str(y2))
         distance_px = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
         list_to_write.append(str(distance_px))
-        distance_m=distance_px*126.8
+        distance_m=distance_px*126.48
         list_to_write.append(str(distance_m))
         list_to_write.append(str(optional_arg1))
         cloud_high = math.tan(optional_arg1)*distance_m
