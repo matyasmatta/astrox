@@ -31,8 +31,8 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
     total_y -= 1
 
     meta_name =  run_path +"/meta_shadow/meta_" + file_name + ".bmp"
-    pixels_txt_classic_name = run_path +"/pixel_txt/normal_" + file_name + str(cloud_id) + ".txt"
-    pixels_txt_red_name = run_path +"/pixel_txt/classic_" + file_name + str(cloud_id) + ".txt"
+    pixels_txt_classic_name = run_path +"/pixel_txt/classic_" + file_name + str(cloud_id) + ".txt"
+    pixels_txt_red_name = run_path +"/pixel_txt/red_" + file_name + str(cloud_id) + ".txt"
 
     # calculate meta angle
     angle_radians =np.radians(angle)
@@ -121,7 +121,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             y += y_dir
         x_sum += x_increase_abs
         y_sum += y_increase_abs
-        if x > total_x or y > total_y or x == 1 or y == 1 or count >= limit:
+        if x > total_x or y > total_y or x == 1 or y == 1 or count >= (limit+10): # + constant_for_starting_point_correction, občas chyběl konec stínu
             break
         
         data = (pix[x,y])
