@@ -47,9 +47,9 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
         altitude_rad = optional_arg1/180*np.pi
         cloud_high = math.tan(altitude_rad)*distance_m
         list_to_write.append(cloud_high)
-        sorted_list_to_write.append((image_name, '', cisilko, variable_getting_pixels, x1, y1, x2, y2, distance_px, distance_m, optional_arg1, cloud_high, p, i))
+        sorted_list_to_write.append([image_name, '', cisilko, variable_getting_pixels, x1, y1, x2, y2, distance_px, distance_m, optional_arg1, cloud_high, p, i])
     else:
-        sorted_list_to_write.append((image_name, '', cisilko, variable_getting_pixels, '', '', '', '', '', '', '', '', p, i))
+        sorted_list_to_write.append([image_name, '', cisilko, variable_getting_pixels, '', '', '', '', '', '', '', '', p, i])
     with open('eda/output2.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
@@ -66,103 +66,58 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
     global getting_cisilko
     getting_cisilko = True
 
-def write_sorted_1():
-    # Otevření vstupního souboru CSV
-    with open('eda\output_for_deleting.csv', 'r') as input_file:
-        reader = csv.reader(input_file)
-        rows = list(reader)
+class new_csv():
+    def write_missing(rows):
+        # Vytvoření seznamu čísel ve třetím sloupci
+        numbers = []
+        for row in rows:
+            number = int(row[2])
+            numbers.append(number)
+        image_name = row[0]
+        p=row[-2]
+        i=row[-1]
+        for y in range(max(numbers)):
+            if y not in numbers:
+                rows.append([image_name, '', y, 'False', '', '', '', '', '', '', '', '', p, i])
+        print(rows)    
+        return rows
 
-    # Vytvoření seznamu čísel ve třetím sloupci
-    numbers = []
-    for row in rows:
-        number = row[2]
-        numbers.append(number)
+    def write_sorted(rows):  
+        # Vytvoření seznamu čísel ve třetím sloupci
+        numbers = []
+        for row in rows:
+            number = row[2]
+            numbers.append(number)
+        for i in range(len(numbers)-1):
+            numbers = []
+            for row in rows:
+                number = row[2]
+                numbers.append(number)
+            for j in range(i+1, len(numbers)):
+                if numbers[i] == numbers[j]:
+                    row_i = rows[i]
+                    row_j = rows[j]
+                    if row_i[3] ==True and row_j[3] ==True:
+                        rows.remove(row_j)
+                        break
+                    elif row_i[3] ==True:
+                        rows.remove(row_j)
+                        break
+                    elif row_j[3] ==True: 
+                        rows.remove(row_i)
+                        break
+                    else:
+                        rows.remove(row_i)
+                        break
+        sorted_rows = sorted(rows, key=lambda x: (x[-2], x[-1], x[2]))
 
-    #musí být seřazený za sebou
-    # Kontrola, zda se v seznamu čísel vyskytují duplicity
-    has_duplicates = False
-    line_deleted = False
-    updated_rows = []
-    for i in range(len(numbers)):
-        if line_deleted == False:
-            row_i = rows[i]
-            if i == len(numbers)-1:
-                updated_rows.append(row_i)
-                break
-            j = i+1
-            row_j = rows[j]
-            if numbers[i] == numbers[j]:
-                line_deleted = True
-                if row_i[3] == 'True' and row_j[3] == 'True':
-                    updated_rows.append(row_i)
-                elif row_i[3] == 'True':
-                    updated_rows.append(row_i)
-                elif row_j[3] == 'True': 
-                    updated_rows.append(row_j)
-                else:
-                    updated_rows.append(row_i)
-            else:
-                updated_rows.append(row_i)
-        else:
-            line_deleted = False
+        print(sorted_rows)
+        return sorted_rows
 
-
-    # Otevření výstupního souboru CSV
-    with open('eda\output_after_1.csv', 'w', newline='') as output_file:
-        writer = csv.writer(output_file)
-        writer.writerows(updated_rows)
-
-    with open('eda\output_for_deleting.csv', 'w') as file:
-        file.truncate(0)
-
-def write_sorted_2():
-    # Otevření vstupního souboru CSV
-    with open('eda\output_after_1.csv', 'r') as input_file:
-        reader = csv.reader(input_file)
-        rows = list(reader)
-
-    # Vytvoření seznamu čísel ve třetím sloupci
-    numbers = []
-    for row in rows:
-        number = row[2]
-        numbers.append(number)
-
-    #musí být seřazený za sebou
-    # Kontrola, zda se v seznamu čísel vyskytují duplicity
-    has_duplicates = False
-    line_deleted = False
-    updated_rows = []
-    for i in range(len(numbers)):
-        if line_deleted == False:
-            row_i = rows[i]
-            if i == len(numbers)-1:
-                updated_rows.append(row_i)
-                break
-            j = i+1
-            row_j = rows[j]
-            if numbers[i] == numbers[j]:
-                line_deleted = True
-                if row_i[3] == 'True' and row_j[3] == 'True':
-                    updated_rows.append(row_i)
-                elif row_i[3] == 'True':
-                    updated_rows.append(row_i)
-                elif row_j[3] == 'True': 
-                    updated_rows.append(row_j)
-                else:
-                    updated_rows.append(row_i)
-            else:
-                updated_rows.append(row_i)
-        else:
-            line_deleted = False
-
-
-
-    # Otevření výstupního souboru CSV
-    with open('eda\output_after_2.csv', 'w', newline='') as output_file:
-        writer = csv.writer(output_file)
-        writer.writerows(updated_rows)
-    with open('eda\output_after_1.csv', 'w') as file:
-        file.truncate(0)
+    def write_sorted_csv(rows):
+        with open('eda\output_pro', 'w', newline='') as output_file:
+            writer = csv.writer(output_file)
+            writer.writerows(rows)
 
 def click_event(event, x, y, parms, args):
 
@@ -277,7 +232,7 @@ def main():
             sorted_list_to_write = []
             prev_key = None
             if ultra_destroy == 1:
-                with open('eda/output2.csv', mode='a', newline='') as file:
+                with open('eda/output_pro.csv', mode='a', newline='') as file:
                     writer = csv.writer(file)
                     writer.writerow([image_name, 'shiiiiit - ultra destroy'])
                 break
@@ -320,7 +275,7 @@ def main():
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'no clouds'))
-                    with open('eda/output_after_2.csv', mode='a', newline='') as file:
+                    with open('eda/output_pro.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'no clouds'))
@@ -331,29 +286,11 @@ def main():
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'too bright'))  
-                    with open('eda/output_After_2.csv', mode='a', newline='') as file:
+                    with open('eda/output_pro.csv', mode='a', newline='') as file:
                         writer = csv.writer(file)
                         # Zápis dat ze seznamu
                         writer.writerow((image_name, 'too bright'))  
                     break
-                elif key == 110: #klávesa n - všechny mraky jsou nevalidní
-                    chop_skipped = True
-                    result = messagebox.askquestion("Potvrzení", "Jsou všechny mraky nevalidní?")
-                    if result == "yes":
-                        sorted_list_to_write_110 = []
-                        variable_getting_pixels = False
-                        max_cloud = int(askstring('Nejvyšší mrak', 'Jaké je nejvyšší číslo mraku na obrázku?'))
-                        for cisilko in range(0,max_cloud+1):
-                            write_to_csv()
-                        for c in range(max_cloud+1):
-                            sorted_list_to_write_110.append((image_name, '', c, 'False', '', '', '', '', '', '', '', '', p, i))
-                        with open('eda/output_after_2.csv', mode='a', newline='') as file:
-                            writer = csv.writer(file)
-                            for tuple0 in sorted_list_to_write_110:
-                                writer.writerow(tuple0)
-
-                        break
-
                 elif key == 27: #ESC
                     chop_skipped = True
                     result = messagebox.askquestion("Potvrzení", "Opravdu chcete zrušit celý program?")
@@ -362,9 +299,12 @@ def main():
                         break
                 elif key == 105:
                     messagebox.showinfo('Udělané mraky', sorted(list_of_cisilko))
-                elif key == 112:
+                elif key == 112 or key == 110: #klávesa p nebo n
                     result = messagebox.askquestion("Potvrzení", "Pokračovat na další obrázek?")
                     if result == "yes":
+                        break
+                    if result == 'no':
+                        messagebox.showinfo('Zpráva', 'Špatná odpoveď, nejde to vrátit')
                         break
                 #konec skipnutí chopu
                 
@@ -460,35 +400,33 @@ def main():
             
             if chop_skipped == False:
                 #napsání všech čísel
-                for c in range(max(list_of_cisilko)+1):
-                    if c not in list_of_cisilko:
-                        sorted_list_to_write.append((image_name, '', c, 'False', '', '', '', '', '', '', '', '', p, i))
-                with open('eda/output_for_deleting.csv', mode='a', newline='') as file:
-                    writer = csv.writer(file)
-                    new_sorted_list_to_write = sorted(sorted_list_to_write, key=lambda x: (x[-2], x[-1], x[2]))
-                    for tuple0 in new_sorted_list_to_write:
-                        writer.writerow(tuple0)
-                write_sorted_1()
-                write_sorted_2()
-
+                print(sorted_list_to_write)
+                try:
+                    rows=new_csv.write_missing(sorted_list_to_write)
+                    rows=new_csv.write_sorted(rows)
+                    new_csv.write_sorted_csv(rows)
+                except:
+                    with open('eda/output_pro.csv', mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        # Zápis dat ze seznamu
+                        writer.writerow((image_name, 'Sum Ting Wong'))  
+      
+                        
     # close the window
     cv2.destroyAllWindows()
 
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
-    size_of_everything = 1 # 1 je cca 505 px
-    with open('eda\output_for_deleting.csv', 'w') as file:
-        file.truncate(0)
-    with open('eda\output_after_1', 'w') as file:
-        file.truncate(0)
-
+    size_of_everything = 1.9 # 1 je cca 505 px
+    size_int = int(size_of_everything)
+    print(size_int)
     with open('eda/output2.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
         writer.writerow(('chop', 'error?','cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m', 'vyska slunce', 'vyska mraku'))
-    with open('eda/output_after_2.csv', mode='a', newline='') as file:
+    with open('eda/output_pro.csv', mode='a', newline='') as file:
         writer = csv.writer(file)
         # Zápis dat ze seznamu
-        writer.writerow(('chop', 'error?','cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m', 'vyska slunce', 'vyska mraku', 'cislo img', 'cislo chopu'))
+        writer.writerow(('chop', 'error?','cloud number', 'valid', 'x mrak', 'y mrak', 'x stin', 'y stin', 'vzdalenost v px', 'vzdalenost v m', 'vyska slunce', 'vyska mraku', 'cislo img', 'cislo chopu', 'size of everything je:'+str(size_of_everything)))
     main()

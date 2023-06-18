@@ -32,3 +32,47 @@ img_23_1,,30,False,,,,,,,,,23,1
 img_23_1,,31,False,,,,,,,,,23,1
 img_23_1,,32,False,,,,,,,,,23,1
 img_23_1,,33,False,,,,,,,,,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,,0,True,392,323,346,278,64.35060217278468,8159.656355509097,31.93750237930078,5086.351846917971,23,1
+img_23_1,,1,False,,,,,,,,,23,1
+img_23_1,,2,False,,,,,,,,,23,1
+img_23_1,,3,False,,,,,,,,,23,1
+img_23_1,,4,False,,,,,,,,,23,1
+img_23_1,,5,False,,,,,,,,,23,1
+img_23_1,,6,False,,,,,,,,,23,1
+img_23_1,,7,False,,,,,,,,,23,1
+img_23_1,,8,True,409,254,378,214,50.60632371551998,6416.881847127933,31.93750237930078,3999.986937263264,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,,0,True,310,265,285,249,29.68164415931166,3763.6324794007182,31.93750237930078,2346.0741701206025,23,1
+img_23_1,,1,False,,,,,,,,,23,1
+img_23_1,,2,False,,,,,,,,,23,1
+img_23_1,,3,False,,,,,,,,,23,1
+img_23_1,,4,False,,,,,,,,,23,1
+img_23_1,,5,False,,,,,,,,,23,1
+img_23_1,,6,False,,,,,,,,,23,1
+img_23_1,,7,False,,,,,,,,,23,1
+img_23_1,,8,True,334,243,315,214,34.66987164671943,4396.139724804024,31.93750237930078,2740.34989150855,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,,0,True,390,288,359,262,40.45985664828782,5130.309823002895,31.93750237930078,3197.997526681881,23,1
+img_23_1,,1,False,,,,,,,,,23,1
+img_23_1,,2,False,,,,,,,,,23,1
+img_23_1,,3,False,,,,,,,,,23,1
+img_23_1,,4,False,,,,,,,,,23,1
+img_23_1,,5,False,,,,,,,,,23,1
+img_23_1,,6,False,,,,,,,,,23,1
+img_23_1,,7,False,,,,,,,,,23,1
+img_23_1,,8,True,399,272,380,246,32.202484376209235,4083.275018903331,31.93750237930078,2545.3245245862013,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,,0,True,327,291,314,272,23.021728866442675,2919.1552202649314,31.93750237930078,1819.666159838956,23,1
+img_23_1,,2,False,,,,,,,,,23,1
+img_23_1,,3,False,,,,,,,,,23,1
+img_23_1,,4,False,,,,,,,,,23,1
+img_23_1,,5,False,,,,,,,,,23,1
+img_23_1,,6,False,,,,,,,,,23,1
+img_23_1,,7,False,,,,,,,,,23,1
+img_23_1,,8,True,337,286,312,249,44.654227123532216,5662.155999263885,31.93750237930078,3529.5257998149677,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_3,no clouds
+img_23_4,too bright
