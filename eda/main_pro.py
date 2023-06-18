@@ -417,7 +417,7 @@ def main():
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
-    size_of_everything = 1.69 # 1 je cca 505 px
+    size_of_everything = 1.85 # 1 je cca 505 px
     size_int = int(size_of_everything)
     print(size_int)
     with open('eda/output2.csv', mode='a', newline='') as file:
