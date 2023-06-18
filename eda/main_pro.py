@@ -55,12 +55,12 @@ def write_to_csv(optional_arg1=(), optional_arg2=(), optional_arg3=()):
         # Zápis dat ze seznamu
         writer.writerow(list_to_write)
     fill()
-    cv2.putText(img, "Set cloud", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+    cv2.putText(img, "Set cloud", (int(300*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX, 0.5*size_of_everything, (255, 0, 0), 2)
     cv2.imshow('image', img)
-    points = np.array([[100*size_of_everything, 505*size_of_everything],
-                   [100*size_of_everything, 525*size_of_everything],
-                   [300*size_of_everything, 525*size_of_everything],
-                   [300*size_of_everything, 505*size_of_everything]], np.int32)
+    points = np.array([[int(100*size_of_everything), int(505*size_of_everything)],
+                   [int(100*size_of_everything), int(525*size_of_everything)],
+                   [int(300*size_of_everything), int(525*size_of_everything)],
+                   [int(300*size_of_everything), int(505*size_of_everything)]], np.int32)
     cv2.fillPoly(img, [points], (255, 255, 255))
     cv2.imshow('image', img)  
     global getting_cisilko
@@ -130,7 +130,7 @@ def click_event(event, x, y, parms, args):
         if first_point == (0, 0):
             first_point = (x, y)
             fill()
-            cv2.putText(img, "Set shadow pixel", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+            cv2.putText(img, "Set shadow pixel", (int(300*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
             cv2.imshow('image', img)
         else:
             second_point = (x, y)
@@ -142,10 +142,10 @@ def click_event(event, x, y, parms, args):
             cv2.setMouseCallback('image', do_nothing)
 
 def fill():
-    points = np.array([[300*size_of_everything, 505*size_of_everything],
-                   [300*size_of_everything, 525*size_of_everything],
-                   [505*size_of_everything, 525*size_of_everything],
-                   [505*size_of_everything, 505*size_of_everything]], np.int32)
+    points = np.array([[int(300*size_of_everything), int(505*size_of_everything)],
+                   [int(300*size_of_everything), int(525*size_of_everything)],
+                   [int(505*size_of_everything), int(525*size_of_everything)],
+                   [int(505*size_of_everything), int(505*size_of_everything)]], np.int32)
     cv2.fillPoly(img, [points], (255, 255, 255))
     cv2.imshow('image', img)    
 
@@ -248,14 +248,13 @@ def main():
             #přidat spodek
             img = cv2.copyMakeBorder(img, 0, int(25*size_of_everything), 0, 0, cv2.BORDER_CONSTANT, value=(255,255,255)) 
             #napsat jméno obrázku
-            img = cv2.putText(img, image_name, (10*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+            img = cv2.putText(img, image_name, (int(10*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX, 0.5*size_of_everything, (255, 0, 0), 2)
             cv2.imshow('image', img)
         
             #psaní
-            fill()
-            cv2.putText(img, "Set cloud", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+            fill()  
+            cv2.putText(img, "Set cloud", (int(300*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX, 0.5*size_of_everything, (255, 0, 0), 2)            
             cv2.imshow('image', img)
-
             global getting_cisilko, variable_validation, variable_getting_pixels, max_cisilko
             getting_cisilko = True
             variable_validation = False
@@ -340,17 +339,17 @@ def main():
 
                     #napsání validate
                     fill()
-                    cv2.putText(img, "Validate", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+                    cv2.putText(img, "Validate", (int(300*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX, int(0.5*size_of_everything), (255, 0, 0), 2)                    
                     cv2.imshow('image', img)
                     
                     #napsání Cloud No. XY
-                    points = np.array([[100*size_of_everything, 505*size_of_everything],
-                   [100*size_of_everything, 525*size_of_everything],
-                   [300*size_of_everything, 525*size_of_everything],
-                   [300*size_of_everything, 505*size_of_everything]], np.int32)
+                    points = np.array([[int(100*size_of_everything), int(505*size_of_everything)],
+                                        [int(100*size_of_everything), int(525*size_of_everything)],
+                                        [int(300*size_of_everything), int(525*size_of_everything)],
+                                        [int(300*size_of_everything), int(505*size_of_everything)]], np.int32)
                     cv2.fillPoly(img, [points], (255, 255, 255))
                     cv2.imshow('image', img)  
-                    cv2.putText(img, "Cloud No.:" + str(cisilko), (100*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+                    cv2.putText(img, "Cloud No.:" + str(cisilko), (int(100*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
                     cv2.imshow('image', img)
 
                     #samotná validace
@@ -378,7 +377,7 @@ def main():
 
                     #naspsání Set cloud pixel
                     fill()
-                    cv2.putText(img, "Set cloud pixel", (300*size_of_everything, 520*size_of_everything), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
+                    cv2.putText(img, "Set cloud pixel", (int(300*size_of_everything), int(520*size_of_everything)), cv2.FONT_HERSHEY_SIMPLEX ,0.5*size_of_everything, (255, 0, 0), 2)
                     cv2.imshow('image', img)
 
                     #nevim moc co ale čeká (vlastně ne nebo nevím) to na kliknutí
@@ -418,7 +417,7 @@ def main():
 if __name__=="__main__":
     # 0 for Maty, 1 for Eda
     annotation_mode = 0
-    size_of_everything = 1.9 # 1 je cca 505 px
+    size_of_everything = 1.69 # 1 je cca 505 px
     size_int = int(size_of_everything)
     print(size_int)
     with open('eda/output2.csv', mode='a', newline='') as file:
