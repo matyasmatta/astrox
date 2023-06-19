@@ -1,0 +1,50 @@
+
+
+"('img_23_1', '', 0, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 6, True, 375, 296, 312, 224, 95.67131231461184, 12131.122401492781, 31.93750237930078, 7561.9798363641985, 23, 1)","('img_23_1', '', 3, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 0, True, 313, 307, 293, 276, 36.89173349139343, 4677.871806708687, 31.93750237930078, 2915.9686225797827, 23, 1)"
+"('img_23_2', '', 0, False, '', '', '', '', '', '', '', '', 23, 2)","('img_23_2', '', 8, True, 319, 332, 304, 305, 30.886890422961002, 3916.457705631455, 31.93750237930078, 2441.3383378535423, 23, 2)","('img_23_2', '', 4, False, '', '', '', '', '', '', '', '', 23, 2)"
+
+
+
+"('img_23_1', '', 0, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 8, True, 373, 187, 327, 144, 62.96824596572466, 7984.373588453887, 31.93750237930078, 4977.088688385294, 23, 1)","('img_23_1', '', 3, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 0, True, 349, 445, 319, 402, 52.43090691567332, 6648.2389969073765, 31.93750237930078, 4144.2042688281945, 23, 1)"
+"('img_23_1', '', 0, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 8, True, 373, 187, 327, 144, 62.96824596572466, 7984.373588453887, 31.93750237930078, 4977.088688385294, 23, 1)","('img_23_1', '', 3, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 0, True, 349, 445, 319, 402, 52.43090691567332, 6648.2389969073765, 31.93750237930078, 4144.2042688281945, 23, 1)"
+"('img_23_1', '', 0, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 8, True, 373, 187, 327, 144, 62.96824596572466, 7984.373588453887, 31.93750237930078, 4977.088688385294, 23, 1)","('img_23_1', '', 3, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 0, True, 349, 445, 319, 402, 52.43090691567332, 6648.2389969073765, 31.93750237930078, 4144.2042688281945, 23, 1)"
+"('img_23_1', '', 0, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 8, True, 373, 187, 327, 144, 62.96824596572466, 7984.373588453887, 31.93750237930078, 4977.088688385294, 23, 1)","('img_23_1', '', 3, False, '', '', '', '', '', '', '', '', 23, 1)","('img_23_1', '', 0, True, 349, 445, 319, 402, 52.43090691567332, 6648.2389969073765, 31.93750237930078, 4144.2042688281945, 23, 1)"
+img_23_1,,0,False,,,,,,,,,23,1
+img_23_1,,8,False,,,,,,,,,23,1
+img_23_1,,6,True,153,384,131,348,42.190046219457976,5349.697860627271,31.93750237930078,3334.7538680943535,23,1
+img_23_1,,0,True,283,385,251,314,77.87810988975015,9874.944334020318,31.93750237930078,6155.582926926168,23,1
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_3,Sum Ting Wong
+img_23_4,Sum Ting Wong
+img_24_1,no clouds
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+img_23_2,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+img_23_2,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu
+img_23_1,Sum Ting Wo+ng
+img_23_2,Sum Ting Wo+ng
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.9
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.9
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:2
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.9
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.8
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.69
+img_23_1,Sum Ting Wong
+img_23_2,shiiiiit - ultra destroy
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.8
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.9
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.85
+chop,error?,cloud number,valid,x mrak,y mrak,x stin,y stin,vzdalenost v px,vzdalenost v m,vyska slunce,vyska mraku,cislo img,cislo chopu,size of everything je:1.85
+img_23_1,Sum Ting Wong
+img_23_2,shiiiiit - ultra destroy
