@@ -69,7 +69,7 @@ class main():
             writer.writerows(rows)
 
 
-rows = main.write_missing('eda\david\output2_eda_to_posral.csv', 'eda\david\output_snad_opraveno.csv')
+rows = main.write_missing('eda\tomas\output_od_tomase.csv', 'eda\tomas\output_snad_opraveno.csv')
 
 '''
     with open(input_file, 'r') as file:
