@@ -69,7 +69,7 @@ class main():
             writer.writerows(rows)
 
 
-rows = main.write_missing('eda\tomas/output_final_final_tomas.csv', 'eda\tomas/output_snad_opravene.csv')
+rows = main.write_missing(r'eda\tomas\output_final_final_Tomas.csv', r'C:\Users\kiv\Documents\GitHub\astrox\eda\tomas\output_snad_opravene.csv')
 
 '''
     with open(input_file, 'r') as file:
