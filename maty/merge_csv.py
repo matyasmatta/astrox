@@ -20,8 +20,8 @@ def merge_csv_files(csv_folder, output_file):
                     writer.writerow(row_print)
 
 # Specify the folder containing the CSV files and the output file path
-csv_folder = r'C:\Users\kiv\Downloads\AstroX\runs\62\ai_output_csv'
-output_file = 'merge1.csv'
+csv_folder = r'C:\Users\kiv\Documents\dlouho\6\ai_output_csv'
+output_file = 'merge2.csv'
 
 # Merge CSV files
 merge_csv_files(csv_folder, output_file)
