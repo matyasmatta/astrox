@@ -110,6 +110,7 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
 
     x, y = starting_point_corrector(x, y, x_increase_final, y_increase_final)
 
+    # Beautifully simplified method when compared to release ;)
     x_sum = 0
     y_sum = 0
     while True:
@@ -134,6 +135,8 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         im2.save(meta_name)
         count += 1
     im2.save(meta_name)
+
+    # Get pixel data into txts; later for graphs
     with open(pixels_txt_classic_name, "a") as file:
         for i in range(len(list_of_values)):
             file.write(str(list_of_values[i]) + "\n") 
@@ -141,32 +144,44 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
         for i in range(len(list_of_red)):
             file.write(str(list_of_red[i]) + "\n") 
     
+    # This is the first method that is used to calculate the shadow lenght
     def calculate_using_min_max(list_of_values):
+        # Define internal function
         def main():
-            # find items in list correspoding to the lowest and highest point
+            # Find items in list correspoding to the lowest and highest point
             shadow_low = min(list_of_values)
             cloud_high = max(list_of_values)
 
-            # find of said items in the list (their order)
+            # Find of said items in the list (their order)
             shadow_location = list_of_values.index(shadow_low)
             cloud_location = list_of_values.index(cloud_high)
 
-            # find the difference
+            # Find the difference
             shadow_lenght = shadow_location - cloud_location
             return shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location
+        
+        # Initialise run
         shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+
+        # Validate if data is 1) positive and there is 2) no shadow in the complete beginning (returns wrong values)
         while shadow_lenght <= 0:
             if shadow_location < 10:
                 list_of_values.remove(shadow_low)
             else:
                 list_of_values.remove(cloud_high)
+
+            # Rerun functions once validation is done (is rerun as many times as is necessary)
             shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+        
+        # Returns two values as the cloud location proved useful in the other calculation method
         return shadow_lenght, cloud_location
 
+    # Second calculation method
     def calculate_using_maximum_change(list_of_values):
+        # Get the n variable which specified how far from initial point we should start calculating (keep in mind it's the centre minus 10 pixels)
         _, n = calculate_using_min_max(list_of_values)
-        print("The n coefficient for max_change was set to", n,)
-    
+
+        # Define the main internal function    
         def main(n):
             list_of_changes = []
             while n < len(list_of_values):
@@ -187,10 +202,8 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             shadow_location = list_of_changes.index(shadow_low)
             cloud_location = list_of_changes.index(cloud_high)
 
-            # find difference between the two pixel lenghts
+            # Find difference between the two pixel lenghts
             shadow_lenght = shadow_location - cloud_location
-            # print("max difference", shadow_lenght)
-            # im2.show()
             return shadow_lenght, cloud_high, cloud_location
         shadow_lenght, cloud_high, cloud_location = main(n)
         while True:
@@ -198,28 +211,25 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
                 item_to_be_deleted = list_of_values[cloud_location]
                 list_of_values.remove(item_to_be_deleted)
                 shadow_lenght, cloud_high, cloud_location = main(n)
-                # print("When calculating via maximum change, the shadow resulted being negative, recalculation in progress.")
             else:
                 break
 
         return shadow_lenght
-
-    # define a simple function to calculate distance based on a given FOV and distance in pixels
-    def distance(fieldOfView, distanceinpixels):
-        fieldOfViewRadians = fieldOfView*(np.pi/180)
-        distanceinmeters = int(distanceinpixels)*126.48
-        return distanceinmeters
     
+    # Get data from internal functions that take pixel values into shadow lenght
     shadow_lenght_min_max, _ = calculate_using_min_max(list_of_values)
     shadow_lenght_min_max_red, _ = calculate_using_min_max(list_of_red)
     shadow_lenght_max_difference = calculate_using_maximum_change(list_of_values)
     shadow_lenght_max_difference_red = calculate_using_maximum_change(list_of_red)
     
+    # Calculate the maximum difference between methods
     if abs(shadow_lenght_min_max_red - shadow_lenght_min_max) > 10:
         shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max)/2
         message = "Difference between methods was too high"
     else:
         shadow_lenght_final = (shadow_lenght_max_difference+shadow_lenght_min_max+shadow_lenght_max_difference_red+shadow_lenght_min_max_red)/4
+    
+    # Data validation using the differences in data
     all_methods = list()
     all_methods.append(shadow_lenght_min_max)
     all_methods.append(shadow_lenght_min_max_red)

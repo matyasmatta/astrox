@@ -4,7 +4,7 @@ from PIL import ImageDraw
 from PIL import Image
 import os
 
-
+# Function for OpenCV resizing
 def resize_image(img, scale_percent) :
     # Calculate new size
     width = int(img.shape[1] * scale_percent / 100)
@@ -14,6 +14,7 @@ def resize_image(img, scale_percent) :
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
     return resized
 
+# Function for BBoxes via OpenCV (legacy)
 def draw_box(img, result, class_list) :
     # Get information from result
     xyxy= result.boxes.xyxy.numpy()
@@ -53,7 +54,9 @@ def draw_box(img, result, class_list) :
                     , text_color, 2 ,cv2.LINE_AA)
     return out_image
 
+# Main run function
 def get_results(path, name, run_path = "./"):
+    
     # configuration (migrated from main())
     model = YOLO("yolov8_latest.pt")
     class_list = model.model.names
@@ -72,6 +75,7 @@ def get_results(path, name, run_path = "./"):
     skipped = 0
     try:
         for obj in xyxy:
+            # Dump data into BBOX dict
             ai_output[i_for_search] = {}
             bbox['xmin'] = int(round(xyxy[i_for_search][0]))
             bbox['xmax'] = int(round(xyxy[i_for_search][2]))
@@ -80,12 +84,16 @@ def get_results(path, name, run_path = "./"):
             bbox['accuracy'] = xyxy[i_for_search][4]
             print(bbox)
 
+            # Calculate centre for each data coordinate
             centre = {}
             centre['x'] = (bbox['xmin']+bbox['xmax'])/2
             centre['y'] = (bbox['ymin']+bbox['ymax'])/2
 
+            # Below is a complex algorithm that works to remove overlapping BBoxes (YOLOv8 does not have default); also called non-max-suppresion
             resemble_x = False
             resemble_y = False
+
+            # Checks the already existing ai_output dict if there is a centre similar to this one already
             def check(a):
                 if a == "x":
                     centre_var = "xcentre"
@@ -108,12 +116,12 @@ def get_results(path, name, run_path = "./"):
                     except:
                         pass
                 return resemble
+            
+            # Check for both x and y
             resemble_x = check('x')
             resemble_y = check('y')
 
-            if resemble_x or resemble_y:
-                print("true")
-
+            # Add data to ai_output dict after validation; conditions specified below; we settled on 65 percent accuracy
             width = bbox['xmax']-bbox['xmin']
             if bbox['accuracy'] > 0.65 and resemble_x == False and resemble_y == False and width < 100:
                 draw.rectangle([bbox['xmin'], bbox['ymin'], bbox['xmax'], bbox['ymax']], outline='red')
@@ -134,5 +142,4 @@ def get_results(path, name, run_path = "./"):
     except:
         pass
     image.save(run_path +"/meta_ai/meta" + name +'.bmp')
-    print(skipped)
     return ai_output
