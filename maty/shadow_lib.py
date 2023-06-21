@@ -155,12 +155,12 @@ def calculate_shadow(file_path, x, y, angle, cloud_id="not specified", image_id=
             shadow_lenght = shadow_location - cloud_location
             return shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location
         shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
-        while True:
-            if shadow_lenght <= 0:
-                list_of_values.remove(cloud_high)
-                shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
+        while shadow_lenght <= 0:
+            if shadow_location < 10:
+                list_of_values.remove(shadow_low)
             else:
-                break
+                list_of_values.remove(cloud_high)
+            shadow_lenght, cloud_high, shadow_low, cloud_location, shadow_location = main()
         return shadow_lenght, cloud_location
 
     def calculate_using_maximum_change(list_of_values):
