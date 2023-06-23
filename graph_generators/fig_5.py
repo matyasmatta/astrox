@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 import csv
 import numpy
 
+font = {'size'   : 10}
+
+plt.rc('font', **font)
+
 x, y1, y2, y3 = list(), list(), list(), list()
 with open("new_data_source.csv", "r") as f:
     reader = csv.reader(f, delimiter=",")
@@ -45,16 +49,17 @@ plt.xticks(range(0, 2501, 250))
 plt.yticks(range(0, 2501, 250))
 
 # Plot the data as scatter plots
-plt.scatter(x_values, y1_values, marker='x', label='Y1')
-plt.scatter(x_values, y2_values, marker='x', label='Y2')
-plt.scatter(x_values, y3_values, marker='x', label='Y3')
+plt.scatter(x_values, y1_values, marker='x', label='Annotater 1')
+plt.scatter(x_values, y2_values, marker='x', label='Annotater 2')
+plt.scatter(x_values, y3_values, marker='x', label='Annotater 3')
+plt.legend(loc="upper left")
+
 
 plt.xlim(0, 2500)
 plt.ylim(0, 2500)
 
 plt.xlabel('Cloud height calculated algorithmically in meters', labelpad=5)
 plt.ylabel('Cloud height calculated manually in meters', labelpad=5)
-plt.title("Fig. 2: Comparasion between manual and algorithmic data", pad=15)
 
 # Set the aspect ratio to 'equal' and figure size to make it square
 plt.gca().set_aspect('equal')
@@ -64,5 +69,7 @@ plt.gcf().set_size_inches(6,6)
 num_points = len(plt.gca().collections[0].get_offsets())
 
 print("Number of points:", num_points, len(x), len(y1))
+plt.savefig('fig7.png', dpi=1000)
+
 
 plt.show()
