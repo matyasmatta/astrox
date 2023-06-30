@@ -1,7 +1,7 @@
 #for getting all pictures in folder
 #works on PC and Raspberry
 
-#from Matyáš
+#by Matyáš
 
 import os
 from os import listdir

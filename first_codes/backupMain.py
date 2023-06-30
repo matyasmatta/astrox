@@ -1,7 +1,7 @@
 #in case we don't have time to finish the complex code
 #works only on Raspberry
 
-#from Tomas
+#by Tomas
 
 
 from sense_hat import SenseHat
