@@ -1,0 +1,1 @@
+you can see the final version on github in ./astrox/tree/release
